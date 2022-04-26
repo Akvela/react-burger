@@ -21,7 +21,7 @@ const AppHeader = () => {
               </a>
             </li>
           </ul>
-          <Logo className={appHeaderStyles.logo} />
+          <Logo />
         </div>
         <div className='pr-5 pl-5'>
           <a href='/#' className={`${appHeaderStyles.link} text text_type_main-default`}>

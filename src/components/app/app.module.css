@@ -1,5 +1,13 @@
 .app {
   background: #131316;
-  width: 1920px;
+  max-width: 1920px;
   height: 100vh;
+}
+
+.main {
+  width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
