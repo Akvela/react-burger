@@ -3,6 +3,7 @@
   height: 208px;
   display: block;
   position: relative;
+  cursor: pointer;
 }
 
 .price {

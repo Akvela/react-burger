@@ -1,26 +1,27 @@
 .menu {
   width: 600px;
+  height: 760px;
 }
 
 .tab {
   display: flex;
 }
 
-.blocks {
-  height: calc(100vh - 344px);
+.block {
+  max-height: 733px;
   display: block;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-.blocks::-webkit-scrollbar {
+.block::-webkit-scrollbar {
   width: 8px; 
 }
 
-.blocks::-webkit-scrollbar-track {
+.block::-webkit-scrollbar-track {
   background: #2F2F37;
 }
 
-.blocks::-webkit-scrollbar-thumb {
+.block::-webkit-scrollbar-thumb {
   background-color: #8585AD;
 }
