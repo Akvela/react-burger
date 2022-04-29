@@ -3,6 +3,7 @@ import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-c
 import cardStyles from './card.module.css';
 import PropTypes from 'prop-types';
 
+
 const Card = ({ card }) => {
   const [count, setCount] = React.useState(0);
 
@@ -25,9 +26,7 @@ const Card = ({ card }) => {
 }
 
 Card.propTypes = {
-  image: PropTypes.string,
-  name: PropTypes.string,
-  price: PropTypes.number
+  card: PropTypes.object
 }
 
 export default Card;

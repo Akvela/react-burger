@@ -2,6 +2,7 @@ import React from 'react';
 import Card from '../card/card';
 import galleryStyles from './gallery.module.css';
 import PropTypes from 'prop-types';
+import { ingridientDataTypes } from '../../utils/types';
 
 const Gallery = ({ itemList }) => {
   return (
@@ -17,20 +18,7 @@ const Gallery = ({ itemList }) => {
 }
 
 Gallery.propTypes = {
-  itemList: PropTypes.arrayOf(PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    type: PropTypes.oneOf(['bun', 'main','sauce']).isRequired,
-    proteins: PropTypes.number.isRequired,
-    fat: PropTypes.number.isRequired,
-    carbohydrates: PropTypes.number.isRequired,
-    calories: PropTypes.number.isRequired,
-    price: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
-    image_mobile: PropTypes.string.isRequired,
-    image_large: PropTypes.string.isRequired,
-    __v: PropTypes.number.isRequired
-  }).isRequired).isRequired
+  itemList: PropTypes.arrayOf(ingridientDataTypes.isRequired).isRequired
 }
 
 export default Gallery;
