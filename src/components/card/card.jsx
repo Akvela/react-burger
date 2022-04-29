@@ -25,9 +25,9 @@ const Card = ({ card }) => {
 }
 
 Card.propTypes = {
-  image: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired
+  image: PropTypes.string,
+  name: PropTypes.string,
+  price: PropTypes.number
 }
 
 export default Card;
