@@ -4,7 +4,6 @@ import { selectItemsOfType } from '../../utils/utils';
 import { data, itemType } from '../../utils/const';
 import Gallery from '../gallery/gallery';
 import burgerIngredientsStyles from './burger-ingredients.module.css';
-import PropTypes from 'prop-types';
 
 const bunsArray = selectItemsOfType(itemType.bun.type, data);
 export const sauceArray = selectItemsOfType(itemType.sauce.type, data);
@@ -44,12 +43,5 @@ const BurgerIngredients = () => {
     </div>
   )
 }
-
-BurgerIngredients.propTypes = PropTypes.shape({
-  name: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['bun', 'main','sauce']).isRequired,
-  price: PropTypes.number.isRequired,
-  image: PropTypes.string.isRequired
-})
 
 export default BurgerIngredients;

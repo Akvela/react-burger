@@ -2,7 +2,6 @@ import { ConstructorElement, Button } from '@ya.praktikum/react-developer-burger
 import { ingredientsArray } from '../burger-ingredients/burger-ingredients';
 import List from '../list/list';
 import burgerConstructorStyles from './burger-constructor.module.css';
-import PropTypes from 'prop-types';
 
 const BurgerConstructor = () => {
   return(
@@ -38,13 +37,5 @@ const BurgerConstructor = () => {
     </div>
   )
 }
-
-BurgerConstructor.propTypes = PropTypes.shape({
-  text: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['bun', 'main','sauce']).isRequired,
-  price: PropTypes.number.isRequired,
-  thumbnail: PropTypes.string.isRequired,
-  key: PropTypes.string.isRequired,
-})
 
 export default BurgerConstructor;
