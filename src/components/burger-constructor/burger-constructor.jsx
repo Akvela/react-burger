@@ -1,9 +1,10 @@
 import { ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ingredientsArray } from '../burger-ingredients/burger-ingredients';
 import List from '../list/list';
 import burgerConstructorStyles from './burger-constructor.module.css';
 
-const BurgerConstructor = () => {
+const BurgerConstructor = ({ ingredients }) => {
+  const ingredientsArray = ingredients.filter(element => element.type !== 'bun')
+
   return(
     <div className='pt-1'>
       <div className={burgerConstructorStyles.item}>

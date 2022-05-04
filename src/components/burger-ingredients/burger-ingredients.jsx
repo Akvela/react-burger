@@ -1,16 +1,13 @@
 import React from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import { selectItemsOfType } from '../../utils/utils';
-import { data, itemType } from '../../utils/const';
 import Gallery from '../gallery/gallery';
 import burgerIngredientsStyles from './burger-ingredients.module.css';
 
-const bunsArray = selectItemsOfType(itemType.bun.type, data);
-export const sauceArray = selectItemsOfType(itemType.sauce.type, data);
-export const mainArray = selectItemsOfType(itemType.main.type, data);
-export const ingredientsArray = sauceArray.concat(mainArray);
-
-const BurgerIngredients = () => {
+const BurgerIngredients = ({ ingredients }) => {
+  const bunsArray = ingredients.filter(element => element.type === 'bun');
+  const sauceArray = ingredients.filter(element => element.type === 'sauce');
+  const mainArray = ingredients.filter(element => element.type === 'main');
+  
   const [current, setCurrent] = React.useState('one');
 
   const handleClick = (activeTab) => {
