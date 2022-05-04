@@ -1,0 +1,44 @@
+.header {
+  max-width: 1920px;
+  width: 100%;
+  background-color: #1C1C21;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.navigation {
+  width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu {
+  display: flex;
+  width: 383px;
+  padding-left: 0;
+}
+
+.menuItem {
+  list-style: none;
+  display: block;
+  box-sizing: border-box;
+}
+
+.link {
+  text-decoration: none;
+  color: #8585AD;
+  display: flex;
+  align-items: center;
+}
+
+.linkActive {
+  color: #F2F2F3;
+}
+
+.wrapper {
+  width: 61.3%;
+  display: flex;
+  justify-content: space-between;
+}

@@ -1,0 +1,12 @@
+.gallery {
+  display: flex;
+  width: 600px;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  gap: 32px 24px;
+  margin: 0;
+}
+
+.item {
+  list-style: none;
+}

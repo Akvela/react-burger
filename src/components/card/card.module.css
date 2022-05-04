@@ -1,0 +1,21 @@
+.item {
+  width: 272px;
+  height: 208px;
+  display: block;
+  position: relative;
+  cursor: pointer;
+}
+
+.price {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin: 0 auto;
+  gap: 9px;
+}
+
+.name {
+  display: block;
+  height: 48px;
+  text-align: center;
+}

@@ -1,0 +1,27 @@
+.menu {
+  width: 600px;
+  height: 760px;
+}
+
+.tab {
+  display: flex;
+}
+
+.block {
+  max-height: 733px;
+  display: block;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.block::-webkit-scrollbar {
+  width: 8px; 
+}
+
+.block::-webkit-scrollbar-track {
+  background: #2F2F37;
+}
+
+.block::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+}
