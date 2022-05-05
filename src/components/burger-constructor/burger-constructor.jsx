@@ -1,8 +1,10 @@
 import { ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import List from '../list/list';
 import burgerConstructorStyles from './burger-constructor.module.css';
+import PropTypes from 'prop-types';
+import { ingridientDataTypes } from '../../utils/types';
 
-const BurgerConstructor = ({ ingredients }) => {
+const BurgerConstructor = ({ ingredients, onButtonOrderClick }) => {
   const ingredientsArray = ingredients.filter(element => element.type !== 'bun')
 
   return(
@@ -33,10 +35,15 @@ const BurgerConstructor = ({ ingredients }) => {
       </div>
       <div className={`${burgerConstructorStyles.info} pt-10 pr-4`}>
           <h2 className="text text_type_digits-medium">610</h2><div className={burgerConstructorStyles.coins}></div>
-          <Button type="primary" size="large">Оформить заказ</Button>
+          <Button type="primary" size="large" onClick={() => onButtonOrderClick()}>Оформить заказ</Button>
       </div>
     </div>
   )
+}
+
+BurgerConstructor.propTypes = {
+  ingredients: PropTypes.arrayOf(ingridientDataTypes.isRequired).isRequired,
+  onButtonOrderClick: PropTypes.func.isRequired
 }
 
 export default BurgerConstructor;

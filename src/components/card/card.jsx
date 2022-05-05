@@ -2,17 +2,13 @@ import React from 'react';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import cardStyles from './card.module.css';
 import PropTypes from 'prop-types';
-
+import { ingridientDataTypes } from '../../utils/types';
 
 const Card = ({ card }) => {
   const [count, setCount] = React.useState(0);
 
-  const handleClick = () => {
-    setCount(count + 1);
-  }
-
   return (
-    <article className={cardStyles.item} onClick={handleClick}>
+    <article className={cardStyles.item}>
       {(count !== 0) &&
         <Counter count={count} size="default" />}
       <img src={`${card.image}`} alt={card.name} className='pl-4 pr-4' />
@@ -26,7 +22,7 @@ const Card = ({ card }) => {
 }
 
 Card.propTypes = {
-  card: PropTypes.object
+  card: ingridientDataTypes.isRequired
 }
 
 export default Card;
