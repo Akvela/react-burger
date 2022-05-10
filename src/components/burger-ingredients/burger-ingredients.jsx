@@ -1,17 +1,16 @@
 import React from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import { selectItemsOfType } from '../../utils/utils';
-import { data, itemType } from '../../utils/const';
 import Gallery from '../gallery/gallery';
 import burgerIngredientsStyles from './burger-ingredients.module.css';
+import PropTypes from 'prop-types';
+import { ingridientDataTypes } from '../../utils/types';
 
-const bunsArray = selectItemsOfType(itemType.bun.type, data);
-export const sauceArray = selectItemsOfType(itemType.sauce.type, data);
-export const mainArray = selectItemsOfType(itemType.main.type, data);
-export const ingredientsArray = sauceArray.concat(mainArray);
-
-const BurgerIngredients = () => {
-  const [current, setCurrent] = React.useState('one');
+const BurgerIngredients = ({ ingredients, onIngredientClick }) => {
+  const bunsArray = ingredients.filter(element => element.type === 'bun');
+  const sauceArray = ingredients.filter(element => element.type === 'sauce');
+  const mainArray = ingredients.filter(element => element.type === 'main');
+  
+  const [current, setCurrent] = React.useState('bun');
 
   const handleClick = (activeTab) => {
     setCurrent(activeTab);
@@ -22,26 +21,31 @@ const BurgerIngredients = () => {
   return (
     <div className={`${burgerIngredientsStyles.menu} pr-10`}>
       <div className={`${burgerIngredientsStyles.tab}`}>
-        <Tab value="one" active={current === 'one'} onClick={()=>{handleClick('one')}}>
+        <Tab value="bun" active={current === 'bun'} onClick={()=>{handleClick('bun')}}>
           Булки
         </Tab>
-        <Tab value="two" active={current === 'two'} onClick={()=>{handleClick('two')}}>
+        <Tab value="sauce" active={current === 'sauce'} onClick={()=>{handleClick('sauce')}}>
           Соусы
         </Tab>
-        <Tab value="three" active={current === 'three'} onClick={()=>{handleClick('three')}}>
+        <Tab value="main" active={current === 'main'} onClick={()=>{handleClick('main')}}>
           Начинки
         </Tab>
       </div>
       <div className={burgerIngredientsStyles.block}>
-        <h2 id='one' className='text text_type_main-medium pb-6 pt-10'>Булки</h2>
-        <Gallery itemList={bunsArray} />
-        <h2 id='two' className='text text_type_main-medium pt-10 pb-6'>Соусы</h2>
-        <Gallery itemList={sauceArray} />
-        <h2 id='three' className='text text_type_main-medium pt-10 pb-6'>Начинки</h2>
-        <Gallery itemList={mainArray} />
+        <h2 id='bun' className='text text_type_main-medium pb-6 pt-10'>Булки</h2>
+        <Gallery itemList={bunsArray} handleClick={onIngredientClick} />
+        <h2 id='sauce' className='text text_type_main-medium pt-10 pb-6'>Соусы</h2>
+        <Gallery itemList={sauceArray} handleClick={onIngredientClick} />
+        <h2 id='main' className='text text_type_main-medium pt-10 pb-6'>Начинки</h2>
+        <Gallery itemList={mainArray} handleClick={onIngredientClick} />
       </div>
     </div>
   )
+}
+
+BurgerIngredients.propTypes = {
+  ingredients: PropTypes.arrayOf(ingridientDataTypes.isRequired).isRequired,
+  onIngredientClick: PropTypes.func.isRequired
 }
 
 export default BurgerIngredients;
