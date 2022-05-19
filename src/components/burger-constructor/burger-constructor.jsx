@@ -1,11 +1,18 @@
+import React, { useContext, useReducer } from 'react';
 import { ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import List from '../list/list';
 import burgerConstructorStyles from './burger-constructor.module.css';
-import PropTypes from 'prop-types';
-import { ingridientDataTypes } from '../../utils/types';
+// import PropTypes from 'prop-types';
+//import { ingridientDataTypes } from '../../utils/types';
+import { OrderContext } from '../../services/orderContext';
+import { calculateSum } from '../../utils/sum';
 
-const BurgerConstructor = ({ ingredients, onButtonOrderClick }) => {
-  const ingredientsArray = ingredients.filter(element => element.type !== 'bun')
+
+const BurgerConstructor = ({ onButtonOrderClick }) => {
+  const { ingredients, setIngredients } = useContext(OrderContext);
+  const bun = ingredients.find(element => element.type === 'bun')
+  
+  const totalPrice = calculateSum(ingredients, bun);
 
   return(
     <div className='pt-1'>
@@ -13,37 +20,36 @@ const BurgerConstructor = ({ ingredients, onButtonOrderClick }) => {
         <ConstructorElement
           type="top"
           isLocked={true}
-          text="Краторная булка N-200i (верх)"
-          price={200}
-          thumbnail={'https://code.s3.yandex.net/react/code/bun-02-mobile.png'}
-          className='background-color: #1C1C21'
+          text={`${bun.name} (верх)`}
+          price={bun.price}
+          thumbnail={bun.image_mobile}
         />
       </div>
       <div className={burgerConstructorStyles.block}>
         <div className={burgerConstructorStyles.gallery}>
-          <List itemList={ingredientsArray} />
+          <List />
         </div>
       </div>
       <div className={burgerConstructorStyles.item}>
         <ConstructorElement
           type="bottom"
           isLocked={true}
-          text="Краторная булка N-200i (низ)"
-          price={200}
-          thumbnail={'https://code.s3.yandex.net/react/code/bun-02-mobile.png'}
+          text={`${bun.name} (низ)`}
+          price={bun.price}
+          thumbnail={bun.image_mobile}
         />
       </div>
       <div className={`${burgerConstructorStyles.info} pt-10 pr-4`}>
-          <h2 className="text text_type_digits-medium">610</h2><div className={burgerConstructorStyles.coins}></div>
-          <Button type="primary" size="large" onClick={() => onButtonOrderClick()}>Оформить заказ</Button>
+        <h2 className="text text_type_digits-medium">{totalPrice}</h2><div className={burgerConstructorStyles.coins}></div>
+        <Button type="primary" size="large" onClick={() => onButtonOrderClick()}>Оформить заказ</Button>
       </div>
     </div>
   )
 }
 
-BurgerConstructor.propTypes = {
-  ingredients: PropTypes.arrayOf(ingridientDataTypes.isRequired).isRequired,
-  onButtonOrderClick: PropTypes.func.isRequired
-}
+// BurgerConstructor.propTypes = {
+//   ingredients: PropTypes.arrayOf(ingridientDataTypes.isRequired).isRequired,
+//   onButtonOrderClick: PropTypes.func.isRequired
+// }
 
 export default BurgerConstructor;

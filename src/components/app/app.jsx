@@ -1,4 +1,5 @@
 import React from 'react';
+import { OrderContext } from '../../services/orderContext';
 import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
@@ -11,7 +12,7 @@ import appStyles from './app.module.css';
 const urlApi = 'https://norma.nomoreparties.space/api/ingredients';
 
 const App = () => {
-  const [ingredients, setIngredients] = React.useState([])
+  const [ingredients, setIngredients] = React.useState(null)
   const [modalIngredientOpened, setModalIngredientOpened] = React.useState(false)
   const [modalOrderOpened, setModalOrderOpened] = React.useState(false)
   const [ingredientSelected, setIngredientSelected] = React.useState({})
@@ -60,13 +61,19 @@ const App = () => {
     setModalOrderOpened(true)
   }
 
+  if (!ingredients) {
+    return null;
+  }
+
   return (
     <div className={`${appStyles.app} pt-10 pb-10`}>
       <AppHeader />
       <main className={appStyles.main}>
         <h1 className={`${appStyles.title} text text_type_main-large pt-10`}>Соберите бургер</h1>
         <BurgerIngredients ingredients={ingredients} onIngredientClick={openModalIngredient} />
-        <BurgerConstructor ingredients={ingredients} onButtonOrderClick={openModalOrder} />
+        <OrderContext.Provider value={{ingredients, setIngredients}}>
+          <BurgerConstructor onButtonOrderClick={openModalOrder} />
+        </OrderContext.Provider>
       </main>
       {modalIngredientOpened && (
         <Modal onCloseClick={closeModalIngredient} onCloseEsc={handleEscCloseIngredient}>
