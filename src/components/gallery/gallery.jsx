@@ -1,4 +1,3 @@
-import React from 'react';
 import Card from '../card/card';
 import galleryStyles from './gallery.module.css';
 import PropTypes from 'prop-types';
@@ -8,11 +7,8 @@ const Gallery = ({ itemList, handleClick }) => {
   return (
     <ul className={`${galleryStyles.gallery} pl-4 pr-2`}>
       {itemList.map((item)=>(
-        <li key={item._id} className={galleryStyles.item} onClick={() => handleClick((item))}>
-          <Card card={item} onClick={handleClick} />
-        </li>
-        )
-      )}
+        <Card key={item._id} card={item} onClick={handleClick} onIngredientClick={handleClick} />
+      ))}
     </ul>
   )
 }

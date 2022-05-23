@@ -1,17 +1,16 @@
-import React, { useContext, useReducer } from 'react';
+import React from 'react';
 import { ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import List from '../list/list';
 import burgerConstructorStyles from './burger-constructor.module.css';
-// import PropTypes from 'prop-types';
-//import { ingridientDataTypes } from '../../utils/types';
-import { OrderContext } from '../../services/orderContext';
+import PropTypes from 'prop-types';
+import { IngredientsContext } from '../../services/ingredients-context';
 import { calculateSum } from '../../utils/sum';
 
 
 const BurgerConstructor = ({ onButtonOrderClick }) => {
-  const { ingredients, setIngredients } = useContext(OrderContext);
-  const bun = ingredients.find(element => element.type === 'bun')
-  
+  const constructorContext = React.useContext(IngredientsContext);
+  const bun = constructorContext.selectedIngredients.find(element => element.type === 'bun')
+  const ingredients = constructorContext.selectedIngredients.filter(element => element.type !== 'bun');
   const totalPrice = calculateSum(ingredients, bun);
 
   return(
@@ -47,9 +46,8 @@ const BurgerConstructor = ({ onButtonOrderClick }) => {
   )
 }
 
-// BurgerConstructor.propTypes = {
-//   ingredients: PropTypes.arrayOf(ingridientDataTypes.isRequired).isRequired,
-//   onButtonOrderClick: PropTypes.func.isRequired
-// }
+BurgerConstructor.propTypes = {
+  onButtonOrderClick: PropTypes.func.isRequired
+}
 
 export default BurgerConstructor;

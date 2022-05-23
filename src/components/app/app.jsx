@@ -1,5 +1,6 @@
 import React from 'react';
-import { OrderContext } from '../../services/orderContext';
+import { IngredientsContext } from '../../services/ingredients-context';
+import { getIngredients, getOrderNumber } from '../../utils/api';
 import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
@@ -9,47 +10,42 @@ import Modal from '../modal/modal';
 import {  } from '@ya.praktikum/react-developer-burger-ui-components';
 import appStyles from './app.module.css';
 
-const urlApi = 'https://norma.nomoreparties.space/api/ingredients';
-
 const App = () => {
-  const [ingredients, setIngredients] = React.useState(null)
-  const [modalIngredientOpened, setModalIngredientOpened] = React.useState(false)
-  const [modalOrderOpened, setModalOrderOpened] = React.useState(false)
-  const [ingredientSelected, setIngredientSelected] = React.useState({})
+  const [modalIngredientOpened, setModalIngredientOpened] = React.useState(false);
+  const [modalOrderOpened, setModalOrderOpened] = React.useState(false);
+  const [ingredientSelected, setIngredientSelected] = React.useState({});
+  const [orderInfo, setOrderInfo] = React.useState({
+    numberOrder: 0,
+    errorOrder: false
+  });
   
-  const getIngredients = () => {
-    fetch(urlApi)
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status)})
-      .then(data => {
-        setIngredients(data.data)
-      })
-       .catch(e => {
-        console.log(e)
-      })
-  }
+  const [state, setState] = React.useState({
+    ingredients: [],
+    selectedIngredients: [],
+    isLoading: true
+  })
   
   React.useEffect(() => {
     getIngredients()
-  }, [])
+      .then(res => setState({
+        ...state,
+        ingredients: res.data,
+        selectedIngredients: [res.data[0], res.data[3], res.data[4], res.data[5], res.data[6], res.data[7]],
+        isLoading: false
+        })
+      )
+      .catch(error => {
+        setState({...state, isLoading: false})
+      })
+    }, [])
 
-  const closeModalIngredient = () => {
+  const closeModal = () => {
     setModalIngredientOpened(false)
-  }
-
-  const closeModalOrder = () => {
     setModalOrderOpened(false)
   }
 
-  const handleEscCloseOrder = (evt) => {
-    evt.key === 'Escape' && closeModalOrder()
-  }
-
-  const handleEscCloseIngredient = (evt) => {
-    evt.key === 'Escape' && closeModalIngredient()
+  const handleEscCloseModal = (evt) => {
+    evt.key === 'Escape' && closeModal()
   }
 
   const openModalIngredient = (ingredient) => {
@@ -58,31 +54,40 @@ const App = () => {
   }
 
   const openModalOrder = () => {
-    setModalOrderOpened(true)
-  }
-
-  if (!ingredients) {
-    return null;
+    const arrId = state.selectedIngredients.map((ingredient) => ingredient._id);
+    getOrderNumber(arrId)
+      .then(res => setOrderInfo({
+        numberOrder: res.order.number,
+        errorOrder: false
+      }))
+      .catch(error => setOrderInfo({
+        numberOrder: 0,
+        errorOrder: true
+      }))
+      .finally (() => setModalOrderOpened(true))
   }
 
   return (
-    <div className={`${appStyles.app} pt-10 pb-10`}>
+    <div className={`${appStyles.app} pb-10`}>
       <AppHeader />
       <main className={appStyles.main}>
         <h1 className={`${appStyles.title} text text_type_main-large pt-10`}>Соберите бургер</h1>
-        <BurgerIngredients ingredients={ingredients} onIngredientClick={openModalIngredient} />
-        <OrderContext.Provider value={{ingredients, setIngredients}}>
-          <BurgerConstructor onButtonOrderClick={openModalOrder} />
-        </OrderContext.Provider>
+        {!state.isLoading &&
+          <IngredientsContext.Provider value={state}>
+            <BurgerIngredients onIngredientClick={openModalIngredient} />
+            <BurgerConstructor onButtonOrderClick={openModalOrder} />
+          </IngredientsContext.Provider>
+        }
+        {state.isLoading && <p className={'text text_type_main-large'}>Загрузка...</p>}
       </main>
       {modalIngredientOpened && (
-        <Modal onCloseClick={closeModalIngredient} onCloseEsc={handleEscCloseIngredient}>
+        <Modal onCloseClick={closeModal} onCloseEsc={handleEscCloseModal}>
           <IngredientDetails ingredient={ingredientSelected}/>
         </Modal>
       )}
       {modalOrderOpened && (
-        <Modal onCloseClick={closeModalOrder} onCloseEsc={handleEscCloseOrder}>
-          <OrderDetails />
+        <Modal onCloseClick={closeModal} onCloseEsc={handleEscCloseModal}>
+          <OrderDetails orderInfo={orderInfo} />
         </Modal>
       )}
     </div>
