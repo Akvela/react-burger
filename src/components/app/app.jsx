@@ -7,7 +7,6 @@ import BurgerConstructor from '../burger-constructor/burger-constructor';
 import OrderDetails from '../order-details/order-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
-import {  } from '@ya.praktikum/react-developer-burger-ui-components';
 import appStyles from './app.module.css';
 
 const App = () => {
@@ -44,10 +43,6 @@ const App = () => {
     setModalOrderOpened(false)
   }
 
-  const handleEscCloseModal = (evt) => {
-    evt.key === 'Escape' && closeModal()
-  }
-
   const openModalIngredient = (ingredient) => {
     setIngredientSelected(ingredient)
     setModalIngredientOpened(true)
@@ -81,12 +76,12 @@ const App = () => {
         {state.isLoading && <p className={'text text_type_main-large'}>Загрузка...</p>}
       </main>
       {modalIngredientOpened && (
-        <Modal onCloseClick={closeModal} onCloseEsc={handleEscCloseModal}>
+        <Modal onCloseClick={closeModal}>
           <IngredientDetails ingredient={ingredientSelected}/>
         </Modal>
       )}
       {modalOrderOpened && (
-        <Modal onCloseClick={closeModal} onCloseEsc={handleEscCloseModal}>
+        <Modal onCloseClick={closeModal}>
           <OrderDetails orderInfo={orderInfo} />
         </Modal>
       )}
