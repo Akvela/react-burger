@@ -3,9 +3,11 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Gallery from '../gallery/gallery';
 import burgerIngredientsStyles from './burger-ingredients.module.css';
 import PropTypes from 'prop-types';
-import { ingridientDataTypes } from '../../utils/types';
+import { IngredientsContext } from '../../services/ingredients-context';
 
-const BurgerIngredients = ({ ingredients, onIngredientClick }) => {
+const BurgerIngredients = ({ onIngredientClick }) => {
+  const ingredients = React.useContext(IngredientsContext).ingredients;
+
   const bunsArray = ingredients.filter(element => element.type === 'bun');
   const sauceArray = ingredients.filter(element => element.type === 'sauce');
   const mainArray = ingredients.filter(element => element.type === 'main');
@@ -16,7 +18,7 @@ const BurgerIngredients = ({ ingredients, onIngredientClick }) => {
     setCurrent(activeTab);
     let anchorElement = document.getElementById(activeTab)
     anchorElement.scrollIntoView({behavior: 'smooth'});
- }
+  }
 
   return (
     <div className={`${burgerIngredientsStyles.menu} pr-10`}>
@@ -44,7 +46,6 @@ const BurgerIngredients = ({ ingredients, onIngredientClick }) => {
 }
 
 BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(ingridientDataTypes.isRequired).isRequired,
   onIngredientClick: PropTypes.func.isRequired
 }
 

@@ -20,5 +20,5 @@
 # установка пакета
 npm i
 # старт проекта
-npm run start
+npm start
 ```
