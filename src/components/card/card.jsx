@@ -27,7 +27,7 @@ export const Card = (props) => {
     <li ref={dragRef} id={props.id} className={cardStyles.item} onClick={(evt) => { dispatch({ type: CLICK_ON_INGREDIENT, item: selectIngredient(evt, ingredients) }) }}>
       {!!props.count && !!(elements.length > 0) &&
         <Counter count={props.count} size="default" />}
-      {!!bun.count && !!props.type === 'bun' && !!bun._id === id && !!bun &&
+      {!!bun.count && props.type === 'bun' && bun._id  === id && !!bun &&
         <Counter count={bun.count} size="default" />}
       <img src={`${props.image}`} alt={props.name} className='pl-4 pr-4' />
       <p className={`${cardStyles.price} text text_type_digits-default pt-1 pb-1`}>
