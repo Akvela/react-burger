@@ -1,10 +1,19 @@
-.block {
+.constructor {
   width: 600px;
+  height: 100%;
+  padding-top: 16px;
+}
+
+.block {
+  width: 585px;
   max-height: 464px;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   overflow-y: auto;
   overflow-x: hidden;
   margin: 16px 0;
+  padding-left: 17px;
 }
 
 .block::-webkit-scrollbar {

@@ -1,92 +1,32 @@
 import React from 'react';
-import { IngredientsContext } from '../../services/ingredients-context';
-import { getIngredients, getOrderNumber } from '../../utils/api';
-import AppHeader from '../app-header/app-header';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
-import OrderDetails from '../order-details/order-details';
-import IngredientDetails from '../ingredient-details/ingredient-details';
-import Modal from '../modal/modal';
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { useSelector, useDispatch } from 'react-redux';
+import { AppHeader } from '../app-header/app-header.jsx';
+import { BurgerIngredients } from '../burger-ingredients/burger-ingredients.jsx';
+import { BurgerConstructor } from '../burger-constructor/burger-constructor.jsx';
+import { getDataIngredients } from '../../services/actions/burger-ingredients.js';
 import appStyles from './app.module.css';
 
-const App = () => {
-  const [modalIngredientOpened, setModalIngredientOpened] = React.useState(false);
-  const [modalOrderOpened, setModalOrderOpened] = React.useState(false);
-  const [ingredientSelected, setIngredientSelected] = React.useState({});
-  const [orderInfo, setOrderInfo] = React.useState({
-    numberOrder: 0,
-    errorOrder: false
-  });
-  
-  const [state, setState] = React.useState({
-    ingredients: [],
-    selectedIngredients: [],
-    isLoading: true
-  })
-  
+export const App = () => {
+  const dispatch = useDispatch();
+  const ingredientsRequest = useSelector(store => store.burgerIngredients.ingredientsRequest);
+
   React.useEffect(() => {
-    getIngredients()
-      .then(res => setState({
-        ...state,
-        ingredients: res.data,
-        selectedIngredients: [res.data[0], res.data[3], res.data[4], res.data[5], res.data[6], res.data[7]],
-        isLoading: false
-        })
-      )
-      .catch(error => {
-        setState({...state, isLoading: false})
-      })
-    }, [])
-
-  const closeModal = () => {
-    setModalIngredientOpened(false)
-    setModalOrderOpened(false)
-  }
-
-  const openModalIngredient = (ingredient) => {
-    setIngredientSelected(ingredient)
-    setModalIngredientOpened(true)
-  }
-
-  const openModalOrder = () => {
-    const arrId = state.selectedIngredients.map((ingredient) => ingredient._id);
-    getOrderNumber(arrId)
-      .then(res => setOrderInfo({
-        numberOrder: res.order.number,
-        errorOrder: false
-      }))
-      .catch(error => setOrderInfo({
-        numberOrder: 0,
-        errorOrder: true
-      }))
-      .finally (() => setModalOrderOpened(true))
-  }
+    dispatch(getDataIngredients());
+  }, [dispatch]);
 
   return (
     <div className={`${appStyles.app} pb-10`}>
       <AppHeader />
       <main className={appStyles.main}>
         <h1 className={`${appStyles.title} text text_type_main-large pt-10`}>Соберите бургер</h1>
-        {!state.isLoading &&
-          <IngredientsContext.Provider value={state}>
-            <BurgerIngredients onIngredientClick={openModalIngredient} />
-            <BurgerConstructor onButtonOrderClick={openModalOrder} />
-          </IngredientsContext.Provider>
-        }
-        {state.isLoading && <p className={'text text_type_main-large'}>Загрузка...</p>}
+        <DndProvider backend={HTML5Backend}>
+          <BurgerIngredients />
+          <BurgerConstructor />
+        </DndProvider>
+        {ingredientsRequest && <p className={'text text_type_digits-medium text_color_inactive'}>Загрузка...</p>}
       </main>
-      {modalIngredientOpened && (
-        <Modal onCloseClick={closeModal}>
-          <IngredientDetails ingredient={ingredientSelected}/>
-        </Modal>
-      )}
-      {modalOrderOpened && (
-        <Modal onCloseClick={closeModal}>
-          <OrderDetails orderInfo={orderInfo} />
-        </Modal>
-      )}
     </div>
   )
 }
-
-export default App;

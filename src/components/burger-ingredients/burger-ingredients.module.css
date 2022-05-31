@@ -1,10 +1,16 @@
 .menu {
   width: 600px;
   height: 760px;
+  display: flex;
+  flex-direction: column;
 }
 
 .tab {
   display: flex;
+  list-style: none;
+  padding: 0;
+  padding-top: 18px;
+  margin: 0;
 }
 
 .block {
