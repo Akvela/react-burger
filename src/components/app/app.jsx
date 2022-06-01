@@ -25,7 +25,7 @@ export const App = () => {
           <BurgerIngredients />
           <BurgerConstructor />
         </DndProvider>
-        {ingredientsRequest && <p className={'text text_type_digits-medium text_color_inactive'}>Загрузка...</p>}
+        {ingredientsRequest && <p className='text text_type_digits-default text_color_inactive'>Загрузка...</p>}
       </main>
     </div>
   )
