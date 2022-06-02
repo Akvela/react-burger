@@ -1,11 +1,13 @@
 import orderDetailsStyles from './order-details.module.css';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
-const OrderDetails = ({orderInfo}) => {
+export const OrderDetails = () => {
+  const { orderFailed, orderNumber } = useSelector(store => store.orderDetails);
+
   return(
     <div className={orderDetailsStyles.container}>
-      {!orderInfo.errorOrder
-        ? <h2 className={`${orderDetailsStyles.title} text text_type_digits-large pt-30`}>{orderInfo.numberOrder}</h2>
+      {!orderFailed
+        ? <h2 className={`${orderDetailsStyles.title} text text_type_digits-large pt-30`}>{orderNumber}</h2>
         : <p className='text text_type_main-default'>Произошла ошибка</p>
       }
       <p className={'text text_type_main-medium pt-8'}>идентификатор заказа</p>
@@ -15,12 +17,3 @@ const OrderDetails = ({orderInfo}) => {
     </div>
   )
 }
-
-OrderDetails.propTypes = {
-  orderInfo: PropTypes.shape({
-    numberOrder: PropTypes.number.isRequired,
-    errorOrder: PropTypes.bool.isRequired
-  })
-}
-
-export default OrderDetails;

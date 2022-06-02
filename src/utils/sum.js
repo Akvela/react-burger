@@ -3,6 +3,10 @@ export const calculateSum = (arr, bun) => {
   arr.forEach(element => {
     sum = sum + element.price
   });
-  sum = bun.price * 2 + sum;
+  if (!bun) {
+    return sum;
+  } else {
+    sum = bun.price * 2 + sum;
+  }
   return sum;
 }

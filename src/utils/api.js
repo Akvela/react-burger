@@ -5,14 +5,19 @@ const checkResponse = (res) => {
 }
 
 const getIngredients = () => {
-  return fetch(`${urlApi}/ingredients`)
+  return fetch(`${urlApi}/ingredients`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'GET',
+  })
     .then(res => checkResponse(res))
 };
 
 const getOrderNumber = (arrIdIngredients) => {
   return fetch(`${urlApi}/orders`, {
     headers: {
-      'Content-Type': 'application/json;charset=utf-8'
+      'Content-Type': 'application/json'
     },
     method: 'POST',
     body: JSON.stringify({ "ingredients": arrIdIngredients })

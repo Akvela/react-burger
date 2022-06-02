@@ -1,21 +1,23 @@
-import Card from '../card/card';
-import galleryStyles from './gallery.module.css';
+import React from 'react';
+import { Card } from '../card/card.jsx';
 import PropTypes from 'prop-types';
 import { ingridientDataTypes } from '../../utils/types';
+import galleryStyles from './gallery.module.css';
 
-const Gallery = ({ itemList, handleClick }) => {
+export const Gallery = React.forwardRef((props, ref) => {
   return (
-    <ul className={`${galleryStyles.gallery} pl-4 pr-2`}>
-      {itemList.map((item)=>(
-        <Card key={item._id} card={item} onClick={handleClick} onIngredientClick={handleClick} />
-      ))}
-    </ul>
+    <>
+      <h2 ref={ref} className='text text_type_main-medium mb-6 mt-10'>{props.ingredientsType}</h2>
+      <ul className={`${galleryStyles.gallery} pl-4 pr-2`}>
+        {props.data && props.data.map((item)=>(
+          <Card id={item._id} key={item._id} {...item} />
+        ))}
+      </ul>
+    </>
   )
-}
+})
 
 Gallery.propTypes = {
-  itemList: PropTypes.arrayOf(ingridientDataTypes.isRequired).isRequired,
-  handleClick: PropTypes.func.isRequired
+  ingredientsType: PropTypes.string.isRequired,
+  data: PropTypes.arrayOf(ingridientDataTypes.isRequired).isRequired
 }
-
-export default Gallery;
