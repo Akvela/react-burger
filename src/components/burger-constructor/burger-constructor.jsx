@@ -5,7 +5,6 @@ import { ConstructorItem } from '../constructor-item/constructor-item.jsx';
 import { ADD_BUN, ADD_ITEM, RESET_CONSTRUCTOR, DELETE_ITEM } from '../../services/actions/burger-constructor.js';
 import { INCREASE_COUNT, DECREASE_COUNT, RESET_COUNT } from '../../services/actions/burger-ingredients.js';
 import { OPEN_MODAL_ORDER, CLOSE_MODAL_ORDER } from '../../services/actions/order-details.js';
-import { calculateSum } from '../../utils/sum.js';
 import { OrderDetails } from '../order-details/order-details.jsx';
 import { Modal } from '../modal/modal.jsx';
 import { getUserOrderNumber } from '../../services/actions/order-details.js';
@@ -18,9 +17,15 @@ export const BurgerConstructor = () => {
   const { orderIsClicked, orderSuccessed } = useSelector(store => store.orderDetails);
   const ingredients = useSelector(store => store.burgerIngredients.ingredients);
   const { elements, bun } = useSelector(store => store.burgerConstructor);
+  const  burgerConstructor = useSelector(store => store.burgerConstructor)
 
-  const totalPrice = calculateSum(elements, bun);
-
+  const totalPrice = React.useMemo(() => {
+    return (
+      (burgerConstructor.bun ? burgerConstructor.bun.price * 2 : 0) + burgerConstructor.elements.reduce((s, v) => s + v.price, 0)
+      )
+    }, [burgerConstructor]
+  )
+  
   const openModalOrder = React.useCallback(() => {
     const arrId = elements.map((ingredient) => ingredient._id);
     dispatch({ type: OPEN_MODAL_ORDER });

@@ -2,13 +2,13 @@ import React from 'react';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useSelector, useDispatch } from 'react-redux';
-import { AppHeader } from '../app-header/app-header.jsx';
-import { BurgerIngredients } from '../burger-ingredients/burger-ingredients.jsx';
-import { BurgerConstructor } from '../burger-constructor/burger-constructor.jsx';
-import { getDataIngredients } from '../../services/actions/burger-ingredients.js';
-import appStyles from './app.module.css';
+import { AppHeader } from '../components/app-header/app-header.jsx';
+import { BurgerIngredients } from '../components/burger-ingredients/burger-ingredients.jsx';
+import { BurgerConstructor } from '../components/burger-constructor/burger-constructor.jsx';
+import { getDataIngredients } from '../services/actions/burger-ingredients.js';
+import homeStyles from './home.module.css';
 
-export const App = () => {
+export function Home() {
   const dispatch = useDispatch();
   const ingredientsRequest = useSelector(store => store.burgerIngredients.ingredientsRequest);
 
@@ -17,10 +17,9 @@ export const App = () => {
   }, [dispatch]);
 
   return (
-    <div className={`${appStyles.app} pb-10`}>
-      <AppHeader />
-      <main className={appStyles.main}>
-        <h1 className={`${appStyles.title} text text_type_main-large pt-10`}>Соберите бургер</h1>
+    <div className={`${homeStyles.app} pb-10`}>
+      <main className={homeStyles.main}>
+        <h1 className={`${homeStyles.title} text text_type_main-large pt-10`}>Соберите бургер</h1>
         <DndProvider backend={HTML5Backend}>
           <BurgerIngredients />
           <BurgerConstructor />
