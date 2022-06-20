@@ -17,15 +17,18 @@ export function Home() {
   }, [dispatch]);
 
   return (
-    <div className={`${homeStyles.app} pb-10`}>
-      <main className={homeStyles.main}>
-        <h1 className={`${homeStyles.title} text text_type_main-large pt-10`}>Соберите бургер</h1>
-        <DndProvider backend={HTML5Backend}>
-          <BurgerIngredients />
-          <BurgerConstructor />
-        </DndProvider>
-        {ingredientsRequest && <p className='text text_type_digits-default text_color_inactive'>Загрузка...</p>}
-      </main>
-    </div>
+    <>
+      <AppHeader />
+      <div className={`${homeStyles.app} pb-10`}>
+        <main className={homeStyles.main}>
+          <h1 className={`${homeStyles.title} text text_type_main-large pt-10`}>Соберите бургер</h1>
+          <DndProvider backend={HTML5Backend}>
+            <BurgerIngredients />
+            <BurgerConstructor />
+          </DndProvider>
+          {ingredientsRequest && <p className='text text_type_digits-default text_color_inactive'>Загрузка...</p>}
+        </main>
+      </div>
+    </>
   )
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { AppHeader } from '../components/app-header/app-header';
 import { EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import loginStyles from './login.module.css';
 
@@ -27,6 +28,7 @@ export function Login() {
 
   return (
     <>
+      <AppHeader />
       <main className={loginStyles.container}>
         <h2 className={`${loginStyles.title} text text_type_main-medium pb-6`}>Вход</h2>
         <form className={loginStyles.form}>

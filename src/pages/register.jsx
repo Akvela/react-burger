@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { AppHeader } from '../components/app-header/app-header';
 import { EmailInput, PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import registerStyles from './register.module.css';
 
@@ -20,6 +21,7 @@ export function Register() {
 
   return (
     <>
+      <AppHeader />
       <main className={registerStyles.container}>
         <h2 className={`${registerStyles.title} text text_type_main-medium pb-6`}>Регистрация</h2>
         <form className={registerStyles.form}>

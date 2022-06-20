@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { AppHeader } from '../components/app-header/app-header';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import forgotPasswordStyles from './forgot-password.module.css';
 
@@ -12,6 +13,7 @@ export function ForgotPassword() {
  
   return (
     <>
+      <AppHeader />
       <main className={forgotPasswordStyles.container}>
         <h2 className={`${forgotPasswordStyles.title} text text_type_main-medium pb-6`}>Восстановление пароля</h2>
         <form className={forgotPasswordStyles.form}>
@@ -20,7 +22,7 @@ export function ForgotPassword() {
         </form>
         <div className={forgotPasswordStyles.string}>
           <span className='text text_type_main-default text_color_inactive'>Вспомнили пароль?</span>
-          <Link className={forgotPasswordStyles.link} to='/register'>Войти</Link>
+          <Link className={forgotPasswordStyles.link} to='/login'>Войти</Link>
         </div>
       </main>
     </>

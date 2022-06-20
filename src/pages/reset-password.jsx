@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { AppHeader } from '../components/app-header/app-header';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import resetPasswordStyles from './reset-password.module.css';
 
@@ -17,6 +18,7 @@ export function ResetPassword() {
 
   return (
     <>
+      <AppHeader />
       <main className={resetPasswordStyles.container}>
         <h2 className={`${resetPasswordStyles.title} text text_type_main-medium pb-6`}>Восстановление пароля</h2>
         <form className={resetPasswordStyles.form}>
