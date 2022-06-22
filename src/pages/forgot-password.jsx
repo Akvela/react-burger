@@ -1,22 +1,32 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { AppHeader } from '../components/app-header/app-header';
+import { Link, Redirect } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { getPasswordRecovery } from '../services/actions/user';
 import forgotPasswordStyles from './forgot-password.module.css';
 
 export function ForgotPassword() {
   const [emailForm, setEmailForm] = React.useState('');
 
+  const dispatch = useDispatch();
+  const checkingResponse = useSelector(store => store.user.checkingResponse);
+
+
   const changeEmailInput = (e) => {
     setEmailForm(e.target.value)
+  }
+
+  const recoverPassword = (evt) => {
+    evt.preventDefault();
+    dispatch(getPasswordRecovery(emailForm))
   }
  
   return (
     <>
-      <AppHeader />
+      {checkingResponse && <Redirect to='/reset-password'/>}
       <main className={forgotPasswordStyles.container}>
         <h2 className={`${forgotPasswordStyles.title} text text_type_main-medium pb-6`}>Восстановление пароля</h2>
-        <form className={forgotPasswordStyles.form}>
+        <form className={forgotPasswordStyles.form} onSubmit={(evt) => recoverPassword(evt)}>
           <Input onChange={changeEmailInput} value={emailForm} name='email' placeholder='Укажите e-mail' />
           <Button type="primary" size="medium">Восстановить</Button>
         </form>

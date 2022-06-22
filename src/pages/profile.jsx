@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { AppHeader } from '../components/app-header/app-header';
 import { Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import profileStyles from './profile.module.css';
 
@@ -21,7 +20,6 @@ export function Profile() {
 
   return (
     <>
-      <AppHeader />
       <main className={profileStyles.page}>
         <div className={profileStyles.container}>
           <ul className={profileStyles.navigation}>

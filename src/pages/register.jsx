@@ -1,13 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { AppHeader } from '../components/app-header/app-header';
+import { Link, Redirect } from 'react-router-dom';
+import { registerNewUser } from '../services/actions/user';
 import { EmailInput, PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import registerStyles from './register.module.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { getCookie } from '../utils/cookie';
 
 export function Register() {
+  const dispatch = useDispatch();
   const [nameForm, setNameForm] = React.useState('');
   const [emailForm, setEmailForm] = React.useState('');
   const [passwordForm, setPasswordForm] = React.useState('');
+  const { userName } = useSelector(store => store.user);
+  const token = getCookie('token')
 
   const changeNameInput = (e) => {
     setNameForm(e.target.value)
@@ -19,12 +24,25 @@ export function Register() {
     setPasswordForm(e.target.value)
   }
 
+  const createNewUser = (evt) => {
+    evt.preventDefault();
+    dispatch(registerNewUser(nameForm, emailForm, passwordForm, token));
+    setNameForm('');
+    setEmailForm('');
+    setPasswordForm('');
+  }
+
+  if (userName) {
+    return (
+      <Redirect to='/' />
+    )
+  }
+
   return (
     <>
-      <AppHeader />
       <main className={registerStyles.container}>
         <h2 className={`${registerStyles.title} text text_type_main-medium pb-6`}>Регистрация</h2>
-        <form className={registerStyles.form}>
+        <form className={registerStyles.form} onSubmit={(evt) => createNewUser(evt)}>
           <fieldset className={registerStyles.fieldset}>
             <Input onChange={changeNameInput} value={nameForm} name='name' placeholder='Имя' />
             <EmailInput onChange={changeEmailInput} value={emailForm} name='email' />

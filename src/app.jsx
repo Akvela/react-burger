@@ -1,12 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-
+import { AppHeader } from './components/app-header/app-header';
 import { Home, Login, Register, ForgotPassword, ResetPassword, Profile } from './pages';
 
 export default function App() {
   return (
     <>
       <Router>
+        <AppHeader />
         <Switch>
           <Route path="/login" exact={true}>
             <Login />

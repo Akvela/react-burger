@@ -1,33 +1,44 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { AppHeader } from '../components/app-header/app-header';
+import { Link, Redirect } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { changePassword } from '../services/actions/user';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import resetPasswordStyles from './reset-password.module.css';
 
 export function ResetPassword() {
+  const dispatch = useDispatch();
 
-  const [emailForm, setEmailForm] = React.useState('');
+  const [tokenForm, setTokenForm] = React.useState('');
   const [passwordForm, setPasswordForm] = React.useState('');
-
-  const changeEmailInput = (e) => {
-    setEmailForm(e.target.value)
+  const { checkingReset, resetPasswordError} = useSelector(store => store.user);
+  
+  const changeTokenInput = (e) => {
+    setTokenForm(e.target.value)
   }
   const changePasswordInput = (e) => {
     setPasswordForm(e.target.value)
   }
 
+  const setNewPassword = (evt) => {
+    evt.preventDefault();
+    dispatch(changePassword(passwordForm, tokenForm))
+  }
+
+
+
   return (
     <>
-      <AppHeader />
+      {checkingReset && <Redirect to='/login' />}
       <main className={resetPasswordStyles.container}>
         <h2 className={`${resetPasswordStyles.title} text text_type_main-medium pb-6`}>Восстановление пароля</h2>
-        <form className={resetPasswordStyles.form}>
+        <form className={resetPasswordStyles.form} onSubmit={(evt) => setNewPassword(evt)}>
           <fieldset className={resetPasswordStyles.fieldset}>
-            <Input type="password" onChange={changePasswordInput} value={passwordForm} name='new-password' icon="ShowIcon" placeholder='Введите новый пароль' />
-            <Input type="text" onChange={changeEmailInput} value={emailForm} name='codeword' placeholder='Введите код из письма' />
+            <PasswordInput type="password" onChange={changePasswordInput} value={passwordForm} name='new-password' icon="ShowIcon" placeholder='Введите новый пароль' />
+            <Input type="text" onChange={changeTokenInput} value={tokenForm} name='token' placeholder='Введите код из письма' />
           </fieldset>
           <Button type="primary" size="medium">Сохранить</Button>
         </form>
+        {resetPasswordError && <p className={resetPasswordStyles.error}>Неверно введен проверочный код</p>}
         <div className={`${resetPasswordStyles.string} pt-20`}>
           <span className='text text_type_main-default text_color_inactive'>Вспомнили пароль?</span>
           <Link className={resetPasswordStyles.link} to='/login'>Войти</Link>
