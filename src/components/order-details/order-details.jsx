@@ -7,7 +7,7 @@ export const OrderDetails = () => {
   return(
     <div className={orderDetailsStyles.container}>
       {!orderFailed
-        ? <h2 className={`${orderDetailsStyles.title} text text_type_digits-large pt-30`}>{orderNumber}</h2>
+        ? <h2 className={`${orderDetailsStyles.title} text text_type_digits-large`}>{orderNumber}</h2>
         : <p className='text text_type_main-default'>Произошла ошибка</p>
       }
       <p className={'text text_type_main-medium pt-8'}>идентификатор заказа</p>

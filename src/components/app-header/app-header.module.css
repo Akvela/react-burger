@@ -38,6 +38,10 @@
   color: #F2F2F3;
 }
 
+.linkActive svg {
+  fill: white;
+}
+
 .wrapper {
   width: 61.3%;
   display: flex;

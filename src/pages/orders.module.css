@@ -41,25 +41,3 @@
 .description {
   opacity: 0.4;
 }
-
-.form {
-  width: 480px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-
-}
-
-.form div {
-  width: 100%;
-}
-
-.form svg {
-  margin-left: 190px;
-}
-
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}

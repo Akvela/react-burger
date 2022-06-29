@@ -1,75 +1,79 @@
-import { CREATE_USER_REQUEST, CREATE_USER_SUCCESS, CREATE_USER_ERROR, CHANGE_EMAIL, CHANGE_NAME, CHANGE_PASSWORD,SEND_MAIL_REQUEST, 
-  SEND_MAIL_SUCCESS, SEND_MAIL_ERROR, SEND_NEW_PASSWORD_REQUEST, SEND_NEW_PASSWORD_SUCCESS, SEND_NEW_PASSWORD_ERROR, LOGIN_SUCCESS, LOGIN_ERROR } from '../actions/user';
+import { CREATE_USER_REQUEST, CREATE_USER_SUCCESS, CREATE_USER_ERROR, SEND_MAIL_REQUEST,  SEND_MAIL_SUCCESS, SEND_MAIL_ERROR, 
+  SEND_NEW_PASSWORD_REQUEST, SEND_NEW_PASSWORD_SUCCESS, SEND_NEW_PASSWORD_ERROR, LOGIN_SUCCESS, 
+  LOGIN_ERROR, LOGIN_REQUEST, GET_USER_INFO_REQUEST, GET_USER_INFO_SUCCESS, GET_USER_INFO_ERROR, LOGOUT_USER } from '../actions/user';
 
 const initialState = {
   userEmail: '',
   userName: '',
   userPassword: '',
-  sendUser: false,
-  createUserError: false,
-  passwordResetError: false,
-  sendMailError: false,
   messageSuccess: '',
   checkingResponse: '',
   checkingReset: '',
-  status: false,
-  formName: '',
-  formEmail: '',
-  formPassword: ''
+  sendMail: false,
+  loading: false,
+  createUserError: false,
+  passwordResetError: false,
+  sendMailError: false,
+  getUserError: false,
+  loginError: false
 }
 
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_USER_REQUEST:
-      return { ...state, sendUser: true }
+      return { ...state, loading: true }
     case CREATE_USER_SUCCESS:
       return {
         ...state,
         userName: action.payload.user.name,
         userEmail: action.payload.user.email,
-        sendUser: false
+        loading: false
       }
     case CREATE_USER_ERROR:
       return { 
         ...state, 
-        sendUser: false, 
+        loading: false, 
         createUserError: true 
       }
-    case CHANGE_EMAIL:
-      return { ...state, formEmail: action.email }
-    case CHANGE_NAME:
-      return { ...state, formName: action.name }
-    case CHANGE_PASSWORD:
-      return { ...state, formPassword: action.password }
+
     case SEND_MAIL_REQUEST:
-      return { ...state,  status: true }
+      return { ...state,  loading: true }
     case SEND_MAIL_SUCCESS:
       return { 
         ...state, 
         checkingResponse: action.success,
         messageSuccess: action.message,
-        status: false 
+        sendMail: true,
+        loading: false 
       }
     case SEND_MAIL_ERROR:
       return {
         ...state,
-        status: false,
+        loading: false,
         sendMailError: true
       }
+
     case SEND_NEW_PASSWORD_REQUEST:
-      return { ...state, status: true }
+      return { ...state, loading: true }
     case SEND_NEW_PASSWORD_SUCCESS:
       return { 
         ...state, 
         checkingReset: action.success,
         messageSuccess: action.message,
-        status: false 
+        loading: false,
+        sendMail: false
       }
     case SEND_NEW_PASSWORD_ERROR:
       return {
         ...state,
-        status: false,
+        loading: false,
         resetPasswordError: true
+      }
+
+    case LOGIN_REQUEST:
+      return {
+        ...state,
+        loading: true
       }
     case LOGIN_SUCCESS:
       return {
@@ -78,8 +82,43 @@ export const userReducer = (state = initialState, action) => {
         userEmail: action.email,
         loginStatus: action.status,
         formName: action.name,
-        formEmail: action.email
+        formEmail: action.email,
+        loading: false
       }
+    case LOGIN_ERROR:
+      return {
+        ...state,
+        loading: false,
+        loginError: true
+      }
+      
+    case LOGOUT_USER:
+      return {
+        ...state,
+        userName: '',
+        userEmail: '',
+        formName: '',
+        formEmail: '',
+      }
+
+    case GET_USER_INFO_REQUEST:
+      return { ...state, loading: true }
+    case GET_USER_INFO_SUCCESS:
+      return {
+        ...state,
+        userName: action.name,
+        formName: action.name,
+        formEmail: action.email,
+        userEmail: action.email,
+        loading: false
+    }
+    case GET_USER_INFO_ERROR:
+      return {
+        ...state,
+        loading: false,
+        getUserError: true
+      }
+      
     default:
       return state
   }

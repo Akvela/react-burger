@@ -12,6 +12,8 @@
   border-radius: 40px;
   cursor: default;
   z-index: 2;
+  padding: 53px 40px 40px 40px;
+  box-sizing: border-box;
 }
 
 .button {
@@ -28,4 +30,8 @@
 
 .button:hover {
   opacity: .6;
+}
+
+.title {
+  padding-bottom: 12px;
 }

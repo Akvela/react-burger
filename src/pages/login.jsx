@@ -1,15 +1,18 @@
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
-
+import { Link, Redirect, useLocation } from 'react-router-dom';
+import { getCookie } from "../utils/cookie";
 import { useSelector, useDispatch } from 'react-redux';
-import { EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { loginUser } from '../services/actions/user';
+import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import loginStyles from './login.module.css';
 
 export function Login() {
-  //let auth = useAuth();
-
   const [emailForm, setEmailForm] = React.useState('');
   const [passwordForm, setPasswordForm] = React.useState('');
+  const location = useLocation();
+  const token = getCookie('token')
+  const dispatch = useDispatch();
+  const userName = useSelector(store => store.user.userName)
 
   const changeEmailInput = (e) => {
     setEmailForm(e.target.value)
@@ -18,22 +21,21 @@ export function Login() {
     setPasswordForm(e.target.value)
   }
 
-  // let login = useCallback(
-  //   e => {
-  //     e.preventDefault();
-  //     auth.signIn(form);
-  //   },
-  //   [auth, form]
-  // );
-
+  if (userName) {
+    return (
+      <Redirect to={ location.state?.from || '/'} />
+    )
+  }
 
   return (
     <>
       <main className={loginStyles.container}>
         <h2 className={`${loginStyles.title} text text_type_main-medium pb-6`}>Вход</h2>
-        <form className={loginStyles.form}>
+        <form className={loginStyles.form} onSubmit={(evt) => { 
+          evt.preventDefault(); dispatch(loginUser(emailForm, passwordForm, token))
+        }}>
           <fieldset className={loginStyles.fieldset}>
-            <EmailInput onChange={changeEmailInput} value={emailForm} name='email' />
+            <Input onChange={changeEmailInput} value={emailForm} name='email' placeholder={'E-mail'} />
             <PasswordInput onChange={changePasswordInput} value={passwordForm} name='password' />
           </fieldset>
           <Button type="primary" size="medium">Войти</Button>

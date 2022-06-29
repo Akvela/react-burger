@@ -7,10 +7,11 @@ import resetPasswordStyles from './reset-password.module.css';
 
 export function ResetPassword() {
   const dispatch = useDispatch();
-
   const [tokenForm, setTokenForm] = React.useState('');
   const [passwordForm, setPasswordForm] = React.useState('');
   const { checkingReset, resetPasswordError} = useSelector(store => store.user);
+  const sendMail = useSelector(store => store.user.sendMail)
+  const userName =  useSelector(store => store.user.userName)
   
   const changeTokenInput = (e) => {
     setTokenForm(e.target.value)
@@ -25,6 +26,11 @@ export function ResetPassword() {
   }
 
 
+  if (!sendMail && userName) {
+    return (
+      <Redirect to='/' />
+    )
+  }
 
   return (
     <>
