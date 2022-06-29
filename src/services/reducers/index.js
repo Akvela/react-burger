@@ -3,10 +3,12 @@ import { burgerConstructorReducer } from './burger-constructor.js';
 import { burgerIngredientsReducer } from './burger-ingredients.js';
 import { ingredientDetailsReducer } from './ingredient-details.js';
 import { orderDetailsReducer } from './order-details.js';
+import { userReducer } from './user.js';
 
 export const rootReducer = combineReducers({
   burgerConstructor: burgerConstructorReducer,
   burgerIngredients: burgerIngredientsReducer,
   ingredientDetails: ingredientDetailsReducer,
-  orderDetails: orderDetailsReducer
+  orderDetails: orderDetailsReducer,
+  user: userReducer
 });

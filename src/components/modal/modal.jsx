@@ -7,7 +7,7 @@ import modalStyles from './modal.module.css';
 
 const modalContainer = document.querySelector('#react-modals');
 
-export const Modal = ({onCloseClick, children}) => {
+export const Modal = ({onCloseClick, children, title}) => {
   const handleEscCloseModal = (evt) => {
     evt.key === 'Escape' && onCloseClick()
   };
@@ -26,6 +26,7 @@ export const Modal = ({onCloseClick, children}) => {
         <button type="button" className={modalStyles.button}>
           <CloseIcon type="primary" onClick={onCloseClick} />
         </button>
+        {title && (<h2 className={`${modalStyles.title} text text_type_main-large`}>{title}</h2>)}
         {children}
       </div>
       <ModalOverlay onClick={onCloseClick} />
@@ -36,5 +37,6 @@ export const Modal = ({onCloseClick, children}) => {
 
 Modal.propTypes = {
   onCloseClick: PropTypes.func.isRequired,
-  children: PropTypes.element.isRequired
+  children: PropTypes.element.isRequired,
+  title: PropTypes.string
 }

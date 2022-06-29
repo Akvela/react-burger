@@ -60,7 +60,7 @@ export const BurgerIngredients = () => {
         <Gallery ingredientsType='Начинки' data={mainArray} ref={mainRef} />
       </div>
       {itemIsClicked && (
-        <Modal onCloseClick={() => { dispatch({ type: CLOSE_MODAL_INGREDIENT }) }}>
+        <Modal title='Детали ингредиента' onCloseClick={() => { dispatch({ type: CLOSE_MODAL_INGREDIENT }) }}>
           <IngredientDetails />
         </Modal>
       )}

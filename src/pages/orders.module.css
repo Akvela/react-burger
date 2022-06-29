@@ -1,0 +1,43 @@
+.page {
+  max-width: 1920px;
+  margin: 0 auto;  
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  width: 860px;
+  margin: 120px 0 0 0;
+  padding-left: 340px;
+  gap: 60px;
+}
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  list-style: none; 
+  display: flex;
+  align-items: center;
+  height: 64px;
+}
+
+.link {
+  text-decoration: none;
+  color: #8585AD;
+  display: block;
+  width: 320px;
+}
+
+.linkActive {
+  color: #F2F2F3;  
+}
+
+.description {
+  opacity: 0.4;
+}
