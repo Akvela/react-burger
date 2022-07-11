@@ -98,7 +98,7 @@ export function Profile() {
                 className={`${profileStyles.link} text text_type_main-medium`}
               >Выход</Link>
             </li>
-            <li className={`${profileStyles.item} pt-20`}>
+            <li className={profileStyles.item}>
               <p className={`${profileStyles.description} text text_type_main-default text_color_inactive`}>В этом разделе вы можете изменить свои персональные данные</p>
             </li>
           </ul>

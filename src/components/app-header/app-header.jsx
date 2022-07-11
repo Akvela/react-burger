@@ -15,7 +15,7 @@ export const AppHeader = () => {
               </NavLink>
             </li>
             <li className={`${appHeaderStyles.menuItem} pr-5 pl-5`}>
-              <NavLink activeClassName={appHeaderStyles.linkActive} className={appHeaderStyles.link} to='/profile/orders'>  
+              <NavLink activeClassName={appHeaderStyles.linkActive} className={appHeaderStyles.link} to='/feed'>  
                 <ListIcon type='secondary' />
                 <span className='text text_type_main-default ml-2'>Лента заказов</span>
               </NavLink>

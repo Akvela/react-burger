@@ -5,6 +5,7 @@ import { getCookie, setCookie } from '../../utils/cookie.js';
 import { refreshToken } from '../../utils/api.js';
 import { ConstructorItem } from '../constructor-item/constructor-item.jsx';
 import { useHistory } from 'react-router-dom';
+import { setUniqueId } from '../../utils/utils.js';
 import { ADD_BUN, ADD_ITEM, RESET_CONSTRUCTOR, DELETE_ITEM } from '../../services/actions/burger-constructor.js';
 import { INCREASE_COUNT, DECREASE_COUNT, RESET_COUNT } from '../../services/actions/burger-ingredients.js';
 import { OPEN_MODAL_ORDER, CLOSE_MODAL_ORDER } from '../../services/actions/order-details.js';
@@ -47,10 +48,6 @@ export const BurgerConstructor = () => {
     dispatch({ type: RESET_CONSTRUCTOR });
     dispatch({ type: RESET_COUNT })
   }, [dispatch]);
-
-  function setUniqueId() {
-    return Date.now() * Math.random()
-  };
 
   const deleteItem = React.useCallback((itemKey, itemId) => {
     dispatch({ type: DELETE_ITEM, id: itemKey });

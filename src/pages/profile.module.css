@@ -7,8 +7,8 @@
   display: flex;
   flex-direction: row;
   width: 860px;
-  margin: 120px 0 0 0;
-  padding-left: 340px;
+  margin: 120px auto 0 auto;
+  padding-right: 380px;
   gap: 60px;
 }
 
@@ -25,6 +25,10 @@
   display: flex;
   align-items: center;
   height: 64px;
+}
+
+.item:last-of-type {
+  margin-top: 70px;
 }
 
 .link {

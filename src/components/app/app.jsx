@@ -9,7 +9,7 @@ import { getCookie, setCookie, refreshTokenUser } from '../../utils/cookie';
 import { getDataIngredients } from '../../services/actions/burger-ingredients';
 import { refreshToken } from '../../utils/api';
 import ProtectedRoute from '../protected-route/protected-route';
-import { Home, Login, Register, ForgotPassword, ResetPassword, Profile, Ingredient, Orders, NotFound } from '../../pages';
+import { Home, Login, Register, ForgotPassword, ResetPassword, Profile, Ingredient, Orders, NotFound, Feed } from '../../pages';
 import { getUserInfo } from '../../services/actions/user';
 
 export default function App() {
@@ -52,6 +52,9 @@ export default function App() {
         </Route>
         <Route path="/reset-password" exact={true}>
           <ResetPassword />
+        </Route>
+        <Route path="/feed" exact={true}>
+          <Feed />
         </Route>
         <ProtectedRoute path="/profile" redirectPath='/login' exact={true} check={userName}>
           <Profile />
