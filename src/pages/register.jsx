@@ -2,16 +2,17 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { registerNewUser } from '../services/actions/user';
 import { EmailInput, PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import registerStyles from './register.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { getCookie } from '../utils/cookie';
+import { Loading } from '../components/loading/loading';
+import registerStyles from './register.module.css';
 
 export function Register() {
   const dispatch = useDispatch();
   const [nameForm, setNameForm] = React.useState('');
   const [emailForm, setEmailForm] = React.useState('');
   const [passwordForm, setPasswordForm] = React.useState('');
-  const { userName } = useSelector(store => store.user);
+  const { userName, loading } = useSelector(store => store.user);
   const token = getCookie('token')
 
   const changeNameInput = (e) => {
@@ -55,6 +56,7 @@ export function Register() {
           <Link className={registerStyles.link} to='/login'>Войти</Link>
         </div>
       </main>
+      {loading && <Loading />}
     </>
   );
 }

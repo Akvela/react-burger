@@ -118,7 +118,6 @@ export const userReducer = (state = initialState, action) => {
         loading: false,
         getUserError: true
       }
-      
     default:
       return state
   }

@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import appHeaderStyles from './app-header.module.css';
 
@@ -21,7 +21,9 @@ export const AppHeader = () => {
               </NavLink>
             </li>
           </ul>
-          <Logo />
+          <Link to='/'>
+            <Logo />
+          </Link>
         </div>
         <div className='pr-5 pl-5'>
           <NavLink activeClassName={appHeaderStyles.linkActive} className={appHeaderStyles.link} exact to='/profile'>

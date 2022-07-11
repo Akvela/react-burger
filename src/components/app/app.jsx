@@ -1,16 +1,16 @@
 import React from 'react';
 import { useLocation, Switch, Route, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { CLOSE_MODAL_INGREDIENT } from './services/actions/ingredient-details';
-import { Modal } from './components/modal/modal';
-import { IngredientDetails } from './components/ingredient-details/ingredient-details';
-import { AppHeader } from './components/app-header/app-header';
-import { getCookie, setCookie, refreshTokenUser } from './utils/cookie';
-import { getDataIngredients } from './services/actions/burger-ingredients';
-import { refreshToken } from './utils/api';
-import ProtectedRoute from './components/protected-route/protected-route';
-import { Home, Login, Register, ForgotPassword, ResetPassword, Profile, Ingredient, Orders, NotFound } from './pages';
-import { getUserInfo } from './services/actions/user';
+import { CLOSE_MODAL_INGREDIENT } from '../../services/actions/ingredient-details';
+import { Modal } from '../modal/modal';
+import { IngredientDetails } from '../ingredient-details/ingredient-details';
+import { AppHeader } from '../app-header/app-header';
+import { getCookie, setCookie, refreshTokenUser } from '../../utils/cookie';
+import { getDataIngredients } from '../../services/actions/burger-ingredients';
+import { refreshToken } from '../../utils/api';
+import ProtectedRoute from '../protected-route/protected-route';
+import { Home, Login, Register, ForgotPassword, ResetPassword, Profile, Ingredient, Orders, NotFound } from '../../pages';
+import { getUserInfo } from '../../services/actions/user';
 
 export default function App() {
   const refresh = getCookie('refreshToken');

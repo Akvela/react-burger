@@ -4,14 +4,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { LOGOUT_USER } from '../services/actions/user';
 import { logout } from '../utils/api';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import profileStyles from './profile.module.css';
 import { refreshTokenUser, deleteCookie, getCookie } from '../utils/cookie';
 import { updateUser } from '../services/actions/user';
+import { Loading } from '../components/loading/loading';
+import profileStyles from './profile.module.css';
 
 export function Profile() {
   const [isUserInfoChanged, setIsUserInfoChanged] = React.useState(false);
   const dispatch = useDispatch();
-  const { userName, userEmail} = useSelector(store => store.user)
+  const { userName, userEmail, loading} = useSelector(store => store.user)
   const [nameValue, setNameValue] = React.useState(userName);
   const [loginValue, setLoginValue] = React.useState(userEmail);
   const [passwordValue, setPasswordValue] = React.useState('');
@@ -113,6 +114,7 @@ export function Profile() {
               <Button type="primary" size="medium" >Сохранить</Button>
             </div>)}
           </form>
+          {loading && <Loading />}
         </div>
       </main>
     </>

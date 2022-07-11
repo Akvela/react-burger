@@ -4,6 +4,7 @@ import { getCookie } from "../utils/cookie";
 import { useSelector, useDispatch } from 'react-redux';
 import { loginUser } from '../services/actions/user';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Loading } from '../components/loading/loading';
 import loginStyles from './login.module.css';
 
 export function Login() {
@@ -12,7 +13,7 @@ export function Login() {
   const location = useLocation();
   const token = getCookie('token')
   const dispatch = useDispatch();
-  const userName = useSelector(store => store.user.userName)
+  const {userName, loading} = useSelector(store => store.user)
 
   const changeEmailInput = (e) => {
     setEmailForm(e.target.value)
@@ -49,6 +50,7 @@ export function Login() {
           <Link className={loginStyles.link} to='/forgot-password'>Восстановить пароль</Link>
         </div>
       </main>
+      {loading && <Loading />}
     </>
   );
 }

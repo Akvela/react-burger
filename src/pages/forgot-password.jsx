@@ -3,13 +3,13 @@ import { Link, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { getPasswordRecovery } from '../services/actions/user';
+import { Loading } from '../components/loading/loading';
 import forgotPasswordStyles from './forgot-password.module.css';
 
 export function ForgotPassword() {
   const [emailForm, setEmailForm] = React.useState('');
   const dispatch = useDispatch();
-  const checkingResponse = useSelector(store => store.user.checkingResponse);
-  const userName =  useSelector(store => store.user.userName);
+  const {checkingResponse, userName, loading} = useSelector(store => store.user);
 
   const changeEmailInput = (e) => {
     setEmailForm(e.target.value)
@@ -44,6 +44,7 @@ export function ForgotPassword() {
           <Link className={forgotPasswordStyles.link} to='/login'>Войти</Link>
         </div>
       </main>
+      {loading && <Loading />}
     </>
   );
 }

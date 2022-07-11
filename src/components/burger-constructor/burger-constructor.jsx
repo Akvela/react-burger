@@ -12,13 +12,14 @@ import { OrderDetails } from '../order-details/order-details.jsx';
 import { Modal } from '../modal/modal.jsx';
 import { getUserOrderNumber } from '../../services/actions/order-details.js';
 import { ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Loading } from '../loading/loading.jsx';
 import burgerConstructorStyles from './burger-constructor.module.css';
 
 
 export const BurgerConstructor = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { orderIsClicked, orderSuccessed } = useSelector(store => store.orderDetails);
+  const { orderIsClicked, orderSuccessed, orderRequest } = useSelector(store => store.orderDetails);
   const ingredients = useSelector(store => store.burgerIngredients.ingredients);
   const { elements, bun } = useSelector(store => store.burgerConstructor);
   const  burgerConstructor = useSelector(store => store.burgerConstructor);
@@ -125,6 +126,7 @@ export const BurgerConstructor = () => {
         <Button type="primary" size="large" disabled={(bun.length===0) || (elements.length===0)} onClick={() => {
           getCookie('refreshToken') === undefined ? history.replace({ pathname: '/login' }) : openModalOrder()}}>Оформить заказ</Button>
       </div>
+      {orderRequest && <Loading />}
       {orderIsClicked && orderSuccessed && (
         <Modal onCloseClick={closeModalOrder}>
           <OrderDetails />
