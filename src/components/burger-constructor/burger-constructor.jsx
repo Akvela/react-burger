@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
-import { getCookie, setCookie } from '../../utils/cookie.js';
+import { getCookie, setCookie, refreshTokenUser } from '../../utils/cookie.js';
 import { refreshToken } from '../../utils/api.js';
 import { ConstructorItem } from '../constructor-item/constructor-item.jsx';
 import { useHistory } from 'react-router-dom';
@@ -25,6 +25,7 @@ export const BurgerConstructor = () => {
   const { elements, bun } = useSelector(store => store.burgerConstructor);
   const  burgerConstructor = useSelector(store => store.burgerConstructor);
   const token = getCookie('token');
+  const refresh = getCookie('refreshToken');
 
   const totalPrice = React.useMemo(() => {
     return (
@@ -39,7 +40,7 @@ export const BurgerConstructor = () => {
       .then(() => {
         const arrId = elements.map(ingredient => ingredient._id )
         dispatch({ type: OPEN_MODAL_ORDER });
-        dispatch(getUserOrderNumber([...arrId, bun._id], token));
+        dispatch(getUserOrderNumber([...arrId, bun._id], token, refresh, refreshTokenUser));
       })
     }
 

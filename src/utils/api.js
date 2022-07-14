@@ -14,15 +14,31 @@ const getIngredients = () => {
     .then(res => checkResponse(res))
 };
 
-const getOrderNumber = (arrIdIngredients) => {
+const getOrderNumber = (arrIdIngredients, token, refresh, callback) => {
   return fetch(`${urlApi}/orders`, {
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
     },
     method: 'POST',
     body: JSON.stringify({ "ingredients": arrIdIngredients })
   })
   .then(res => checkResponse(res))
+  .catch(res => {
+    if (!res.success) {
+      refreshToken(refresh)
+        .then(res => {
+          callback(res);
+          fetch(`${this.url}orders`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': res.accessToken
+            }
+          }).then(res => checkResponse(res))
+        })
+    }
+  })
 };
 
 const requestPassword = (email) => {
