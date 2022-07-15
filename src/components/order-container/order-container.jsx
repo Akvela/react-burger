@@ -1,17 +1,16 @@
 import { formatRelative } from 'date-fns';
 import { ru } from 'date-fns/locale'
-import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { setUniqueId } from '../../utils/utils';
-import { useSelector, useDispatch } from 'react-redux';
-import { CLICK_ON_ORDER } from '../../services/actions/orders';
+import { useSelector } from 'react-redux';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import orderContainerStyles from './order-container.module.css';
+import PropTypes from 'prop-types';
 
-export const OrderContainer = ({status, number, createdAt, name, ingredients, id, path}) => {
+export const OrderContainer = ({status, number, createdAt, name, ingredients, id}) => {
   const allIngredients = useSelector(store => store.burgerIngredients.ingredients);
   const location = useLocation();
-  const dispatch = useDispatch();
+  
 
   const findIngredient = (ingredient) => {
     return allIngredients.find((item) => item._id === ingredient)
@@ -48,9 +47,9 @@ export const OrderContainer = ({status, number, createdAt, name, ingredients, id
 
   return(
     <Link className={orderContainerStyles.box} to={{
-      pathname: path,
+      pathname: `${location.pathname}/${id}`,
       state: { background: location }
-    }} onClick={()=> {dispatch({type: CLICK_ON_ORDER, payload: id})}}>
+    }}>
         <div className={orderContainerStyles.header}>
           <p className='text text_type_digits-default'>#{number}</p>
           <p className='text text_type_main-default text_color_inactive'>{determineDate(createdAt)}</p>
@@ -86,4 +85,12 @@ export const OrderContainer = ({status, number, createdAt, name, ingredients, id
 
     </Link>
   )
+}
+
+OrderContainer.propTypes = {
+  status: PropTypes.string, 
+  number: PropTypes.number, 
+  createdAt: PropTypes.string, 
+  name: PropTypes.string, 
+  id: PropTypes.string
 }

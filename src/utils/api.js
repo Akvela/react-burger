@@ -41,6 +41,10 @@ const getOrderNumber = (arrIdIngredients, token, refresh, callback) => {
   })
 };
 
+const getOrderInfo = (number) => {
+  return fetch(`${urlApi}/orders/${number}`).then(res => checkResponse(res))
+};
+
 const requestPassword = (email) => {
   return fetch(`${urlApi}/password-reset`, {
     headers: {
@@ -149,4 +153,4 @@ const logout = (match) => {
 }
 
 export {getIngredients, getOrderNumber, requestPassword, resetPassword, createNewUser, login, 
-  refreshToken, logout, getUser, refreshUser}
+  refreshToken, logout, getUser, refreshUser, getOrderInfo}

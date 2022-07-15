@@ -3,6 +3,7 @@
   flex-direction: column;
   margin: 0;
   min-height: 400px;
+  max-width: 640px;
   position: relative;
   z-index: 10;
 }
