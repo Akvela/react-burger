@@ -1,23 +1,25 @@
 import { formatRelative } from 'date-fns';
 import { ru } from 'date-fns/locale'
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useRouteMatch } from 'react-router-dom';
 import { setUniqueId } from '../../utils/utils';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import orderContainerStyles from './order-container.module.css';
 import PropTypes from 'prop-types';
+import { CLICK_ON_ORDER } from '../../services/actions/orders';
 
-export const OrderContainer = ({status, number, createdAt, name, ingredients, id}) => {
+export const OrderContainer = ({ order }) => {
   const allIngredients = useSelector(store => store.burgerIngredients.ingredients);
+  const { number, _id, createdAt, name, status, ingredients } = order;
   const location = useLocation();
+  const { url } = useRouteMatch();
+  const numbersHidden = ingredients.length === 6 ? '' : `+${ingredients.length - 6}`;
   
-
   const findIngredient = (ingredient) => {
     return allIngredients.find((item) => item._id === ingredient)
   }
-
+  
   const lastIngredient = findIngredient(ingredients[5]);
-  const numbersHidden = ingredients.length === 6 ? '' : `+${ingredients.length - 6}`;
 
   const calculateAmount = () => {
     let sum = 0;
@@ -47,8 +49,8 @@ export const OrderContainer = ({status, number, createdAt, name, ingredients, id
 
   return(
     <Link className={orderContainerStyles.box} to={{
-      pathname: `${location.pathname}/${id}`,
-      state: { background: location }
+      pathname: `${url}/${_id}`,
+      state: { background: location, from: location.pathname }
     }}>
         <div className={orderContainerStyles.header}>
           <p className='text text_type_digits-default'>#{number}</p>
@@ -82,7 +84,6 @@ export const OrderContainer = ({status, number, createdAt, name, ingredients, id
             <CurrencyIcon type='primary' />
           </div>
         </div>
-
     </Link>
   )
 }

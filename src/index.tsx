@@ -11,7 +11,7 @@ import { socketMiddleware } from './services/middleware/socket-middleware';
 import { wsActions } from './services/actions/ws'
 import './index.css';
 
-const wsUrl = 'wss://norma.nomoreparties.space/orders/all'
+const wsUrl = 'wss://norma.nomoreparties.space/orders';
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const enhancer = composeEnhancers(applyMiddleware(thunk, socketMiddleware(wsUrl, wsActions)));

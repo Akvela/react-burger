@@ -13,7 +13,6 @@ import ProtectedRoute from '../protected-route/protected-route';
 import { Home, Login, Register, ForgotPassword, ResetPassword, Profile, Ingredient, Orders, NotFound, Feed, InfoOrder } from '../../pages';
 import { getUserInfo } from '../../services/actions/user';
 import { CLOSE_MODAL_ORDER } from '../../services/actions/order-details';
-import { Loading } from '../loading/loading';
 
 export default function App() {
   const refresh = getCookie('refreshToken');
@@ -22,7 +21,11 @@ export default function App() {
   const history = useHistory();
   const background = location.state?.background;
   const dispatch = useDispatch();
+  const from = location.state?.from;
   const userName = useSelector(store => store.user.userName);
+  const { orders, wsOpen } = useSelector(store => store.ws)
+  
+  React.useEffect(() => {}, []);
   
   React.useEffect(() => {
     dispatch(getDataIngredients());
@@ -30,85 +33,75 @@ export default function App() {
     .then(() => {
       dispatch(getUserInfo(token));
     })
-    const interval = setInterval(refreshTokenUser, 10000000)
+    const interval = setInterval(refreshTokenUser, 100000)
     return () => {
       clearInterval(interval)
     }
   }, [])
-  
-  const closeModal = () => {
-    dispatch({ type: CLOSE_MODAL_ORDER })
-    background && history.goBack();
-  };
+
 
   return (
     <>
       <AppHeader />
       <Switch location={background || location}>
-        <Route path="/" exact={true}>
+        <Route path='/' exact={true}>
           <Home />
         </Route>
 
-        <Route path="/login" exact={true}>
+        <Route path='/login' exact={true}>
           <Login />
         </Route>
 
-        <Route path="/register" exact={true}>
+        <Route path='/register' exact={true}>
           <Register />
         </Route>
 
-        <Route path="/forgot-password" exact={true}>
+        <Route path='/forgot-password' exact={true}>
           <ForgotPassword />
         </Route>
 
-        <Route path="/reset-password" exact={true}>
+        <Route path='/reset-password' exact={true}>
           <ResetPassword />
         </Route>
 
-        <Route path="/feed" exact={true}>
+        <Route path='/feed' exact={true}>
           <Feed />
         </Route>
 
-        <Route path='/feed/:id' exact={true} children={<InfoOrder />} />
+        <Route path='/feed/:id' exact={true}>
+          {!!orders.length && <InfoOrder />}
+        </Route>
 
-        <Route path='/ingredients/:id'  exact={true} children={<Ingredient title='Детали ингредиента' />} />
+        <Route path='/profile/orders/:id' exact={true}>
+          <InfoOrder />
+        </Route>
 
-        <ProtectedRoute path="/profile" redirectPath='/login' exact={true} check={userName}>
+        <Route path='/ingredients/:id' exact={true} children={<Ingredient title='Детали ингредиента' />} />
+
+        <ProtectedRoute path='/profile' exact={true} check={userName}>
           <Profile />
         </ProtectedRoute>
 
-        <ProtectedRoute path="/profile/orders" redirectPath='/login' exact={true} check={userName}>
+        <ProtectedRoute path='/profile/orders' exact={true} check={userName}>
           <Orders />
         </ProtectedRoute>
 
-        <ProtectedRoute path='/profile/orders/:id' redirectPath='/login' exact={true} check={userName} >
-          <InfoOrder />
-        </ProtectedRoute>
-
-        <Route path="*">
+        <Route path='*'>
           <NotFound />
         </Route>
       </Switch>
 
-      {background && <Route path='/ingredients/:id'>
-        <Modal title='Детали ингредиента' onCloseClick={() => closeModal()}>
+      {background && (<Route path='/ingredients/:id' exact={true} children={ 
+        <Modal title='Детали ингредиента' onCloseClick={() => { history.goBack(); dispatch({ type: CLOSE_MODAL_INGREDIENT }) }}>
           <IngredientDetails />
-        </Modal>
-      </Route>}
+        </Modal>} />)}
+      
 
-      {background && <ProtectedRoute path='/profile/orders/:id' redirectPath='/login' exact={true} check={userName}>
-          <Modal onCloseClick={() => closeModal()}>
+      {background && !!orders.length && (<Route path={`${from}/:id`} exact={true} children={
+          <Modal onCloseClick={() => { background && history.goBack(); dispatch({ type: CLOSE_MODAL_ORDER }) }}>
             <OrderInfo />
-          </Modal>
-        } 
-      </ProtectedRoute>}
-
-      {background && <Route path='/feed/:id' exact={true}>
-        <Modal onCloseClick={() => { closeModal()}}>
-          <OrderInfo />
-        </Modal>
-      </Route>}
-
+          </Modal>} />
+        )}
     </>
   );
 }

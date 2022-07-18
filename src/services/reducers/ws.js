@@ -1,11 +1,10 @@
-import { WS_CONNECTION_SUCCESS, WS_GET_MESSAGE, WS_CONNECTION_CLOSED, WS_CONNECTION_ERROR, WS_CONNECTION_START, 
-  WS_CONNECTION_WITH_TOKEN, WS_RESET_ERROR_STATUS } from "../actions/ws";
+import { WS_CONNECTION_SUCCESS, WS_GET_MESSAGE, WS_CONNECTION_CLOSED, WS_CONNECTION_ERROR, WS_CONNECTION_START } from "../actions/ws";
 
 const initialState = {
   wsRequest: false,
   wsOpen: false,
   wsFailed: false,
-  orders: null,
+  orders: [],
   total: '',
   totalToday: ''
 }
@@ -18,6 +17,7 @@ export const wsReducer = (state = initialState, action) => {
         wsRequest: true
       };
     }
+
     case WS_CONNECTION_SUCCESS: {
       return {
         ...state,
@@ -39,7 +39,7 @@ export const wsReducer = (state = initialState, action) => {
         wsRequest: false,
         wsOpen: false,
         wsFailed: false,
-        orders: null,
+        orders: [],
         total: '',
         totalToday: ''
       }
@@ -53,24 +53,6 @@ export const wsReducer = (state = initialState, action) => {
       }
     }
 
-    case WS_RESET_ERROR_STATUS: {
-      return {
-        ...state,
-        wsRequest: false,
-        wsOpen: false,
-        wsFailed: false,
-        orders: null,
-        total: '',
-        totalToday: ''
-      }
-    }
-
-    case WS_CONNECTION_WITH_TOKEN: {
-      return {
-        ...state,
-        wsRequest: true
-      }
-    }
 
     default: {
       return state;

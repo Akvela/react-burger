@@ -2,20 +2,21 @@ import React from 'react';
 import { OrderContainer } from '../components/order-container/order-container';
 import { Loading } from '../components/loading/loading';
 import { setUniqueId } from '../utils/utils';
-import { WS_CONNECTION_START, WS_CONNECTION_CLOSED } from '../services/actions/ws';
+import { WS_CONNECTION_START, WS_CONNECTION_CLOSE } from '../services/actions/ws';
 import feedStyles from './feed.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 
 
+
 export function Feed() {
   const dispatch = useDispatch();
-  const { orders, wsRequest, wsFailed, total, totalToday } = useSelector(store => store.ws);
+  const { orders, total, totalToday } = useSelector(store => store.ws);
 
   React.useEffect(() => {
-    dispatch({ type: WS_CONNECTION_START });
+    dispatch({ type: WS_CONNECTION_START, payload: '/all' });
 
     return () => {
-      dispatch({ type: WS_CONNECTION_CLOSED });
+      dispatch({ type: WS_CONNECTION_CLOSE });
     };
   }, [dispatch]);
 
@@ -31,8 +32,7 @@ export function Feed() {
           <div className={feedStyles.tape}>
             <ul className={feedStyles.container}>
               {orders?.map((item)=>(
-                <OrderContainer id={item._id} key={setUniqueId()} status={null} number={item.number} createdAt={item.createdAt} 
-                name={item.name} ingredients={item.ingredients} path={`/feed/${item._id}`} />
+                <OrderContainer key={setUniqueId()} order={item} />
               ))}
             </ul>
             <div className={feedStyles.info}>

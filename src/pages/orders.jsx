@@ -5,37 +5,29 @@ import { LOGOUT_USER } from '../services/actions/user';
 import { logout } from '../utils/api';
 import ordersStyles from './orders.module.css';
 import { deleteCookie, getCookie } from '../utils/cookie';
-import { wsInitWithToken, WS_CONNECTION_CLOSED } from '../services/actions/ws';
+import { WS_CONNECTION_START, WS_CONNECTION_CLOSE } from '../services/actions/ws';
 import { setUniqueId } from '../utils/utils';
 import { OrderContainer } from '../components/order-container/order-container';
+import { Loading } from '../components/loading/loading';
 
 
 export function Orders() {
   const dispatch = useDispatch();
-  const refresh = getCookie('refreshToken');
-  const token = getCookie('token');
   const { orders } = useSelector(store => store.ws)
-  const { userName } = useSelector(store => store.user)
   
-
   React.useEffect(() => {
-    dispatch(wsInitWithToken(`wss://norma.nomoreparties.space/orders?token=${token}`));
+    dispatch({type: WS_CONNECTION_START, payload: `?token=${getCookie('token')}`});
 
     return () => {
-      dispatch({type: WS_CONNECTION_CLOSED});
+      dispatch({ type: WS_CONNECTION_CLOSE });
     };
-  }, [dispatch, token]);
+  }, [dispatch]);
 
 
-  if (userName === '') {
-    return (
-      <Redirect to='/login' />
-    )
-  }
   
   return(
     <>
-      {orders && 
+      {orders ? (
         <main className={ordersStyles.page}>
         <div className={ordersStyles.container}>
           <ul className={ordersStyles.navigation}>
@@ -63,13 +55,13 @@ export function Orders() {
           </ul>
           <ul className={ordersStyles.list}>
             {orders && orders?.map((item)=>(
-              <OrderContainer id={item._id} key={setUniqueId()} status={item.status} number={item.number} createdAt={item.createdAt} name={item.name} 
-                ingredients={item.ingredients} path={`/profile/orders/${item._id}`} />
+              <OrderContainer key={setUniqueId()} order={item} />
             ))}
           </ul>
           
         </div>
-      </main> }
+      </main> 
+      ) : <Loading /> }
     </>
   )
 }

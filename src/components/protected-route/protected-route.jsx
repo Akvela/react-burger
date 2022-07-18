@@ -1,7 +1,7 @@
 import { Redirect, Route } from "react-router-dom";
 
 
-export default function ProtectedRoute({ path, children, redirectPath, check }) {
+export default function ProtectedRoute({ path, children, check }) {
   return (
     <Route 
       path={path} 
@@ -9,7 +9,7 @@ export default function ProtectedRoute({ path, children, redirectPath, check }) 
       render={
         ({ location }) => check ? 
           (children) : 
-            (<Redirect to={{ pathname: redirectPath, state: { from: location }} } />)
+            (<Redirect to={{ pathname: '/login', state: { from: location }} } />)
       } 
     />
   )
