@@ -3,19 +3,21 @@ import { ru } from 'date-fns/locale'
 import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { setUniqueId } from '../../utils/utils';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import orderInfoStyles from './order-info.module.css';
 import { Loading } from '../loading/loading';
 import PropTypes from 'prop-types';
+import { WS_CONNECTION_START, WS_CONNECTION_CLOSE } from '../../services/actions/ws';
 
 export const OrderInfo = ({headerStyle}) => {
+  const dispatch = useDispatch();
+
   const { orders } = useSelector(store => store.ws);
   const { id } = useParams();
-  const location = useLocation();
   const { ingredients } = useSelector(store => store.burgerIngredients);
-  const currentOrder = orders && orders.find((order) => order._id === id)
-  const findIngredient = currentOrder && currentOrder.ingredients.map((orderIngredient) => ingredients.find((ingredient) => ingredient._id === orderIngredient))
+  const currentOrder = orders?.find((order) => order._id === id);
+  const findIngredient = currentOrder?.ingredients.map((orderIngredient) => ingredients.find((ingredient) => ingredient._id === orderIngredient))
 
   const calculateAmount = () => {
     let sum = 0;
@@ -37,18 +39,18 @@ export const OrderInfo = ({headerStyle}) => {
     }
     return sum;
   }
-  
+
   const determineDate = (date) => {
     const relativeDate = formatRelative(new Date(date), new Date(), { locale: ru });
     return relativeDate.split(' в ').join(', ') + ' i-GMT+3'
   }
 
-  if (!currentOrder || !orders.length) return null;
+  // if (!orders.length || !ingredients.length) return null;
 
   return (
     <> 
     {!currentOrder && <Loading />}
-    {!!currentOrder && !!orders.length &&
+    {currentOrder &&
       <div className={orderInfoStyles.item}>
         <p className={`${headerStyle} text text_type_digits-default`}>#{currentOrder?.number}</p>
         <h2 className='text text_type_main-medium pt-10'>{currentOrder?.name}</h2>
@@ -78,7 +80,7 @@ export const OrderInfo = ({headerStyle}) => {
               )
             })
           } 
-        </ul>    
+        </ul>
         <div className={`${orderInfoStyles.paragraph} text text_type_digits-default`}>
           <p className='text text_type_main-default text_color_inactive'>{determineDate(currentOrder?.createdAt)}</p>
           <div className={`${orderInfoStyles.price} text text_type_digits-default`}>

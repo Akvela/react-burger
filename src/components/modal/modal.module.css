@@ -18,6 +18,7 @@
 
 .button {
   position: absolute;
+  z-index: 1001;
   top: 60px;
   right: 40px;
   padding: 0;

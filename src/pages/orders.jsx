@@ -10,20 +10,17 @@ import { setUniqueId } from '../utils/utils';
 import { OrderContainer } from '../components/order-container/order-container';
 import { Loading } from '../components/loading/loading';
 
-
 export function Orders() {
   const dispatch = useDispatch();
   const { orders } = useSelector(store => store.ws)
   
   React.useEffect(() => {
-    dispatch({type: WS_CONNECTION_START, payload: `?token=${getCookie('token')}`});
+    dispatch({ type: WS_CONNECTION_START, payload: `?token=${getCookie('token')}` });
 
     return () => {
       dispatch({ type: WS_CONNECTION_CLOSE });
     };
   }, [dispatch]);
-
-
   
   return(
     <>
@@ -54,11 +51,10 @@ export function Orders() {
             </li>
           </ul>
           <ul className={ordersStyles.list}>
-            {orders && orders?.map((item)=>(
+            {orders?.map((item)=>(
               <OrderContainer key={setUniqueId()} order={item} />
             ))}
           </ul>
-          
         </div>
       </main> 
       ) : <Loading /> }

@@ -8,6 +8,7 @@ import modalStyles from './modal.module.css';
 const modalContainer = document.querySelector('#react-modals');
 
 export const Modal = ({onCloseClick, children, title}) => {
+  console.log(onCloseClick);
   const handleEscCloseModal = (evt) => {
     evt.key === 'Escape' && onCloseClick()
   };
@@ -23,8 +24,8 @@ export const Modal = ({onCloseClick, children, title}) => {
   return createPortal(
     <>
       <div className={modalStyles.box}>
-        <button type="button" className={modalStyles.button}>
-          <CloseIcon type="primary" onClick={onCloseClick} />
+        <button className={modalStyles.button} onClick={onCloseClick}>
+          <CloseIcon type="primary" />
         </button>
         {title && (<h2 className={`${modalStyles.title} text text_type_main-large`}>{title}</h2>)}
         {children}

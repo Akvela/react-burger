@@ -19,13 +19,11 @@ export default function App() {
   const token = getCookie('token');
   const location = useLocation();
   const history = useHistory();
-  const background = location.state?.background;
+  const background = history.action === 'PUSH' && location.state?.background;
+  console.log('что есть history.action', history.action)
   const dispatch = useDispatch();
-  const from = location.state?.from;
-  const userName = useSelector(store => store.user.userName);
-  const { orders, wsOpen } = useSelector(store => store.ws)
-  
-  React.useEffect(() => {}, []);
+  const loginStatus = useSelector(store => store.user.loginStatus);
+  const { orders } = useSelector(store => store.ws)
   
   React.useEffect(() => {
     dispatch(getDataIngredients());
@@ -33,12 +31,15 @@ export default function App() {
     .then(() => {
       dispatch(getUserInfo(token));
     })
-    const interval = setInterval(refreshTokenUser, 100000)
+    const interval = setInterval(refreshTokenUser, 60 * 60 * 1000)
     return () => {
       clearInterval(interval)
     }
-  }, [])
+  }, [background])
 
+  const closeModal = () => {
+    history.goBack();
+  }
 
   return (
     <>
@@ -68,21 +69,17 @@ export default function App() {
           <Feed />
         </Route>
 
-        <Route path='/feed/:id' exact={true}>
-          {!!orders.length && <InfoOrder />}
-        </Route>
-
-        <Route path='/profile/orders/:id' exact={true}>
-          <InfoOrder />
-        </Route>
+        <Route path='/feed/:id' exact={true} children={<InfoOrder />} />
+          
+        <ProtectedRoute path='/profile/orders/:id' exact={true} check={loginStatus} children={<InfoOrder />} />
 
         <Route path='/ingredients/:id' exact={true} children={<Ingredient title='Детали ингредиента' />} />
 
-        <ProtectedRoute path='/profile' exact={true} check={userName}>
+        <ProtectedRoute path='/profile' exact={true} check={loginStatus}>
           <Profile />
         </ProtectedRoute>
 
-        <ProtectedRoute path='/profile/orders' exact={true} check={userName}>
+        <ProtectedRoute path='/profile/orders' exact={true} check={loginStatus}>
           <Orders />
         </ProtectedRoute>
 
@@ -97,11 +94,17 @@ export default function App() {
         </Modal>} />)}
       
 
-      {background && !!orders.length && (<Route path={`${from}/:id`} exact={true} children={
-          <Modal onCloseClick={() => { background && history.goBack(); dispatch({ type: CLOSE_MODAL_ORDER }) }}>
+      {background && <Route path='/feed/:id' exact={true}>
+          <Modal title='' onCloseClick={() => {history.goBack(); console.log('click')}}>
             <OrderInfo />
-          </Modal>} />
-        )}
+          </Modal>
+        </Route>
+      }
+
+      {background && <ProtectedRoute path='/profile/orders/:id' exact={true} check={loginStatus} children={ 
+        <Modal title='' onCloseClick={() => history.goBack()}>
+          <OrderInfo /> {console.log('тут background order: ', background)}
+        </Modal>} /> }
     </>
   );
 }

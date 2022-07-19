@@ -15,7 +15,8 @@ const initialState = {
   passwordResetError: false,
   sendMailError: false,
   getUserError: false,
-  loginError: false
+  loginError: false,
+  loginStatus: false
 }
 
 export const userReducer = (state = initialState, action) => {
@@ -80,7 +81,7 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         userName: action.name,
         userEmail: action.email,
-        loginStatus: action.status,
+        loginStatus: true,
         formName: action.name,
         formEmail: action.email,
         loading: false
@@ -99,6 +100,7 @@ export const userReducer = (state = initialState, action) => {
         userEmail: '',
         formName: '',
         formEmail: '',
+        loginStatus: false
       }
 
     case GET_USER_INFO_REQUEST:

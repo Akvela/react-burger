@@ -14,7 +14,8 @@ export const OrderContainer = ({ order }) => {
   const location = useLocation();
   const { url } = useRouteMatch();
   const numbersHidden = ingredients.length === 6 ? '' : `+${ingredients.length - 6}`;
-  
+  const dispatch = useDispatch();
+
   const findIngredient = (ingredient) => {
     return allIngredients.find((item) => item._id === ingredient)
   }
@@ -48,10 +49,8 @@ export const OrderContainer = ({ order }) => {
   }
 
   return(
-    <Link className={orderContainerStyles.box} to={{
-      pathname: `${url}/${_id}`,
-      state: { background: location, from: location.pathname }
-    }}>
+    <li className={orderContainerStyles.card}>
+      <Link className={orderContainerStyles.box} to={{ pathname: `${url}/${_id}`, state: { background: location} }}>
         <div className={orderContainerStyles.header}>
           <p className='text text_type_digits-default'>#{number}</p>
           <p className='text text_type_main-default text_color_inactive'>{determineDate(createdAt)}</p>
@@ -84,7 +83,8 @@ export const OrderContainer = ({ order }) => {
             <CurrencyIcon type='primary' />
           </div>
         </div>
-    </Link>
+      </Link>
+    </li>
   )
 }
 

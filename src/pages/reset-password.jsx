@@ -12,7 +12,7 @@ export function ResetPassword() {
   const [passwordForm, setPasswordForm] = React.useState('');
   const {checkingReset, resetPasswordError, loading} = useSelector(store => store.user);
   const sendMail = useSelector(store => store.user.sendMail)
-  const userName =  useSelector(store => store.user.userName)
+  const loginStatus =  useSelector(store => store.user.loginStatus)
   
   const changeTokenInput = (e) => {
     setTokenForm(e.target.value)
@@ -26,7 +26,7 @@ export function ResetPassword() {
     dispatch(changePassword(passwordForm, tokenForm))
   }
 
-  if (!sendMail && userName) {
+  if (!sendMail && loginStatus) {
     return (
       <Redirect to='/' />
     )

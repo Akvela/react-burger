@@ -31,9 +31,7 @@ export function setCookie(name, value, props) {
 }
 
 export function deleteCookie(name) {
-  setCookie(name, "", {
-    'max-age': -1
-  })
+  setCookie(name, null, { expires: -1 })
 }
 
 export function refreshTokenUser() {

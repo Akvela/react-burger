@@ -39,20 +39,21 @@ export const wsReducer = (state = initialState, action) => {
         wsRequest: false,
         wsOpen: false,
         wsFailed: false,
-        orders: [],
         total: '',
         totalToday: ''
       }
     }
     case WS_GET_MESSAGE: {
-      return {
-        ...state,
-        orders: action.payload.orders,
-        total: action.payload.total,
-        totalToday: action.payload.totalToday,
+      
+      if (action.payload.hasOwnProperty('orders')) {
+        return {
+          ...state,
+          orders: action.payload.orders,
+          total: action.payload.total,
+          totalToday: action.payload.totalToday,
+        }
       }
     }
-
 
     default: {
       return state;

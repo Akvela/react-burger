@@ -13,7 +13,7 @@ export function Login() {
   const location = useLocation();
   const token = getCookie('token')
   const dispatch = useDispatch();
-  const {userName, loading} = useSelector(store => store.user)
+  const {loginStatus, loading} = useSelector(store => store.user)
 
   const changeEmailInput = (e) => {
     setEmailForm(e.target.value)
@@ -22,7 +22,7 @@ export function Login() {
     setPasswordForm(e.target.value)
   }
 
-  if (userName) {
+  if (loginStatus) {
     return (
       <Redirect to={ location.state?.from || '/'} />
     )

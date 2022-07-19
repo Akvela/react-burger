@@ -12,7 +12,7 @@ export function Register() {
   const [nameForm, setNameForm] = React.useState('');
   const [emailForm, setEmailForm] = React.useState('');
   const [passwordForm, setPasswordForm] = React.useState('');
-  const { userName, loading } = useSelector(store => store.user);
+  const { loginStatus, loading } = useSelector(store => store.user);
   const token = getCookie('token')
 
   const changeNameInput = (e) => {
@@ -33,7 +33,7 @@ export function Register() {
     setPasswordForm('');
   }
 
-  if (userName) {
+  if (loginStatus) {
     return (
       <Redirect to='/' />
     )
