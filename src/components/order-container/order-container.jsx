@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import orderContainerStyles from './order-container.module.css';
 import PropTypes from 'prop-types';
-import { CLICK_ON_ORDER } from '../../services/actions/orders';
 
 export const OrderContainer = ({ order }) => {
   const allIngredients = useSelector(store => store.burgerIngredients.ingredients);

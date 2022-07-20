@@ -1,6 +1,7 @@
 import { CREATE_USER_REQUEST, CREATE_USER_SUCCESS, CREATE_USER_ERROR, SEND_MAIL_REQUEST,  SEND_MAIL_SUCCESS, SEND_MAIL_ERROR, 
   SEND_NEW_PASSWORD_REQUEST, SEND_NEW_PASSWORD_SUCCESS, SEND_NEW_PASSWORD_ERROR, LOGIN_SUCCESS, 
-  LOGIN_ERROR, LOGIN_REQUEST, GET_USER_INFO_REQUEST, GET_USER_INFO_SUCCESS, GET_USER_INFO_ERROR, LOGOUT_USER } from '../actions/user';
+  LOGIN_ERROR, LOGIN_REQUEST, GET_USER_INFO_REQUEST, GET_USER_INFO_SUCCESS, GET_USER_INFO_ERROR, CHECK_AUTH, CHECK_AUTH_CHECKED, 
+  REFRESH_TOKEN_REQUEST, REFRESH_TOKEN_SUCCESS, REFRESH_TOKEN_FAILED, LOG_OUT_SUCCESS } from '../actions/user';
 
 const initialState = {
   userEmail: '',
@@ -16,7 +17,10 @@ const initialState = {
   sendMailError: false,
   getUserError: false,
   loginError: false,
-  loginStatus: false
+  refreshTokenRequest: false,
+  refreshTokenFailed: false,
+  refreshTokenError: false,
+  isAuthChecked: false
 }
 
 export const userReducer = (state = initialState, action) => {
@@ -92,8 +96,8 @@ export const userReducer = (state = initialState, action) => {
         loading: false,
         loginError: true
       }
-      
-    case LOGOUT_USER:
+
+    case LOG_OUT_SUCCESS:
       return {
         ...state,
         userName: '',
@@ -101,6 +105,42 @@ export const userReducer = (state = initialState, action) => {
         formName: '',
         formEmail: '',
         loginStatus: false
+      }
+
+      case CHECK_AUTH: {
+        return {
+          ...state,
+          isAuthChecked: false
+        }
+      }
+      case CHECK_AUTH_CHECKED: {
+        return {
+          ...state,
+          isAuthChecked: true
+        }
+      }
+
+      case REFRESH_TOKEN_REQUEST: {
+        return {
+          ...state,
+          refreshTokenRequest: true,
+          refreshTokenFailed: false,
+        }
+      }
+      case REFRESH_TOKEN_SUCCESS: {
+        return {
+          ...state,
+          refreshTokenRequest: false,
+          refreshTokenFailed: false,
+        }
+      }
+      case REFRESH_TOKEN_FAILED: {
+        return {
+          ...state,
+          refreshTokenRequest: false,
+          refreshTokenFailed: true,
+          refreshTokenError: true
+        }
       }
 
     case GET_USER_INFO_REQUEST:

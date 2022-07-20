@@ -1,18 +1,13 @@
 import { formatRelative } from 'date-fns';
 import { ru } from 'date-fns/locale'
-import React from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { setUniqueId } from '../../utils/utils';
 import { useSelector, useDispatch } from 'react-redux';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import orderInfoStyles from './order-info.module.css';
-import { Loading } from '../loading/loading';
 import PropTypes from 'prop-types';
-import { WS_CONNECTION_START, WS_CONNECTION_CLOSE } from '../../services/actions/ws';
 
 export const OrderInfo = ({headerStyle}) => {
-  const dispatch = useDispatch();
-
   const { orders } = useSelector(store => store.ws);
   const { id } = useParams();
   const { ingredients } = useSelector(store => store.burgerIngredients);
@@ -45,11 +40,8 @@ export const OrderInfo = ({headerStyle}) => {
     return relativeDate.split(' в ').join(', ') + ' i-GMT+3'
   }
 
-  // if (!orders.length || !ingredients.length) return null;
-
   return (
     <> 
-    {!currentOrder && <Loading />}
     {currentOrder &&
       <div className={orderInfoStyles.item}>
         <p className={`${headerStyle} text text_type_digits-default`}>#{currentOrder?.number}</p>

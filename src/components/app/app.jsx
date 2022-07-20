@@ -11,81 +11,47 @@ import { getDataIngredients } from '../../services/actions/burger-ingredients';
 import { refreshToken } from '../../utils/api';
 import ProtectedRoute from '../protected-route/protected-route';
 import { Home, Login, Register, ForgotPassword, ResetPassword, Profile, Ingredient, Orders, NotFound, Feed, InfoOrder } from '../../pages';
-import { getUserInfo } from '../../services/actions/user';
+import { checkAuth } from '../../services/actions/user';
 import { CLOSE_MODAL_ORDER } from '../../services/actions/order-details';
 
 export default function App() {
-  const refresh = getCookie('refreshToken');
-  const token = getCookie('token');
   const location = useLocation();
   const history = useHistory();
   const background = history.action === 'PUSH' && location.state?.background;
-  console.log('что есть history.action', history.action)
   const dispatch = useDispatch();
-  const loginStatus = useSelector(store => store.user.loginStatus);
-  const { orders } = useSelector(store => store.ws)
   
   React.useEffect(() => {
+    dispatch(checkAuth());
     dispatch(getDataIngredients());
-    refresh && refreshToken(refresh).then(res => { setCookie('token', res.accessToken.split('Bearer ')[1]); setCookie('refreshToken', res.refreshToken) })
-    .then(() => {
-      dispatch(getUserInfo(token));
-    })
-    const interval = setInterval(refreshTokenUser, 60 * 60 * 1000)
-    return () => {
-      clearInterval(interval)
-    }
-  }, [background])
-
-  const closeModal = () => {
-    history.goBack();
-  }
+  }, [dispatch]);
 
   return (
     <>
       <AppHeader />
       <Switch location={background || location}>
-        <Route path='/' exact={true}>
-          <Home />
-        </Route>
+        <Route path='/' exact={true} children={<Home />} />
 
-        <Route path='/login' exact={true}>
-          <Login />
-        </Route>
+        <Route path='/login' exact={true} children={<Login />} />
 
-        <Route path='/register' exact={true}>
-          <Register />
-        </Route>
+        <Route path='/register' exact={true} children={<Register />} />
 
-        <Route path='/forgot-password' exact={true}>
-          <ForgotPassword />
-        </Route>
+        <Route path='/forgot-password' exact={true} children={<ForgotPassword />} />
 
-        <Route path='/reset-password' exact={true}>
-          <ResetPassword />
-        </Route>
+        <Route path='/reset-password' exact={true} children={<ResetPassword />} />
 
-        <Route path='/feed' exact={true}>
-          <Feed />
-        </Route>
+        <Route path='/feed' exact={true} children={<Feed />} />
 
         <Route path='/feed/:id' exact={true} children={<InfoOrder />} />
           
-        <ProtectedRoute path='/profile/orders/:id' exact={true} check={loginStatus} children={<InfoOrder />} />
+        <ProtectedRoute path='/profile/orders/:id' exact={true} children={<InfoOrder />} />
 
         <Route path='/ingredients/:id' exact={true} children={<Ingredient title='Детали ингредиента' />} />
 
-        <ProtectedRoute path='/profile' exact={true} check={loginStatus}>
-          <Profile />
-        </ProtectedRoute>
+        <ProtectedRoute path='/profile' exact={true} children={<Profile />} />
 
-        <ProtectedRoute path='/profile/orders' exact={true} check={loginStatus}>
-          <Orders />
-        </ProtectedRoute>
+        <ProtectedRoute path='/profile/orders' exact={true} children={<Orders />} />
 
-        <Route path='*'>
-          <NotFound />
-        </Route>
+        <Route path='*' children={<NotFound />} />
       </Switch>
 
       {background && (<Route path='/ingredients/:id' exact={true} children={ 
@@ -95,15 +61,14 @@ export default function App() {
       
 
       {background && <Route path='/feed/:id' exact={true}>
-          <Modal title='' onCloseClick={() => {history.goBack(); console.log('click')}}>
+          <Modal title='' onCloseClick={() => history.goBack()}>
             <OrderInfo />
           </Modal>
-        </Route>
-      }
+        </Route> }
 
-      {background && <ProtectedRoute path='/profile/orders/:id' exact={true} check={loginStatus} children={ 
+      {background && <ProtectedRoute path='/profile/orders/:id' exact={true} children={ 
         <Modal title='' onCloseClick={() => history.goBack()}>
-          <OrderInfo /> {console.log('тут background order: ', background)}
+          <OrderInfo />
         </Modal>} /> }
     </>
   );

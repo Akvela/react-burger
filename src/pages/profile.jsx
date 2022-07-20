@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { LOGOUT_USER } from '../services/actions/user';
 import { logout } from '../utils/api';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { refreshTokenUser, deleteCookie, getCookie } from '../utils/cookie';
 import { updateUser } from '../services/actions/user';
 import { Loading } from '../components/loading/loading';
+import { LOG_OUT_SUCCESS } from '../services/actions/user';
 import profileStyles from './profile.module.css';
 
 export function Profile() {
@@ -20,6 +20,16 @@ export function Profile() {
   const nameInputRef = React.useRef(null);
   const loginInputRef = React.useRef(null);
   const passwordInputRef = React.useRef(null);
+
+  const accessToken = getCookie('accessToken');
+  const refreshToken = localStorage.getItem('refreshToken');
+
+  const logoutUser = () => {
+    logout(refreshToken);
+    deleteCookie('accessToken');
+    deleteCookie('refreshToken');
+    dispatch({ type: LOG_OUT_SUCCESS });
+  }
 
   const onClickName = () => {
     setTimeout(() => nameInputRef.current && nameInputRef.current.focus(), 0)
@@ -53,15 +63,8 @@ export function Profile() {
 
   const submitForm = (evt) => {
     evt.preventDefault();
-    dispatch(updateUser(nameValue, loginValue, passwordValue, getCookie('token')))
+    dispatch(updateUser(nameValue, loginValue, passwordValue, { accessToken: `Bearer ${accessToken}` }))
   }
-
-  React.useEffect(() => {
-    const interval = setInterval(refreshTokenUser, 100000)
-    return () => {
-      clearInterval(interval)
-    }
-  },[])
 
   React.useEffect(() => {
     setNameValue(userName);
@@ -87,14 +90,7 @@ export function Profile() {
               <Link to='/profile/orders' className={`${profileStyles.link} text text_type_main-medium`}>История заказов</Link>
             </li>
             <li className={profileStyles.item}>
-              <Link to='/profile'
-                onClick={() => { 
-                  const match = getCookie('refreshToken'); 
-                  match && logout(match); 
-                  deleteCookie('token'); 
-                  deleteCookie('refreshToken'); 
-                  dispatch({type: LOGOUT_USER}) 
-                }}
+              <Link to='/' onClick={() => logoutUser()}
                 className={`${profileStyles.link} text text_type_main-medium`}
               >Выход</Link>
             </li>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, Redirect, useLocation } from 'react-router-dom';
-import { getCookie } from "../utils/cookie";
 import { useSelector, useDispatch } from 'react-redux';
 import { loginUser } from '../services/actions/user';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -11,9 +10,8 @@ export function Login() {
   const [emailForm, setEmailForm] = React.useState('');
   const [passwordForm, setPasswordForm] = React.useState('');
   const location = useLocation();
-  const token = getCookie('token')
   const dispatch = useDispatch();
-  const {loginStatus, loading} = useSelector(store => store.user)
+  const {userName, loading} = useSelector(store => store.user);
 
   const changeEmailInput = (e) => {
     setEmailForm(e.target.value)
@@ -22,9 +20,9 @@ export function Login() {
     setPasswordForm(e.target.value)
   }
 
-  if (loginStatus) {
+  if (userName) {
     return (
-      <Redirect to={ location.state?.from || '/'} />
+      <Redirect to={location.state?.from || '/'} />
     )
   }
 
@@ -33,7 +31,7 @@ export function Login() {
       <main className={loginStyles.container}>
         <h2 className={`${loginStyles.title} text text_type_main-medium pb-6`}>Вход</h2>
         <form className={loginStyles.form} onSubmit={(evt) => { 
-          evt.preventDefault(); dispatch(loginUser(emailForm, passwordForm, token))
+          evt.preventDefault(); dispatch(loginUser(emailForm, passwordForm))
         }}>
           <fieldset className={loginStyles.fieldset}>
             <Input onChange={changeEmailInput} value={emailForm} name='email' placeholder={'E-mail'} />

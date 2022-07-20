@@ -8,7 +8,6 @@ import modalStyles from './modal.module.css';
 const modalContainer = document.querySelector('#react-modals');
 
 export const Modal = ({onCloseClick, children, title}) => {
-  console.log(onCloseClick);
   const handleEscCloseModal = (evt) => {
     evt.key === 'Escape' && onCloseClick()
   };

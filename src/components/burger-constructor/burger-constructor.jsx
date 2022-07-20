@@ -1,14 +1,13 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
-import { getCookie, setCookie, refreshTokenUser } from '../../utils/cookie.js';
-import { refreshToken } from '../../utils/api.js';
+import { getCookie } from '../../utils/cookie.js';
 import { ConstructorItem } from '../constructor-item/constructor-item.jsx';
 import { useHistory } from 'react-router-dom';
 import { setUniqueId } from '../../utils/utils.js';
 import { ADD_BUN, ADD_ITEM, RESET_CONSTRUCTOR, DELETE_ITEM } from '../../services/actions/burger-constructor.js';
 import { INCREASE_COUNT, DECREASE_COUNT, RESET_COUNT } from '../../services/actions/burger-ingredients.js';
-import { OPEN_MODAL_ORDER, CLOSE_MODAL_ORDER } from '../../services/actions/order-details.js';
+import { CLOSE_MODAL_ORDER } from '../../services/actions/order-details.js';
 import { OrderDetails } from '../order-details/order-details.jsx';
 import { Modal } from '../modal/modal.jsx';
 import { getUserOrderNumber } from '../../services/actions/order-details.js';
@@ -20,35 +19,36 @@ import burgerConstructorStyles from './burger-constructor.module.css';
 export const BurgerConstructor = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { orderIsClicked, orderSuccessed, orderRequest } = useSelector(store => store.orderDetails);
+  const { orderIsClicked, orderSuccessed, orderRequest, orderNumber } = useSelector(store => store.orderDetails);
   const ingredients = useSelector(store => store.burgerIngredients.ingredients);
   const { elements, bun } = useSelector(store => store.burgerConstructor);
   const  burgerConstructor = useSelector(store => store.burgerConstructor);
-  const token = getCookie('token');
-  const refresh = getCookie('refreshToken');
+  const { userName } = useSelector(store => store.user);
+  const accessToken = getCookie('accessToken');
 
   const totalPrice = React.useMemo(() => {
     return (
       (burgerConstructor.bun ? burgerConstructor.bun.price * 2 : 0) + burgerConstructor.elements.reduce((s, v) => s + v.price, 0)
       )
-    }, [burgerConstructor]
-  )
+  }, [burgerConstructor])
   
-  const openModalOrder = () => {
-    const match = getCookie('refreshToken');
-    match && refreshToken(match).then(res => { setCookie('token', res.accessToken.split('Bearer ')[1]); setCookie('refreshToken', res.refreshToken) })
-      .then(() => {
-        const arrId = elements.map(ingredient => ingredient._id )
-        dispatch({ type: OPEN_MODAL_ORDER });
-        dispatch(getUserOrderNumber([...arrId, bun._id], token, refresh, refreshTokenUser));
-      })
-    }
+  const orderIds = React.useMemo(() => {
+    return (
+      elements.map(ingredient  => ingredient._id).concat(bun._id)
+    )
+  }, [burgerConstructor])
 
-  const closeModalOrder = React.useCallback(() => {
+  const postOrder = () => {
+    const arrId = elements.map(ingredient => ingredient._id )
+    userName && dispatch(getUserOrderNumber({ accessToken: `Bearer ${accessToken}`, order: [...arrId, bun._id] }));
+    !userName && history.replace({ pathname: '/login', state: { from: { pathname: '/' }} })
+  }
+
+  const closeModalOrder = () => {
     dispatch({ type: CLOSE_MODAL_ORDER });
     dispatch({ type: RESET_CONSTRUCTOR });
     dispatch({ type: RESET_COUNT })
-  }, [dispatch]);
+  };
 
   const deleteItem = React.useCallback((itemKey, itemId) => {
     dispatch({ type: DELETE_ITEM, id: itemKey });
@@ -121,11 +121,16 @@ export const BurgerConstructor = () => {
           {totalPrice}
         </h2>
         <div className={burgerConstructorStyles.coins}></div>
-        <Button type="primary" size="large" disabled={(bun.length===0) || (elements.length===0)} onClick={() => {
-          getCookie('refreshToken') === undefined ? history.replace({ pathname: '/login' }) : openModalOrder()}}>Оформить заказ</Button>
+        <Button type="primary" size="large" disabled={(bun.length===0) || (elements.length===0)} onClick={() => postOrder()}>Оформить заказ</Button>
       </div>
-      {orderRequest && <Loading />}
-      {orderIsClicked && orderSuccessed && (
+
+      {orderRequest && orderIsClicked && (
+        <Modal onCloseClick={closeModalOrder}>
+          <Loading />
+        </Modal>
+      )}
+
+      {orderNumber && (
         <Modal onCloseClick={closeModalOrder}>
           <OrderDetails />
         </Modal>

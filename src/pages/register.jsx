@@ -3,7 +3,6 @@ import { Link, Redirect } from 'react-router-dom';
 import { registerNewUser } from '../services/actions/user';
 import { EmailInput, PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { getCookie } from '../utils/cookie';
 import { Loading } from '../components/loading/loading';
 import registerStyles from './register.module.css';
 
@@ -13,7 +12,6 @@ export function Register() {
   const [emailForm, setEmailForm] = React.useState('');
   const [passwordForm, setPasswordForm] = React.useState('');
   const { loginStatus, loading } = useSelector(store => store.user);
-  const token = getCookie('token')
 
   const changeNameInput = (e) => {
     setNameForm(e.target.value)
@@ -27,7 +25,7 @@ export function Register() {
 
   const createNewUser = (evt) => {
     evt.preventDefault();
-    dispatch(registerNewUser(nameForm, emailForm, passwordForm, token));
+    dispatch(registerNewUser(nameForm, emailForm, passwordForm));
     setNameForm('');
     setEmailForm('');
     setPasswordForm('');

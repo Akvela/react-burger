@@ -6,8 +6,6 @@ import { WS_CONNECTION_START, WS_CONNECTION_CLOSE } from '../services/actions/ws
 import feedStyles from './feed.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 
-
-
 export function Feed() {
   const dispatch = useDispatch();
   const { orders, total, totalToday } = useSelector(store => store.ws);
@@ -20,7 +18,6 @@ export function Feed() {
     };
   }, [dispatch]);
 
- 
   const ordersDone = orders?.filter(item => item.status === 'done').slice(0, 20);
   const ordersWork = orders?.filter(item => item.status === 'pending').slice(0, 10);
 

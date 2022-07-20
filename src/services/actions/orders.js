@@ -1,2 +1,0 @@
-export const CLICK_ON_ORDER = 'CLICK_ON_ORDER';
-export const CLOSE_MODAL_ORDER = 'CLOSE_MODAL_ORDER';
