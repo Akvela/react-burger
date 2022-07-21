@@ -1,5 +1,3 @@
-import { refreshToken } from "./api";
-
 export function getCookie(name) {
   const matches = document.cookie.match(
     new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)')
@@ -31,12 +29,5 @@ export function setCookie(name, value, props) {
 }
 
 export function deleteCookie(name) {
-  setCookie(name, "", {
-    'max-age': -1
-  })
-}
-
-export function refreshTokenUser() {
-  const match = getCookie('refreshToken');
-  match !== undefined && refreshToken(match).then(res => { setCookie('token', res.accessToken.split('Bearer ')[1]); setCookie('refreshToken', res.refreshToken) })
+  setCookie(name, null, { expires: -1 })
 }

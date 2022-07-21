@@ -1,0 +1,75 @@
+.page {
+  width: 1240px;
+  margin: 40px auto 0 auto;
+  display: block;
+  box-sizing: border-box;
+}
+
+.tape {
+  display: flex;
+  width: 1240px;
+  gap: 49px;
+  height: 855px;
+  margin: 20px auto 0 31px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px 8px 8px;
+  width: 600px;
+  gap: 16px;
+  height: 828px;
+  margin: 0;
+  overflow-y: auto;
+  box-sizing: content-box;
+  margin: 0 0 0 -40px;
+}
+
+.container::-webkit-scrollbar {
+  width: 8px; 
+}
+
+.container::-webkit-scrollbar-track {
+  background: #2F2F37;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.orders {
+  display: flex;
+  gap: 40px;
+  padding-bottom: 60px;
+}
+
+.column {
+  width: 272px;
+  height: 250px;
+}
+
+.points {
+  padding-bottom: 60px;
+  text-shadow: 0px 0px 16px rgba(51, 51, 255, 0.25), 0px 0px 8px rgba(51, 51, 255, 0.25), 0px 4px 32px rgba(51, 51, 255, 0.5);
+}
+
+.list {
+  list-style: none;
+  flex-direction: column;
+  flex-wrap: wrap;
+  display: flex;
+  width: 272px;
+  padding: 0;
+  height: 250px;
+}
+
+.numberOrderDone {
+  color: #00CCCC;
+}

@@ -11,8 +11,7 @@ const initialState = {
 
 export const orderDetailsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case OPEN_MODAL_ORDER:
-      return { ...state, orderIsClicked: true }
+
     case CLOSE_MODAL_ORDER:
       return {
         ...state,
@@ -24,19 +23,25 @@ export const orderDetailsReducer = (state = initialState, action) => {
         order: {}
       }
     case GET_ORDER_REQUEST:
-      return { ...state, orderRequest: true }
+      return { 
+        ...state, 
+        orderRequest: true, 
+        orderIsClicked: true 
+      }
     case GET_ORDER_SUCCESS:
       return {
         ...state,
+        orderIsClicked: true,
         orderRequest: false,
-        orderSuccessed: action.result,
-        orderNumber: action.data,
-        order: action.orderData,
+        orderSuccessed: action.orderSuccessed,
+        orderNumber: action.orderNumber,
+        order: action.order,
+        orderFailed: false
       }
     case GET_ORDER_ERROR:
       return {
         ...state,
-        orderFailure: true,
+        orderFailed: true,
         orderNumber: null,
       }
     default:

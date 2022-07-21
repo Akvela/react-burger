@@ -1,0 +1,88 @@
+.card {
+  list-style: none;
+}
+
+.box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  max-height: 246px;
+  padding: 24px;
+  box-sizing: border-box;
+  background: #1C1C21;
+  border-radius: 40px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.ingredients {
+  display: flex;
+  width: 304px;
+  height: 64px;
+  padding-left: 0;
+  list-style: none;
+}
+
+.ingredient {
+  height: 64px;
+  width: 64px;
+  border-radius: 50%;
+  background: linear-gradient(#1C1C21, #1C1C21) padding-box,
+  linear-gradient(45deg, #801AB2, #4C4CFF) border-box;
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.ingredient:not(:first-child) {
+  margin-left: -20px;
+}
+
+.lastIngredient {
+  opacity: .6;
+  height: 64px;
+  object-fit: cover;
+}
+
+.ingredientsImage {
+  height: 64px;
+  object-fit: cover;
+}
+
+.count {
+  display: block;
+  position: absolute;
+  top: 18px;
+  right: 21px;
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 800px;
+  white-space: nowrap;
+}

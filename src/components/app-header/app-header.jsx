@@ -1,8 +1,11 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import appHeaderStyles from './app-header.module.css';
 
 export const AppHeader = () => {
+  const { userName } = useSelector((store) => store.user);
+
   return(
     <header className={`${appHeaderStyles.header} pt-4 pb-4`}>
       <nav className={appHeaderStyles.navigation}>
@@ -15,18 +18,20 @@ export const AppHeader = () => {
               </NavLink>
             </li>
             <li className={`${appHeaderStyles.menuItem} pr-5 pl-5`}>
-              <NavLink activeClassName={appHeaderStyles.linkActive} className={appHeaderStyles.link} to='/profile/orders'>  
+              <NavLink activeClassName={appHeaderStyles.linkActive} className={appHeaderStyles.link} to='/feed'>  
                 <ListIcon type='secondary' />
                 <span className='text text_type_main-default ml-2'>Лента заказов</span>
               </NavLink>
             </li>
           </ul>
-          <Logo />
+          <Link to='/'>
+            <Logo />
+          </Link>
         </div>
         <div className='pr-5 pl-5'>
           <NavLink activeClassName={appHeaderStyles.linkActive} className={appHeaderStyles.link} exact to='/profile'>
             <ProfileIcon type='secondary' />
-            <span className='text text_type_main-default ml-2'>Личный кабинет</span>
+            <span className='text text_type_main-default ml-2'>{userName || 'Личный кабинет'}</span>
           </NavLink>
         </div>
       </nav>

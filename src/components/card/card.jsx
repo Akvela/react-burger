@@ -1,6 +1,6 @@
 import { useDrag } from 'react-dnd';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useLocation, useHistory } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { CLICK_ON_INGREDIENT } from "../../services/actions/ingredient-details";
 import PropTypes from 'prop-types';
 import { ingridientDataTypes } from '../../utils/types.js';

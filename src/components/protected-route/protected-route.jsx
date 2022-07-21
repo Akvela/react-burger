@@ -1,15 +1,17 @@
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Loading } from "../loading/loading";
 
-export default function ProtectedRoute({ path, children, redirectPath, check }) {
-  return (
-    <Route 
-      path={path} 
-      exact={true} 
-      render={
-        ({ location }) => check ? 
-          (children) : 
-            (<Redirect to={{ pathname: redirectPath, state: { from: location }} } />)
-      } 
-    />
-  )
+
+export default function ProtectedRoute({ children, ...rest }) {
+  const { isAuthChecked } = useSelector((store) => store.user);
+  const location = useLocation();
+  
+  if (!isAuthChecked && <Loading />) {
+    return (
+      <Redirect to={{ pathname: '/login', state: { from: location }} } />
+    )
+  }
+
+  return <Route {...rest}>{children}</Route>;
 }

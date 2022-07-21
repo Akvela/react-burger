@@ -23,8 +23,8 @@ export const Modal = ({onCloseClick, children, title}) => {
   return createPortal(
     <>
       <div className={modalStyles.box}>
-        <button type="button" className={modalStyles.button}>
-          <CloseIcon type="primary" onClick={onCloseClick} />
+        <button className={modalStyles.button} onClick={onCloseClick}>
+          <CloseIcon type="primary" />
         </button>
         {title && (<h2 className={`${modalStyles.title} text text_type_main-large`}>{title}</h2>)}
         {children}
@@ -37,6 +37,6 @@ export const Modal = ({onCloseClick, children, title}) => {
 
 Modal.propTypes = {
   onCloseClick: PropTypes.func.isRequired,
-  children: PropTypes.element.isRequired,
+  children: PropTypes.node.isRequired,
   title: PropTypes.string
 }

@@ -3,15 +3,16 @@ import { Link, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { changePassword } from '../services/actions/user';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Loading } from '../components/loading/loading';
 import resetPasswordStyles from './reset-password.module.css';
 
 export function ResetPassword() {
   const dispatch = useDispatch();
   const [tokenForm, setTokenForm] = React.useState('');
   const [passwordForm, setPasswordForm] = React.useState('');
-  const { checkingReset, resetPasswordError} = useSelector(store => store.user);
+  const {checkingReset, resetPasswordError, loading} = useSelector(store => store.user);
   const sendMail = useSelector(store => store.user.sendMail)
-  const userName =  useSelector(store => store.user.userName)
+  const loginStatus =  useSelector(store => store.user.loginStatus)
   
   const changeTokenInput = (e) => {
     setTokenForm(e.target.value)
@@ -25,8 +26,7 @@ export function ResetPassword() {
     dispatch(changePassword(passwordForm, tokenForm))
   }
 
-
-  if (!sendMail && userName) {
+  if (!sendMail && loginStatus) {
     return (
       <Redirect to='/' />
     )
@@ -50,6 +50,7 @@ export function ResetPassword() {
           <Link className={resetPasswordStyles.link} to='/login'>Войти</Link>
         </div>
       </main>
+      {loading && <Loading />}
     </>
   );
 }

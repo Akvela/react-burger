@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { BurgerIngredients } from '../components/burger-ingredients/burger-ingredients.jsx';
 import { BurgerConstructor } from '../components/burger-constructor/burger-constructor.jsx';
 import { getDataIngredients } from '../services/actions/burger-ingredients.js';
+import { Loading } from '../components/loading/loading.jsx';
 import homeStyles from './home.module.css';
 
 export function Home() {
@@ -24,7 +25,7 @@ export function Home() {
             <BurgerIngredients />
             <BurgerConstructor />
           </DndProvider>
-          {ingredientsRequest && <p className='text text_type_digits-default text_color_inactive'>Загрузка...</p>}
+          {ingredientsRequest && <Loading />}
         </main>
       </div>
     </>

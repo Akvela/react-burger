@@ -6,10 +6,9 @@
 .container {
   display: flex;
   flex-direction: row;
-  width: 860px;
-  margin: 120px 0 0 0;
-  padding-left: 340px;
-  gap: 60px;
+  width: 1250px;
+  margin: 40px auto 0 auto;
+  gap: 5px;
 }
 
 .navigation {
@@ -18,6 +17,7 @@
   width: 320px;
   margin: 0;
   padding: 0;
+  margin: 80px 0 0 0;
 }
 
 .item {
@@ -25,6 +25,10 @@
   display: flex;
   align-items: center;
   height: 64px;
+}
+
+.item:last-of-type {
+  margin-top: 70px;
 }
 
 .link {
@@ -35,9 +39,34 @@
 }
 
 .linkActive {
-  color: #F2F2F3;  
+  color: #F2F2F3;
 }
 
 .description {
   opacity: 0.4;
+}
+
+.list {
+  width: 880px;
+  gap: 24px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: 828px;
+  margin: 0 0 10px 0;
+  overflow-y: auto;
+  padding: 0 8px 0 44px;
+  box-sizing: content-box;
+}
+
+.list::-webkit-scrollbar {
+  width: 8px; 
+}
+
+.list::-webkit-scrollbar-track {
+  background: #2F2F37;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
 }

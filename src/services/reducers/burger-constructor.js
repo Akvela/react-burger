@@ -16,11 +16,7 @@ export const burgerConstructorReducer = (state = initialState, action) => {
     case REORDER_ITEMS:
       return { ...state, elements: action.data }
     case RESET_CONSTRUCTOR:
-      return {
-        ...state,
-        elements: [],
-        bun: ''
-      }
+      return initialState;
     default:
       return state
   }

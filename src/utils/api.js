@@ -14,15 +14,20 @@ const getIngredients = () => {
     .then(res => checkResponse(res))
 };
 
-const getOrderNumber = (arrIdIngredients) => {
+const getOrderNumber = (accessToken, arrIdIngredients) => {
   return fetch(`${urlApi}/orders`, {
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      authorization: accessToken
     },
     method: 'POST',
-    body: JSON.stringify({ "ingredients": arrIdIngredients })
+    body: JSON.stringify({ ingredients: arrIdIngredients })
   })
   .then(res => checkResponse(res))
+};
+
+const getOrderInfo = (number) => {
+  return fetch(`${urlApi}/orders/${number}`).then(res => checkResponse(res))
 };
 
 const requestPassword = (email) => {
@@ -40,7 +45,6 @@ const resetPassword = (password, token) => {
   return fetch(`${urlApi}/password-reset/reset`, {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
     },
     method: 'POST',
     body: JSON.stringify({ 
@@ -51,12 +55,11 @@ const resetPassword = (password, token) => {
   .then(res => checkResponse(res))
 }
 
-const createNewUser = (name, email, password, token) => {
+const createNewUser = (name, email, password) => {
   return fetch(`${urlApi}/auth/register`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       'name': name,
@@ -67,22 +70,21 @@ const createNewUser = (name, email, password, token) => {
   .then(res => checkResponse(res))
 }
 
-const getUser = (token) => {
+const getUser = (accessToken) => {
   return fetch(`${urlApi}/auth/user`, {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
+      'Authorization': accessToken
     },
-    method: 'GET'
   })
   .then(res => checkResponse(res))
 }
 
-const refreshUser = (name, email, password, token) => {
+const refreshUser = (name, email, password, accessToken) => {
   return fetch(`${urlApi}/auth/user`, {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
+      'Authorization': accessToken
     },
     method: 'PATCH',
     body: JSON.stringify({ 
@@ -94,12 +96,11 @@ const refreshUser = (name, email, password, token) => {
   .then(res => checkResponse(res))
 }
 
-const login = (email, password, token) => {
+const login = (email, password) => {
   return fetch(`${urlApi}/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
     },
     body: JSON.stringify({
       'email': email,
@@ -109,28 +110,28 @@ const login = (email, password, token) => {
   .then(res => checkResponse(res))
 }
 
-const refreshToken = (token) => {
+const refreshTokenUser = (refreshToken) => {
   return fetch(`${urlApi}/auth/token`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ 'token': token })
+    body: JSON.stringify({ 'token': refreshToken })
   })
   .then(res => checkResponse(res))
 }
 
-const logout = (match) => {
+const logout = (accessToken) => {
   return fetch(`${urlApi}/auth/logout`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + match
+      'Authorization': 'Bearer ' + accessToken
     },
-    body: JSON.stringify({ 'token': match })
+    body: JSON.stringify({ 'token': accessToken })
   })
   .then(res => checkResponse(res))
 }
 
 export {getIngredients, getOrderNumber, requestPassword, resetPassword, createNewUser, login, 
-  refreshToken, logout, getUser, refreshUser}
+  refreshTokenUser, logout, getUser, refreshUser, getOrderInfo}

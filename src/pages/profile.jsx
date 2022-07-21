@@ -1,17 +1,18 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { LOGOUT_USER } from '../services/actions/user';
 import { logout } from '../utils/api';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import profileStyles from './profile.module.css';
 import { refreshTokenUser, deleteCookie, getCookie } from '../utils/cookie';
 import { updateUser } from '../services/actions/user';
+import { Loading } from '../components/loading/loading';
+import { LOG_OUT_SUCCESS } from '../services/actions/user';
+import profileStyles from './profile.module.css';
 
 export function Profile() {
   const [isUserInfoChanged, setIsUserInfoChanged] = React.useState(false);
   const dispatch = useDispatch();
-  const { userName, userEmail} = useSelector(store => store.user)
+  const { userName, userEmail, loading} = useSelector(store => store.user)
   const [nameValue, setNameValue] = React.useState(userName);
   const [loginValue, setLoginValue] = React.useState(userEmail);
   const [passwordValue, setPasswordValue] = React.useState('');
@@ -19,6 +20,16 @@ export function Profile() {
   const nameInputRef = React.useRef(null);
   const loginInputRef = React.useRef(null);
   const passwordInputRef = React.useRef(null);
+
+  const accessToken = getCookie('accessToken');
+  const refreshToken = localStorage.getItem('refreshToken');
+
+  const logoutUser = () => {
+    logout(refreshToken);
+    deleteCookie('accessToken');
+    deleteCookie('refreshToken');
+    dispatch({ type: LOG_OUT_SUCCESS });
+  }
 
   const onClickName = () => {
     setTimeout(() => nameInputRef.current && nameInputRef.current.focus(), 0)
@@ -52,15 +63,8 @@ export function Profile() {
 
   const submitForm = (evt) => {
     evt.preventDefault();
-    dispatch(updateUser(nameValue, loginValue, passwordValue, getCookie('token')))
+    dispatch(updateUser(nameValue, loginValue, passwordValue, { accessToken: `Bearer ${accessToken}` }))
   }
-
-  React.useEffect(() => {
-    const interval = setInterval(refreshTokenUser, 100000)
-    return () => {
-      clearInterval(interval)
-    }
-  },[])
 
   React.useEffect(() => {
     setNameValue(userName);
@@ -86,18 +90,11 @@ export function Profile() {
               <Link to='/profile/orders' className={`${profileStyles.link} text text_type_main-medium`}>История заказов</Link>
             </li>
             <li className={profileStyles.item}>
-              <Link to='/profile'
-                onClick={() => { 
-                  const match = getCookie('refreshToken'); 
-                  match && logout(match); 
-                  deleteCookie('token'); 
-                  deleteCookie('refreshToken'); 
-                  dispatch({type: LOGOUT_USER}) 
-                }}
+              <Link to='/' onClick={() => logoutUser()}
                 className={`${profileStyles.link} text text_type_main-medium`}
               >Выход</Link>
             </li>
-            <li className={`${profileStyles.item} pt-20`}>
+            <li className={profileStyles.item}>
               <p className={`${profileStyles.description} text text_type_main-default text_color_inactive`}>В этом разделе вы можете изменить свои персональные данные</p>
             </li>
           </ul>
@@ -113,6 +110,7 @@ export function Profile() {
               <Button type="primary" size="medium" >Сохранить</Button>
             </div>)}
           </form>
+          {loading && <Loading />}
         </div>
       </main>
     </>
