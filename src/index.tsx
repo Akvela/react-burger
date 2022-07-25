@@ -19,7 +19,7 @@ const store = createStore(rootReducer, enhancer);
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <BrowserRouter basename='/react-burger/'>
       <App />
     </BrowserRouter>
   </Provider>,
