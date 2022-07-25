@@ -51,7 +51,7 @@ export default function App() {
 
         <ProtectedRoute path='/profile/orders' exact={true} children={<Orders />} />
 
-        <Route path='*' children={<NotFound />} />
+        <Route children={<NotFound />} />
       </Switch>
 
       {background && (<Route path='/ingredients/:id' exact={true} children={ 
