@@ -9,7 +9,7 @@ import forgotPasswordStyles from './forgot-password.module.css';
 export function ForgotPassword() {
   const [emailForm, setEmailForm] = React.useState('');
   const dispatch = useDispatch();
-  const {checkingResponse, userName, loading} = useSelector(store => store.user);
+  const {checkingResponse, userName, loading, sendMailError} = useSelector(store => store.user);
 
   const changeEmailInput = (e) => {
     setEmailForm(e.target.value)
@@ -39,6 +39,7 @@ export function ForgotPassword() {
           <Input onChange={changeEmailInput} value={emailForm} name='email' placeholder='Укажите e-mail' />
           <Button type="primary" size="medium">Восстановить</Button>
         </form>
+        {sendMailError && <span className={forgotPasswordStyles.error}>Пользователя с такой почтой не существует</span>}
         <div className={forgotPasswordStyles.string}>
           <span className='text text_type_main-default text_color_inactive'>Вспомнили пароль?</span>
           <Link className={forgotPasswordStyles.link} to='/login'>Войти</Link>

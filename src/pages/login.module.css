@@ -52,3 +52,8 @@
   text-align: center;
   padding: 0 0 0 8px;
 }
+
+.error {
+  margin-top: 10px;
+  color: rgb(197, 25, 25);
+}
