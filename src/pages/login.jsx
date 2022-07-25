@@ -11,7 +11,7 @@ export function Login() {
   const [passwordForm, setPasswordForm] = React.useState('');
   const location = useLocation();
   const dispatch = useDispatch();
-  const {userName, loading} = useSelector(store => store.user);
+  const {userName, loading, loginError} = useSelector(store => store.user);
 
   const changeEmailInput = (e) => {
     setEmailForm(e.target.value)
@@ -39,6 +39,7 @@ export function Login() {
           </fieldset>
           <Button type="primary" size="medium">Войти</Button>
         </form>
+        {loginError && <span className={loginStyles.error}>Неправильно введены данные</span>}
         <div className={`${loginStyles.string} pt-20 pb-4`}>
           <span className='text text_type_main-default text_color_inactive'>Вы — новый пользователь?</span>
           <Link className={loginStyles.link} to='/register'>Зарегистрироваться</Link>

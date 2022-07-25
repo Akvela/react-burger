@@ -90,7 +90,6 @@ export const BurgerConstructor = () => {
             thumbnail={item.image_mobile} />
         ))}
       </div>
-      {!bun && <p className='text text_type_digits-default text_color_inactive ml-10 pt-8 pl-30'>Перетащите булку и ингредиенты</p>}
       <ul className={burgerConstructorStyles.block}>
         {elements.filter(item => { return item.type !== 'bun' }).map((item, index)=>(
           <ConstructorItem id={item.uniqueId} index={index} key={item.uniqueId} >
@@ -116,6 +115,12 @@ export const BurgerConstructor = () => {
           />
         ))}
       </div>
+      
+      {elements.length === 0 && (<div className={burgerConstructorStyles.box}>
+        <p className={burgerConstructorStyles.text}>Выбери булку и начинку</p>
+        {isDrag && <p className={burgerConstructorStyles.border}>Тяни сюда</p>}
+      </div>)}
+
       <div className={`${burgerConstructorStyles.info} pt-10 pr-4`}>
         <h2 className="text text_type_digits-medium">
           {totalPrice}
