@@ -29,7 +29,7 @@ export default function App() {
     <>
       <AppHeader />
       <Switch location={background || location}>
-        <Route path='react-burger' exact={true} children={<Home />} />
+        <Route path='/' exact={true} children={<Home />} />
 
         <Route path='/login' exact={true} children={<Login />} />
 
