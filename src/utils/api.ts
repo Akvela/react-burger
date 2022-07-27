@@ -1,6 +1,6 @@
 const urlApi = 'https://norma.nomoreparties.space/api';
 
-const checkResponse = (res) => {
+const checkResponse = (res: Response) => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err))
 }
 
@@ -14,7 +14,7 @@ const getIngredients = () => {
     .then(res => checkResponse(res))
 };
 
-const getOrderNumber = (accessToken, arrIdIngredients) => {
+const getOrderNumber = (accessToken: string, arrIdIngredients: Array<string>) => {
   return fetch(`${urlApi}/orders`, {
     headers: {
       'Content-Type': 'application/json',
@@ -26,11 +26,11 @@ const getOrderNumber = (accessToken, arrIdIngredients) => {
   .then(res => checkResponse(res))
 };
 
-const getOrderInfo = (number) => {
+const getOrderInfo = (number: string) => {
   return fetch(`${urlApi}/orders/${number}`).then(res => checkResponse(res))
 };
 
-const requestPassword = (email) => {
+const requestPassword = (email: string) => {
   return fetch(`${urlApi}/password-reset`, {
     headers: {
       'Content-Type': 'application/json'
@@ -41,7 +41,7 @@ const requestPassword = (email) => {
     .then(res => checkResponse(res))
 }
 
-const resetPassword = (password, token) => {
+const resetPassword = (password: string, token: string) => {
   return fetch(`${urlApi}/password-reset/reset`, {
     headers: {
       'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ const resetPassword = (password, token) => {
   .then(res => checkResponse(res))
 }
 
-const createNewUser = (name, email, password) => {
+const createNewUser = (name: string, email: string, password: string) => {
   return fetch(`${urlApi}/auth/register`, {
     method: 'POST',
     headers: {
@@ -70,7 +70,7 @@ const createNewUser = (name, email, password) => {
   .then(res => checkResponse(res))
 }
 
-const getUser = (accessToken) => {
+const getUser = (accessToken: string) => {
   return fetch(`${urlApi}/auth/user`, {
     headers: {
       'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ const getUser = (accessToken) => {
   .then(res => checkResponse(res))
 }
 
-const refreshUser = (name, email, password, accessToken) => {
+const refreshUser = (name: string, email: string, password: string, accessToken: string) => {
   return fetch(`${urlApi}/auth/user`, {
     headers: {
       'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ const refreshUser = (name, email, password, accessToken) => {
   .then(res => checkResponse(res))
 }
 
-const login = (email, password) => {
+const login = (email: string, password: string) => {
   return fetch(`${urlApi}/auth/login`, {
     method: 'POST',
     headers: {
@@ -110,7 +110,7 @@ const login = (email, password) => {
   .then(res => checkResponse(res))
 }
 
-const refreshTokenUser = (refreshToken) => {
+const refreshTokenUser = (refreshToken: string) => {
   return fetch(`${urlApi}/auth/token`, {
     method: 'POST',
     headers: {
@@ -121,7 +121,7 @@ const refreshTokenUser = (refreshToken) => {
   .then(res => checkResponse(res))
 }
 
-const logout = (accessToken) => {
+const logout = (accessToken: string) => {
   return fetch(`${urlApi}/auth/logout`, {
     method: 'POST',
     headers: {

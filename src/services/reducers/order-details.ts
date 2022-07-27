@@ -1,4 +1,15 @@
-import {OPEN_MODAL_ORDER, CLOSE_MODAL_ORDER, GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_ERROR } from '../actions/order-details.js';
+import {CLOSE_MODAL_ORDER, GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_ERROR } from '../actions/order-details.js';
+import { TOrderDetailsActions } from '../actions/order-details.js';
+import { TOrder } from '../types/data.js';
+
+type TOrderDetailsState = {
+  orderRequest: boolean,
+  orderIsClicked: boolean,
+  orderSuccessed: boolean,
+  orderFailed: boolean,
+  orderNumber: number | null,
+  order: TOrder | {}
+}
 
 const initialState = {
   orderRequest: false,
@@ -9,9 +20,8 @@ const initialState = {
   order: {}
 }
 
-export const orderDetailsReducer = (state = initialState, action) => {
+export const orderDetailsReducer = (state = initialState, action: TOrderDetailsActions): TOrderDetailsState => {
   switch (action.type) {
-
     case CLOSE_MODAL_ORDER:
       return {
         ...state,
@@ -25,8 +35,8 @@ export const orderDetailsReducer = (state = initialState, action) => {
     case GET_ORDER_REQUEST:
       return { 
         ...state, 
-        orderRequest: true, 
-        orderIsClicked: true 
+        orderRequest: true,
+        orderIsClicked: true
       }
     case GET_ORDER_SUCCESS:
       return {

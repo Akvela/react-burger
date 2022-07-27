@@ -2,14 +2,42 @@ import { CREATE_USER_REQUEST, CREATE_USER_SUCCESS, CREATE_USER_ERROR, SEND_MAIL_
   SEND_NEW_PASSWORD_REQUEST, SEND_NEW_PASSWORD_SUCCESS, SEND_NEW_PASSWORD_ERROR, LOGIN_SUCCESS, 
   LOGIN_ERROR, LOGIN_REQUEST, GET_USER_INFO_REQUEST, GET_USER_INFO_SUCCESS, GET_USER_INFO_ERROR, CHECK_AUTH, CHECK_AUTH_CHECKED, 
   REFRESH_TOKEN_REQUEST, REFRESH_TOKEN_SUCCESS, REFRESH_TOKEN_FAILED, LOG_OUT_SUCCESS } from '../actions/user';
+import { TUserActions } from '../actions/user';
+import { TUser } from '../types/data';
+
+type TUserState = {
+  userEmail: string,
+  userName: string,
+  formName: string,
+  formEmail: string,
+  userPassword: string,
+  messageSuccess: string,
+  checkingResponse: boolean,
+  checkingReset: boolean,
+  sendMail: boolean,
+  loading: boolean,
+  createUserError: boolean,
+  passwordResetError: boolean,
+  sendMailError: boolean,
+  getUserError: boolean,
+  loginError: boolean,
+  refreshTokenRequest: boolean,
+  refreshTokenFailed: boolean,
+  refreshTokenError: boolean,
+  isAuthChecked: boolean,
+  resetPasswordError: boolean,
+  loginStatus: boolean
+}
 
 const initialState = {
   userEmail: '',
   userName: '',
+  formName: '',
+  formEmail: '',
   userPassword: '',
   messageSuccess: '',
-  checkingResponse: '',
-  checkingReset: '',
+  checkingResponse: false,
+  checkingReset: false,
   sendMail: false,
   loading: false,
   createUserError: false,
@@ -20,10 +48,12 @@ const initialState = {
   refreshTokenRequest: false,
   refreshTokenFailed: false,
   refreshTokenError: false,
-  isAuthChecked: false
+  isAuthChecked: false,
+  resetPasswordError: false,
+  loginStatus: false
 }
 
-export const userReducer = (state = initialState, action) => {
+export const userReducer = (state = initialState, action: TUserActions): TUserState => {
   switch (action.type) {
     case CREATE_USER_REQUEST:
       return { ...state, loading: true }
@@ -85,10 +115,10 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         userName: action.name,
         userEmail: action.email,
-        loginStatus: true,
         formName: action.name,
         formEmail: action.email,
-        loading: false
+        loading: false,
+        loginStatus: true
       }
     case LOGIN_ERROR:
       return {

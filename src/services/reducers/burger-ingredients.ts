@@ -1,4 +1,12 @@
 import { INCREASE_COUNT, DECREASE_COUNT, RESET_COUNT, GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_ERROR } from "../actions/burger-ingredients.js";
+import { TBurgerIngredientsActions } from "../actions/burger-ingredients.js";
+import { TIngredient } from '../types/data.js';
+
+type TBurgerIngredientsState = {
+  ingredients: Array<TIngredient>;
+  ingredientsRequest: boolean,
+  ingredientsFailed: boolean
+};
 
 const initialState = {
   ingredients: [],
@@ -6,26 +14,26 @@ const initialState = {
   ingredientsFailed: false
 }
 
-export const burgerIngredientsReducer = (state = initialState, action) => {
+export const burgerIngredientsReducer = (state = initialState, action: TBurgerIngredientsActions): TBurgerIngredientsState => {
   switch (action.type) {
     case INCREASE_COUNT:
       return {
         ...state,
-        ingredients: [...state.ingredients].map(item => {
-          return item._id === action.id && item.type !== 'bun' ? {...item, count: item.count + 1 } : item
+        ingredients: [...state.ingredients as TIngredient[]].map(item => {
+          return item._id === action.id && item.type !== 'bun' ? {...item, count: item.count || 0 + 1 } : item
         })
       }
     case DECREASE_COUNT:
       return {
         ...state,
-        ingredients: [...state.ingredients].map(item => {
-          return item._id === action.id ? {...item, count: item.count - 1 } : item
+        ingredients: [...state.ingredients as TIngredient[]].map(item => {
+          return item._id === action.id ? {...item, count: item.count || 0 - 1 } : item
         })
       }
     case RESET_COUNT:
       return {
         ...state,
-        ingredients: [...state.ingredients].map(item => {
+        ingredients: [...state.ingredients as TIngredient[]].map(item => {
           return {...item, count: 0 }
         })
       }

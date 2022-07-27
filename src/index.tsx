@@ -15,7 +15,7 @@ const wsUrl = 'wss://norma.nomoreparties.space/orders';
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const enhancer = composeEnhancers(applyMiddleware(thunk, socketMiddleware(wsUrl, wsActions)));
-const store = createStore(rootReducer, enhancer); 
+export const store = createStore(rootReducer, enhancer); 
 
 ReactDOM.render(
   <Provider store={store}>

@@ -1,8 +1,10 @@
-export const socketMiddleware = (wsUrl, wsActions) => {
-  return store => {
-    let socket = null;
+import { AnyAction, MiddlewareAPI } from 'redux';
 
-    return next => action => {
+export const socketMiddleware = (wsUrl: string, wsActions: {[key in any]: any}) => {
+  return (store: MiddlewareAPI) => {
+    let socket: WebSocket | null = null;
+
+    return (next: (T: AnyAction) => void) => (action: AnyAction) => {
       const { dispatch } = store;
       const { type, payload } = action;
       const { wsInit, onOpen, onClose, onError, onMessage, wsClose } = wsActions;
@@ -12,7 +14,7 @@ export const socketMiddleware = (wsUrl, wsActions) => {
       }
       
       if (type === wsClose) {
-        socket.close()
+        socket?.close()
       }
 
       if (socket) {

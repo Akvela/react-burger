@@ -19,7 +19,7 @@ import burgerConstructorStyles from './burger-constructor.module.css';
 export const BurgerConstructor = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { orderIsClicked, orderSuccessed, orderRequest, orderNumber } = useSelector(store => store.orderDetails);
+  const { orderIsClicked, orderRequest, orderNumber } = useSelector(store => store.orderDetails);
   const ingredients = useSelector(store => store.burgerIngredients.ingredients);
   const { elements, bun } = useSelector(store => store.burgerConstructor);
   const  burgerConstructor = useSelector(store => store.burgerConstructor);
@@ -30,12 +30,6 @@ export const BurgerConstructor = () => {
     return (
       (burgerConstructor.bun ? burgerConstructor.bun.price * 2 : 0) + burgerConstructor.elements.reduce((s, v) => s + v.price, 0)
       )
-  }, [burgerConstructor])
-  
-  const orderIds = React.useMemo(() => {
-    return (
-      elements.map(ingredient  => ingredient._id).concat(bun._id)
-    )
   }, [burgerConstructor])
 
   const postOrder = () => {
