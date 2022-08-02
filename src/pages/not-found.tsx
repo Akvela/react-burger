@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {FunctionComponent} from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import notfoundStyles from './not-found.module.css';
 
-export function NotFound() {
+export const NotFound: FunctionComponent = () => {
   return (
     <div className={notfoundStyles.wrapper}>
       <p className="text text_type_digits-large text_color_inactive">404</p>

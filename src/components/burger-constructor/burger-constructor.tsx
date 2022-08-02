@@ -1,32 +1,33 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { FunctionComponent } from 'react';
+import { useSelector, useDispatch } from '../../services/types/hooks';
 import { useDrop } from 'react-dnd';
-import { getCookie } from '../../utils/cookie.js';
-import { ConstructorItem } from '../constructor-item/constructor-item.jsx';
+import { getCookie } from '../../utils/cookie';
+import { ConstructorItem } from '../constructor-item/constructor-item';
 import { useHistory } from 'react-router-dom';
-import { setUniqueId } from '../../utils/utils.js';
-import { ADD_BUN, ADD_ITEM, RESET_CONSTRUCTOR, DELETE_ITEM } from '../../services/actions/burger-constructor.js';
-import { INCREASE_COUNT, DECREASE_COUNT, RESET_COUNT } from '../../services/actions/burger-ingredients.js';
-import { CLOSE_MODAL_ORDER } from '../../services/actions/order-details.js';
-import { OrderDetails } from '../order-details/order-details.jsx';
-import { Modal } from '../modal/modal.jsx';
-import { getUserOrderNumber } from '../../services/actions/order-details.js';
+import { setUniqueId } from '../../utils/utils';
+import { ADD_BUN, ADD_ITEM, RESET_CONSTRUCTOR, DELETE_ITEM } from '../../services/actions/burger-constructor';
+import { INCREASE_COUNT, DECREASE_COUNT, RESET_COUNT } from '../../services/actions/burger-ingredients';
+import { CLOSE_MODAL_ORDER } from '../../services/actions/order-details';
+import { OrderDetails } from '../order-details/order-details';
+import { Modal } from '../modal/modal';
+import { getUserOrderNumber } from '../../services/actions/order-details';
 import { ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Loading } from '../loading/loading.jsx';
+import { Loading } from '../loading/loading';
 import burgerConstructorStyles from './burger-constructor.module.css';
+import { TIngredient } from '../../services/types/data';
 
 
-export const BurgerConstructor = () => {
+export const BurgerConstructor: FunctionComponent = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { orderIsClicked, orderRequest, orderNumber } = useSelector(store => store.orderDetails);
-  const ingredients = useSelector(store => store.burgerIngredients.ingredients);
+  const { ingredients } = useSelector(store => store.burgerIngredients);
   const { elements, bun } = useSelector(store => store.burgerConstructor);
   const  burgerConstructor = useSelector(store => store.burgerConstructor);
   const { userName } = useSelector(store => store.user);
   const accessToken = getCookie('accessToken');
 
-  const totalPrice = React.useMemo(() => {
+  const totalPrice: number = React.useMemo(() => {
     return (
       (burgerConstructor.bun ? burgerConstructor.bun.price * 2 : 0) + burgerConstructor.elements.reduce((s, v) => s + v.price, 0)
       )
@@ -44,7 +45,7 @@ export const BurgerConstructor = () => {
     dispatch({ type: RESET_COUNT })
   };
 
-  const deleteItem = React.useCallback((itemKey, itemId) => {
+  const deleteItem = React.useCallback((itemKey: number, itemId: string) => {
     dispatch({ type: DELETE_ITEM, id: itemKey });
     dispatch({ type: DECREASE_COUNT, id: itemId });
   }, [dispatch]);
@@ -54,7 +55,7 @@ export const BurgerConstructor = () => {
     collect: monitor => ({
       isDrag: monitor.canDrop()
     }),
-    drop(itemId) {
+    drop(itemId: { id: string }) {
       dispatch({
         type: ADD_ITEM, 
         data: ingredients.filter(item => {
@@ -74,7 +75,7 @@ export const BurgerConstructor = () => {
   return(
     elements && <div className={`${burgerConstructorStyles.constructor} pt-1`} ref={dropTarget}>
       <div className={burgerConstructorStyles.item}> 
-        {bun && Array.of(bun).map((item, index) => (
+        {bun && bun._id && Array.of(bun).map((item, index) => (
           <ConstructorElement 
             key={index}
             type="top" 
@@ -98,7 +99,7 @@ export const BurgerConstructor = () => {
         ))}
       </ul>
       <div className={burgerConstructorStyles.item}>
-        {bun && Array.of(bun).map((item, index) => (
+        {bun && bun._id && Array.of(bun).map((item, index) => (
           <ConstructorElement 
             key={index}
             type="bottom" 
@@ -120,7 +121,7 @@ export const BurgerConstructor = () => {
           {totalPrice}
         </h2>
         <div className={burgerConstructorStyles.coins}></div>
-        <Button type="primary" size="large" disabled={(bun.length===0) || (elements.length===0)} onClick={() => postOrder()}>Оформить заказ</Button>
+        <Button type="primary" size="large" disabled={(bun === {}) || (elements.length===0)} onClick={() => postOrder()}>Оформить заказ</Button>
       </div>
 
       {orderRequest && orderIsClicked && (

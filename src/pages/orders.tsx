@@ -1,6 +1,6 @@
 import { Link, Redirect } from 'react-router-dom';
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, {FunctionComponent} from 'react';
+import { useSelector, useDispatch } from '../services/types/hooks';
 import { logout } from '../utils/api';
 import ordersStyles from './orders.module.css';
 import { deleteCookie, getCookie } from '../utils/cookie';
@@ -10,7 +10,7 @@ import { OrderContainer } from '../components/order-container/order-container';
 import { Loading } from '../components/loading/loading';
 import { LOG_OUT_SUCCESS } from '../services/actions/user';
 
-export function Orders() {
+export const Orders: FunctionComponent = () => {
   const dispatch = useDispatch();
   const { orders } = useSelector(store => store.ws)
   const { userName } = useSelector(store => store.user)

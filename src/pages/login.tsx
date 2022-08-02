@@ -1,22 +1,22 @@
-import React from 'react';
+import React, {FunctionComponent} from 'react';
 import { Link, Redirect, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../services/types/hooks';
 import { loginUser } from '../services/actions/user';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Loading } from '../components/loading/loading';
 import loginStyles from './login.module.css';
 
-export function Login() {
+export const Login: FunctionComponent = () => {
   const [emailForm, setEmailForm] = React.useState('');
   const [passwordForm, setPasswordForm] = React.useState('');
-  const location = useLocation();
+  const location = useLocation<{[key in any] : any}>();
   const dispatch = useDispatch();
   const {userName, loading, loginError} = useSelector(store => store.user);
 
-  const changeEmailInput = (e) => {
+  const changeEmailInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailForm(e.target.value)
   }
-  const changePasswordInput = (e) => {
+  const changePasswordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordForm(e.target.value)
   }
 

@@ -1,9 +1,10 @@
 import { NavLink, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/types/hooks';
+import { FunctionComponent } from 'react';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import appHeaderStyles from './app-header.module.css';
 
-export const AppHeader = () => {
+export const AppHeader: FunctionComponent = () => {
   const { userName } = useSelector((store) => store.user);
 
   return(

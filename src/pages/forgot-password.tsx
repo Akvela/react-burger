@@ -1,21 +1,21 @@
-import React from 'react';
+import React, {FunctionComponent} from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from '../services/types/hooks';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { getPasswordRecovery } from '../services/actions/user';
 import { Loading } from '../components/loading/loading';
 import forgotPasswordStyles from './forgot-password.module.css';
 
-export function ForgotPassword() {
+export const ForgotPassword: FunctionComponent = () => {
   const [emailForm, setEmailForm] = React.useState('');
   const dispatch = useDispatch();
   const {checkingResponse, userName, loading, sendMailError} = useSelector(store => store.user);
 
-  const changeEmailInput = (e) => {
+  const changeEmailInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailForm(e.target.value)
   };
 
-  const recoverPassword = (e) => {
+  const recoverPassword = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!emailForm) {
       return;

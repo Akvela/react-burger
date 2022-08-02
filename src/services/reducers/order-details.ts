@@ -1,14 +1,14 @@
-import {CLOSE_MODAL_ORDER, GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_ERROR } from '../actions/order-details.js';
-import { TOrderDetailsActions } from '../actions/order-details.js';
-import { TOrder } from '../types/data.js';
+import {CLOSE_MODAL_ORDER, GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_ERROR } from '../actions/order-details';
+import { TOrderDetailsActions } from '../actions/order-details';
+import { TOrder } from '../types/data';
 
 type TOrderDetailsState = {
-  orderRequest: boolean,
-  orderIsClicked: boolean,
-  orderSuccessed: boolean,
-  orderFailed: boolean,
-  orderNumber: number | null,
-  order: TOrder | {}
+  orderRequest: boolean;
+  orderIsClicked: boolean;
+  orderSuccessed: boolean;
+  orderFailed: boolean;
+  orderNumber: number | null;
+  order: TOrder | {};
 }
 
 const initialState = {

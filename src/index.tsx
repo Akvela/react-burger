@@ -1,9 +1,8 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-import App from './components/app/app.jsx';
-import { rootReducer } from './services/reducers/index.js';
+import { App } from './components/app/app';
+import { rootReducer } from './services/reducers/index';
 import { compose, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { BrowserRouter } from 'react-router-dom';

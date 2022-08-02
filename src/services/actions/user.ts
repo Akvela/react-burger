@@ -2,7 +2,6 @@ import { requestPassword, resetPassword, createNewUser, refreshUser, getUser, lo
 import { setCookie, getCookie } from '../../utils/cookie';
 import { TUser } from '../types/data';
 import { AppThunk, AppDispatch } from '../types';
-import { TApplicationActions } from '../types';
 
 export const CREATE_USER_REQUEST: 'CREATE_USER_REQUEST' = 'CREATE_USER_REQUEST';
 export const CREATE_USER_SUCCESS: 'CREATE_USER_SUCCESS' = 'CREATE_USER_SUCCESS';
@@ -51,73 +50,73 @@ export interface IPatchUserFailedAction {
   readonly type: typeof PATCH_USER_FAILED;
 }
 export interface IGetUserInfoRequestAction {
-  readonly type: typeof GET_USER_INFO_REQUEST;
+  type: typeof GET_USER_INFO_REQUEST;
 }
 export interface IGetUserInfoSuccessAction {
-  readonly type: typeof GET_USER_INFO_SUCCESS;
-  readonly email: string;
-  readonly name: string;
+  type: typeof GET_USER_INFO_SUCCESS;
+  email: string;
+  name: string;
 }
 export interface IGetUserInfoErrorAction {
-  readonly type: typeof GET_USER_INFO_ERROR;
+  type: typeof GET_USER_INFO_ERROR;
 }
 export interface ISendMailRequestAction {
-  readonly type: typeof SEND_MAIL_REQUEST;
+  type: typeof SEND_MAIL_REQUEST;
 }
 export interface ISendMailSuccessAction {
-  readonly type: typeof SEND_MAIL_SUCCESS;
-  readonly success: boolean;
-  readonly message: string;
+  type: typeof SEND_MAIL_SUCCESS;
+  success: boolean;
+  message: string;
 }
 export interface ISendMailErrorAction {
-  readonly type: typeof SEND_MAIL_ERROR;
+  type: typeof SEND_MAIL_ERROR;
 }
 export interface ISendNewPasswordRequestAction {
-  readonly type: typeof SEND_NEW_PASSWORD_REQUEST;
+  type: typeof SEND_NEW_PASSWORD_REQUEST;
 }
 export interface ISendNewPasswordSuccessAction {
-  readonly type: typeof SEND_NEW_PASSWORD_SUCCESS;
-  readonly success: boolean;
-  readonly message: string;
+  type: typeof SEND_NEW_PASSWORD_SUCCESS;
+  success: boolean;
+  message: string;
 }
 export interface ISendNewPasswordErrorAction {
-  readonly type: typeof SEND_NEW_PASSWORD_ERROR;
+  type: typeof SEND_NEW_PASSWORD_ERROR;
 }
 export interface ILoginRequestAction {
-  readonly type: typeof LOGIN_REQUEST;
+  type: typeof LOGIN_REQUEST;
 }
 export interface ILoginSuccessAction {
-  readonly type: typeof LOGIN_SUCCESS;
-  readonly email: string;
-  readonly name: string;
-  readonly status: boolean;
+  type: typeof LOGIN_SUCCESS;
+  email: string;
+  name: string;
+  status: boolean;
 }
 export interface ILoginErrorAction {
-  readonly type: typeof LOGIN_ERROR;
+  type: typeof LOGIN_ERROR;
 }
 export interface ILogOutRequestAction {
-  readonly type: typeof LOG_OUT_REQUEST;
+  type: typeof LOG_OUT_REQUEST;
 }
 export interface ILogOutSuccessAction {
-  readonly type: typeof LOG_OUT_SUCCESS;
+  type: typeof LOG_OUT_SUCCESS;
 }
 export interface ILogOutFailedAction {
-  readonly type: typeof LOG_OUT_FAILED;
+  type: typeof LOG_OUT_FAILED;
 }
 export interface ICheckAuthAction {
-  readonly type: typeof CHECK_AUTH;
+  type: typeof CHECK_AUTH;
 }
 export interface ICheckAuthCheckedAction {
-  readonly type: typeof CHECK_AUTH_CHECKED;
+  type: typeof CHECK_AUTH_CHECKED;
 }
 export interface IRefreshTokenRequestAction {
-  readonly type: typeof REFRESH_TOKEN_REQUEST;
+  type: typeof REFRESH_TOKEN_REQUEST;
 }
 export interface IRefreshTokenSuccessAction {
-  readonly type: typeof REFRESH_TOKEN_SUCCESS;
+  type: typeof REFRESH_TOKEN_SUCCESS;
 }
 export interface IRefreshTokenFailedAction {
-  readonly type: typeof REFRESH_TOKEN_FAILED;
+  type: typeof REFRESH_TOKEN_FAILED;
 }
 
 export type TUserActions = 
@@ -197,7 +196,11 @@ export const loginUser: AppThunk = (email: string, password: string) => {
   }
 }
 
-export const fetchWithRefresh: AppThunk = (request: (requestParams: any) => TApplicationActions, ...requestParams: string[] ) => {
+type TRequestParams = {
+  accessToken: string
+}
+
+export const fetchWithRefresh: AppThunk = (request: (...args: any[]) => any, ...requestParams: TRequestParams[]) => {
   return function (dispatch: AppDispatch) {
     const refreshToken = localStorage.getItem('refreshToken');
     if (!refreshToken) {
@@ -216,7 +219,7 @@ export const fetchWithRefresh: AppThunk = (request: (requestParams: any) => TApp
           dispatch(request(requestParams));
         })
         .catch((err) => {
-          dispatch(logout());
+          dispatch(logout(refreshToken));
           dispatch({ type: REFRESH_TOKEN_FAILED, err: err.message });
           return Promise.reject(err);
         });
@@ -224,7 +227,7 @@ export const fetchWithRefresh: AppThunk = (request: (requestParams: any) => TApp
   };
 };
 
-export const getUserInfo: AppThunk = ({ accessToken }) => {
+export const getUserInfo: AppThunk = ({ accessToken }: {accessToken: string}) => {
   return function(dispatch: AppDispatch) {
     dispatch({ type: GET_USER_INFO_REQUEST })
     getUser(accessToken as string)
@@ -244,7 +247,7 @@ export const getUserInfo: AppThunk = ({ accessToken }) => {
   }
 }
 
-export const updateUser: AppThunk = ({ name, email, password, accessToken }) => {
+export const updateUser: AppThunk = ({ name, email, password, accessToken }: { name: string, email: string, password: string, accessToken: string }) => {
   return function(dispatch: AppDispatch) {
     refreshUser(name, email, password, accessToken)
       .then(res => dispatch({

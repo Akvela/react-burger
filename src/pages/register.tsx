@@ -1,29 +1,29 @@
-import React from 'react';
+import React, {FunctionComponent} from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { registerNewUser } from '../services/actions/user';
 import { EmailInput, PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../services/types/hooks';
 import { Loading } from '../components/loading/loading';
 import registerStyles from './register.module.css';
 
-export function Register() {
+export const Register: FunctionComponent = () => {
   const dispatch = useDispatch();
   const [nameForm, setNameForm] = React.useState('');
   const [emailForm, setEmailForm] = React.useState('');
   const [passwordForm, setPasswordForm] = React.useState('');
   const { loginStatus, loading } = useSelector(store => store.user);
 
-  const changeNameInput = (e) => {
+  const changeNameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNameForm(e.target.value)
   }
-  const changeEmailInput = (e) => {
+  const changeEmailInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailForm(e.target.value)
   }
-  const changePasswordInput = (e) => {
+  const changePasswordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordForm(e.target.value)
   }
 
-  const createNewUser = (evt) => {
+  const createNewUser = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     dispatch(registerNewUser(nameForm, emailForm, passwordForm));
     setNameForm('');

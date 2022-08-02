@@ -1,22 +1,22 @@
-import React from 'react';
+import React, { FunctionComponent, KeyboardEvent, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import { ModalOverlay } from '../modal-overlay/modal-overlay.jsx';
-import PropTypes from 'prop-types';
+import { ModalOverlay } from '../modal-overlay/modal-overlay';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { TModal } from '../../services/types/data';
 import modalStyles from './modal.module.css';
 
 const modalContainer = document.querySelector('#react-modals');
 
-export const Modal = ({onCloseClick, children, title}) => {
-  const handleEscCloseModal = (evt) => {
+export const Modal: FunctionComponent<TModal> = ({onCloseClick, children, title}) => {
+  function handleEscCloseModal(evt: KeyboardEvent) {
     evt.key === 'Escape' && onCloseClick()
   };
 
   React.useEffect(() => {
-    document.addEventListener("keydown", handleEscCloseModal)
+    document.addEventListener('keydown', handleEscCloseModal)
 
     return () => {
-      document.removeEventListener("keydown", handleEscCloseModal)
+      document.removeEventListener('keydown', handleEscCloseModal)
     }
   }, []);
 
@@ -31,12 +31,6 @@ export const Modal = ({onCloseClick, children, title}) => {
       </div>
       <ModalOverlay onClick={onCloseClick} />
     </>,
-    modalContainer
+    modalContainer!
   )
-}
-
-Modal.propTypes = {
-  onCloseClick: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
-  title: PropTypes.string
 }

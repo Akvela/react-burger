@@ -1,16 +1,17 @@
+import { FunctionComponent } from 'react';
 import { useDrag } from 'react-dnd';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../services/types/hooks';
 import { Link, useLocation } from 'react-router-dom';
 import { CLICK_ON_INGREDIENT } from "../../services/actions/ingredient-details";
-import PropTypes from 'prop-types';
-import { ingridientDataTypes } from '../../utils/types.js';
+import { TIngredient } from '../../services/types/data';
+
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import cardStyles from './card.module.css';
 
-export const Card = (props) => {
+export const Card: FunctionComponent<TIngredient> = (props) => {
   const { id } = props;
   const { bun, elements } = useSelector(store => store.burgerConstructor);
-  const ingredients = useSelector(store => store.burgerIngredients.ingredients);
+  const { ingredients } = useSelector(store => store.burgerIngredients);
   const dispatch = useDispatch();
   const location = useLocation();
 
@@ -19,7 +20,7 @@ export const Card = (props) => {
     item: { id }
   });
 
-  function selectIngredient(evt, data) {
+  function selectIngredient(evt: React.MouseEvent, data: typeof ingredients) {
     return data.filter(item => {
       return item._id === evt.currentTarget.id
     })
@@ -45,5 +46,3 @@ export const Card = (props) => {
     </Link>
   )
 }
-
-Card.propTypes = ingridientDataTypes.isRequired.isRequired

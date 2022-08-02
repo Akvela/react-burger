@@ -7,23 +7,23 @@ export const RESET_CONSTRUCTOR: 'RESET_CONSTRUCTOR' = 'RESET_CONSTRUCTOR';
 export const REORDER_ITEMS: 'REORDER_ITEMS' = 'REORDER_ITEMS';
 
 export interface IAddBunAction {
-  readonly type: typeof ADD_BUN;
-  readonly bunItem: TIngredient;
+  type: typeof ADD_BUN;
+  bunItem: TIngredient;
 }
 export interface IAddItemAction {
-  readonly type: typeof ADD_ITEM;
-  readonly data: Array<TIngredient>;
+  type: typeof ADD_ITEM;
+  data: Array<TIngredient>;
 }
 export interface IDeleteItemAction {
-  readonly type: typeof DELETE_ITEM;
-  readonly id: number;
+  type: typeof DELETE_ITEM;
+  id: string;
 }
 export interface IResetConstructorAction {
-  readonly type: typeof RESET_CONSTRUCTOR;
+  type: typeof RESET_CONSTRUCTOR;
 }
 export interface IReorderItemsAction {
-  readonly type: typeof REORDER_ITEMS;
-  readonly data: Array<TIngredient>;
+  type: typeof REORDER_ITEMS;
+  data: Array<TIngredient>;
 }
 
 export type TBurgerConstructorActions = 

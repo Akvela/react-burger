@@ -8,23 +8,23 @@ export const WS_CONNECTION_ERROR: 'WS_CONNECTION_ERROR' = 'WS_CONNECTION_ERROR';
 export const WS_CONNECTION_CLOSE: 'WS_CONNECTION_CLOSE' = 'WS_CONNECTION_CLOSE';
 
 export interface IWsConnectionSuccessAction {
-  readonly type: typeof WS_CONNECTION_SUCCESS;
+  type: typeof WS_CONNECTION_SUCCESS;
 }
 export interface IWsGetMessageAction {
-  readonly type: typeof WS_GET_MESSAGE;
-  readonly payload: TFeedOrders;
+  type: typeof WS_GET_MESSAGE;
+  payload: TFeedOrders;
 }
 export interface IWsConnectionStartAction {
-  readonly type: typeof WS_CONNECTION_START;
+  type: typeof WS_CONNECTION_START;
 }
 export interface IWsConnectionClosedAction {
-  readonly type: typeof WS_CONNECTION_CLOSED;
+  type: typeof WS_CONNECTION_CLOSED;
 }
 export interface IWsConnectionErrorAction {
-  readonly type: typeof WS_CONNECTION_ERROR;
+  type: typeof WS_CONNECTION_ERROR;
 }
 export interface IWsConnectionCloseAction {
-  readonly type: typeof WS_CONNECTION_CLOSE;
+  type: typeof WS_CONNECTION_CLOSE;
 }
 
 export type TWsActions = 

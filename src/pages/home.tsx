@@ -1,14 +1,14 @@
-import React from 'react';
+import React, {FunctionComponent} from 'react';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { useSelector, useDispatch } from 'react-redux';
-import { BurgerIngredients } from '../components/burger-ingredients/burger-ingredients.jsx';
-import { BurgerConstructor } from '../components/burger-constructor/burger-constructor.jsx';
-import { getDataIngredients } from '../services/actions/burger-ingredients.js';
-import { Loading } from '../components/loading/loading.jsx';
+import { useSelector, useDispatch } from '../services/types/hooks';
+import { BurgerIngredients } from '../components/burger-ingredients/burger-ingredients';
+import { BurgerConstructor } from '../components/burger-constructor/burger-constructor';
+import { getDataIngredients } from '../services/actions/burger-ingredients';
+import { Loading } from '../components/loading/loading';
 import homeStyles from './home.module.css';
 
-export function Home() {
+export const Home: FunctionComponent = () => {
   const dispatch = useDispatch();
   const ingredientsRequest = useSelector(store => store.burgerIngredients.ingredientsRequest);
 

@@ -1,12 +1,12 @@
-import React from 'react';
+import React, {FunctionComponent} from 'react';
 import { OrderContainer } from '../components/order-container/order-container';
 import { Loading } from '../components/loading/loading';
 import { setUniqueId } from '../utils/utils';
 import { WS_CONNECTION_START, WS_CONNECTION_CLOSE } from '../services/actions/ws';
 import feedStyles from './feed.module.css';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from '../services/types/hooks';
 
-export function Feed() {
+export const Feed: FunctionComponent = () => {
   const dispatch = useDispatch();
   const { orders, total, totalToday } = useSelector(store => store.ws);
 

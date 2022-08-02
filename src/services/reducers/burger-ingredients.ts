@@ -1,11 +1,11 @@
-import { INCREASE_COUNT, DECREASE_COUNT, RESET_COUNT, GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_ERROR } from "../actions/burger-ingredients.js";
-import { TBurgerIngredientsActions } from "../actions/burger-ingredients.js";
-import { TIngredient } from '../types/data.js';
+import { INCREASE_COUNT, DECREASE_COUNT, RESET_COUNT, GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_ERROR } from '../actions/burger-ingredients';
+import { TBurgerIngredientsActions } from '../actions/burger-ingredients';
+import { TIngredient } from '../types/data';
 
 type TBurgerIngredientsState = {
   ingredients: Array<TIngredient>;
-  ingredientsRequest: boolean,
-  ingredientsFailed: boolean
+  ingredientsRequest: boolean;
+  ingredientsFailed: boolean;
 };
 
 const initialState = {

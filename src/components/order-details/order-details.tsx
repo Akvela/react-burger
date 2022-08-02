@@ -1,7 +1,8 @@
 import orderDetailsStyles from './order-details.module.css';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/types/hooks';
+import { FunctionComponent } from 'react';
 
-export const OrderDetails = () => {
+export const OrderDetails: FunctionComponent = () => {
   const { orderFailed, orderNumber } = useSelector(store => store.orderDetails);
 
   return(

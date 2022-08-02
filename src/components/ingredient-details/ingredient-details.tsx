@@ -1,13 +1,14 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, {FunctionComponent} from 'react';
+import { useSelector } from '../../services/types/hooks';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ingredientDetailsStyles from './ingredient-details.module.css';
+import { TIngredientDetails, TIngredient } from '../../services/types/data';
 
-export const IngredientDetails = ({ title }) => {
-  const ingredients = useSelector(store => store.burgerIngredients.ingredients);
+export const IngredientDetails: FunctionComponent<TIngredientDetails> = ({ title }) => {
+  const { ingredients } = useSelector(store => store.burgerIngredients);
   const { id } = useParams();
-  const selectedIngredient = ingredients.find(ingredient => ingredient._id === id)
+  const selectedIngredient: TIngredient = ingredients?.find(ingredient => ingredient._id === id)
 
   return(
     <>

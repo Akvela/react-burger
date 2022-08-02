@@ -1,10 +1,9 @@
 import React from 'react';
-import { Card } from '../card/card.jsx';
-import PropTypes from 'prop-types';
-import { ingridientDataTypes } from '../../utils/types';
+import { Card } from '../card/card';
+import { TGallery } from '../../services/types/data';
 import galleryStyles from './gallery.module.css';
 
-export const Gallery = React.forwardRef((props, ref) => {
+export const Gallery = React.forwardRef<HTMLHeadingElement, TGallery>((props, ref) => {
   return (
     <>
       <h2 ref={ref} className='text text_type_main-medium mb-6 mt-10'>{props.ingredientsType}</h2>
@@ -16,8 +15,3 @@ export const Gallery = React.forwardRef((props, ref) => {
     </>
   )
 })
-
-Gallery.propTypes = {
-  ingredientsType: PropTypes.string.isRequired,
-  data: PropTypes.arrayOf(ingridientDataTypes.isRequired).isRequired
-}

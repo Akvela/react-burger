@@ -10,25 +10,25 @@ export const GET_INGREDIENTS_SUCCESS: 'GET_INGREDIENTS_SUCCESS' = 'GET_INGREDIEN
 export const GET_INGREDIENTS_ERROR: 'GET_INGREDIENTS_ERROR' = 'GET_INGREDIENTS_ERROR';
 
 export interface IIncreaseCountAction {
-  readonly type: typeof INCREASE_COUNT;
-  readonly id: string;
+  type: typeof INCREASE_COUNT;
+  id: string;
 }
 export interface IDecreaseCountAction {
-  readonly type: typeof DECREASE_COUNT;
-  readonly id: string;
+  type: typeof DECREASE_COUNT;
+  id: string;
 }
 export interface IResetCountAction {
-  readonly type: typeof RESET_COUNT;
+  type: typeof RESET_COUNT;
 }
 export interface IGetIngredientsRequestAction {
-  readonly type: typeof GET_INGREDIENTS_REQUEST;
+  type: typeof GET_INGREDIENTS_REQUEST;
 }
 export interface IGetIngredientsSuccessAction {
-  readonly type: typeof GET_INGREDIENTS_SUCCESS;
+  type: typeof GET_INGREDIENTS_SUCCESS;
   data: Array<TIngredient>
 }
 export interface IGetIngredientsErrorAction {
-  readonly type: typeof GET_INGREDIENTS_ERROR;
+  type: typeof GET_INGREDIENTS_ERROR;
 }
 
 export type TBurgerIngredientsActions = 

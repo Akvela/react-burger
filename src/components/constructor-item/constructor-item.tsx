@@ -1,14 +1,15 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { FunctionComponent } from 'react';
+import { useSelector, useDispatch } from '../../services/types/hooks';
 import { useDrag, useDrop } from 'react-dnd';
 import { REORDER_ITEMS } from '../../services/actions/burger-constructor';
 import { DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
-import constructorItemStyles from './constructor-item.module.css';
 
-export const ConstructorItem = (props) => {
+import constructorItemStyles from './constructor-item.module.css';
+import { TConstructorItem, TIngredient } from '../../services/types/data';
+
+export const ConstructorItem: FunctionComponent<TConstructorItem> = (props) => {
   const { elements } = useSelector(store => store.burgerConstructor);
-  const ref = React.useRef();
+  const ref = React.useRef<HTMLLIElement>(null);
   const dispatch = useDispatch();
   const { id, index } = props;
   
@@ -20,7 +21,7 @@ export const ConstructorItem = (props) => {
     })
   });
 
-  function moveItem(dragIndex, hoverIndex) {
+  function moveItem(dragIndex: number, hoverIndex: number) {
     let newItems = [...elements];
     let dragItem = newItems[dragIndex];
     newItems.splice(dragIndex, 1);
@@ -30,7 +31,7 @@ export const ConstructorItem = (props) => {
 
   const [, drop] = useDrop({
     accept: 'element',
-    hover(item) {
+    hover(item: TIngredient) {
       if (item.index === index) {
         return;
       }
@@ -50,9 +51,4 @@ export const ConstructorItem = (props) => {
       {props.children}
     </li>
   )
-}
-
-ConstructorItem.propTypes = {
-  id: PropTypes.number.isRequired,
-  index: PropTypes.number.isRequired
 }

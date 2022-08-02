@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../services/types/hooks';
 import { logout } from '../utils/api';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { refreshTokenUser, deleteCookie, getCookie } from '../utils/cookie';
@@ -9,7 +9,7 @@ import { Loading } from '../components/loading/loading';
 import { LOG_OUT_SUCCESS } from '../services/actions/user';
 import profileStyles from './profile.module.css';
 
-export function Profile() {
+export const Profile: FunctionComponent = () => {
   const [isUserInfoChanged, setIsUserInfoChanged] = React.useState(false);
   const dispatch = useDispatch();
   const { userName, userEmail, loading} = useSelector(store => store.user)
@@ -41,27 +41,27 @@ export function Profile() {
     setTimeout(() => passwordInputRef.current && passwordInputRef.current.focus(), 0)
   }
 
-  const changeName = (evt) => {
+  const changeName = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setNameValue(evt.target.value)
     evt.target.value === userName ? setIsUserInfoChanged(false) : setIsUserInfoChanged(true)
   }
-  const changeEmail = (evt) => {
+  const changeEmail = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setLoginValue(evt.target.value)
     evt.target.value === userEmail ? setIsUserInfoChanged(false) : setIsUserInfoChanged(true)
   }
-  const changePassword = (evt) => {
+  const changePassword = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordValue(evt.target.value)
     evt.target.value === passwordValue ? setIsUserInfoChanged(false) : setIsUserInfoChanged(true)
   }
 
-  const resetForm = (evt) => {
+  const resetForm = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     setNameValue(userName)
     setLoginValue(userEmail)
     setPasswordValue('')
   }
 
-  const submitForm = (evt) => {
+  const submitForm = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     dispatch(updateUser(nameValue, loginValue, passwordValue, { accessToken: `Bearer ${accessToken}` }))
   }

@@ -1,13 +1,14 @@
 import { formatRelative } from 'date-fns';
-import { ru } from 'date-fns/locale'
+import { ru } from 'date-fns/locale';
+import { FunctionComponent } from 'react';
 import { useParams } from 'react-router-dom';
 import { setUniqueId } from '../../utils/utils';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from '../../services/types/hooks';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import orderInfoStyles from './order-info.module.css';
-import PropTypes from 'prop-types';
+import { TOrderInfo } from '../../services/types/data';
 
-export const OrderInfo = ({headerStyle}) => {
+export const OrderInfo: FunctionComponent<TOrderInfo> = ({headerStyle}) => {
   const { orders } = useSelector(store => store.ws);
   const { id } = useParams();
   const { ingredients } = useSelector(store => store.burgerIngredients);

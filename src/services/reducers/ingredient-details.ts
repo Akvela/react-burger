@@ -1,10 +1,10 @@
-import { CLICK_ON_INGREDIENT, CLOSE_MODAL_INGREDIENT } from "../actions/ingredient-details.js";
-import { TIngredientDetailsActions } from "../actions/ingredient-details.js";
-import { TIngredient } from '../types/data.js';
+import { CLICK_ON_INGREDIENT, CLOSE_MODAL_INGREDIENT } from '../actions/ingredient-details';
+import { TIngredientDetailsActions } from '../actions/ingredient-details';
+import { TIngredient } from '../types/data';
 
 type TIngredientDetailsState = {
   currentItem: TIngredient | { [key in any]: never };
-  itemIsClicked: boolean
+  itemIsClicked: boolean;
 };
 
 const initialState = {

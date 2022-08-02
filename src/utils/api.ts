@@ -1,6 +1,8 @@
+import { TIngredientsResponse, TOrderResponse, TPasswordResponse, TUser, TToken } from "../services/types/data";
+
 const urlApi = 'https://norma.nomoreparties.space/api';
 
-const checkResponse = (res: Response) => {
+const checkResponse = <T>(res: Response): Promise<T> => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err))
 }
 
@@ -11,23 +13,19 @@ const getIngredients = () => {
     },
     method: 'GET',
   })
-    .then(res => checkResponse(res))
+    .then(res => checkResponse<TIngredientsResponse>(res))
 };
 
-const getOrderNumber = (accessToken: string, arrIdIngredients: Array<string>) => {
+const getOrderNumber = (accessToken: string, order: Array<string>) => {
   return fetch(`${urlApi}/orders`, {
     headers: {
       'Content-Type': 'application/json',
       authorization: accessToken
     },
     method: 'POST',
-    body: JSON.stringify({ ingredients: arrIdIngredients })
+    body: JSON.stringify({ ingredients: order })
   })
-  .then(res => checkResponse(res))
-};
-
-const getOrderInfo = (number: string) => {
-  return fetch(`${urlApi}/orders/${number}`).then(res => checkResponse(res))
+  .then(res => checkResponse<TOrderResponse>(res))
 };
 
 const requestPassword = (email: string) => {
@@ -38,7 +36,7 @@ const requestPassword = (email: string) => {
     method: 'POST',
     body: JSON.stringify({ 'email': email })
   })
-    .then(res => checkResponse(res))
+    .then(res => checkResponse<TPasswordResponse>(res))
 }
 
 const resetPassword = (password: string, token: string) => {
@@ -52,7 +50,7 @@ const resetPassword = (password: string, token: string) => {
       'token': token
     })
   })
-  .then(res => checkResponse(res))
+  .then(res => checkResponse<TPasswordResponse>(res))
 }
 
 const createNewUser = (name: string, email: string, password: string) => {
@@ -67,7 +65,7 @@ const createNewUser = (name: string, email: string, password: string) => {
       'password': password
     })
   })
-  .then(res => checkResponse(res))
+  .then(res => checkResponse<TUser>(res))
 }
 
 const getUser = (accessToken: string) => {
@@ -77,8 +75,9 @@ const getUser = (accessToken: string) => {
       'Authorization': accessToken
     },
   })
-  .then(res => checkResponse(res))
+  .then(res => checkResponse<TUser>(res))
 }
+
 
 const refreshUser = (name: string, email: string, password: string, accessToken: string) => {
   return fetch(`${urlApi}/auth/user`, {
@@ -93,7 +92,7 @@ const refreshUser = (name: string, email: string, password: string, accessToken:
       'password': password
     })
   })
-  .then(res => checkResponse(res))
+  .then(res => checkResponse<TUser>(res))
 }
 
 const login = (email: string, password: string) => {
@@ -107,7 +106,7 @@ const login = (email: string, password: string) => {
       'password': password
     })
   })
-  .then(res => checkResponse(res))
+  .then(res => checkResponse<TUser>(res))
 }
 
 const refreshTokenUser = (refreshToken: string) => {
@@ -118,20 +117,20 @@ const refreshTokenUser = (refreshToken: string) => {
     },
     body: JSON.stringify({ 'token': refreshToken })
   })
-  .then(res => checkResponse(res))
+  .then(res => checkResponse<TUser>(res))
 }
 
-const logout = (accessToken: string) => {
+const logout = (refreshToken: string) => {
   return fetch(`${urlApi}/auth/logout`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + accessToken
+      'Authorization': 'Bearer ' + refreshToken
     },
-    body: JSON.stringify({ 'token': accessToken })
+    body: JSON.stringify({ 'token': refreshToken })
   })
-  .then(res => checkResponse(res))
+  .then(res => checkResponse<TToken>(res))
 }
 
 export {getIngredients, getOrderNumber, requestPassword, resetPassword, createNewUser, login, 
-  refreshTokenUser, logout, getUser, refreshUser, getOrderInfo}
+  refreshTokenUser, logout, getUser, refreshUser}

@@ -1,4 +1,4 @@
-import { WS_CONNECTION_SUCCESS, WS_GET_MESSAGE, WS_CONNECTION_CLOSED, WS_CONNECTION_ERROR, WS_CONNECTION_START } from "../actions/ws";
+import { WS_CONNECTION_SUCCESS, WS_GET_MESSAGE, WS_CONNECTION_CLOSED, WS_CONNECTION_ERROR, WS_CONNECTION_START } from '../actions/ws';
 import { TWsActions } from '../actions/ws';
 
 type TWsState = {
