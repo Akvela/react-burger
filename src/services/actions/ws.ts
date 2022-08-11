@@ -16,6 +16,7 @@ export interface IWsGetMessageAction {
 }
 export interface IWsConnectionStartAction {
   type: typeof WS_CONNECTION_START;
+  payload: string;
 }
 export interface IWsConnectionClosedAction {
   type: typeof WS_CONNECTION_CLOSED;
@@ -25,6 +26,25 @@ export interface IWsConnectionErrorAction {
 }
 export interface IWsConnectionCloseAction {
   type: typeof WS_CONNECTION_CLOSE;
+}
+
+export function connectionSuccess(): IWsConnectionSuccessAction {
+  return { type: WS_CONNECTION_SUCCESS };
+}
+export function connectionGetMessage(payload: TFeedOrders): IWsGetMessageAction {
+  return { type: WS_GET_MESSAGE, payload };
+}
+export function connectionStart(payload: string): IWsConnectionStartAction {
+  return { type: WS_CONNECTION_START, payload };
+}
+export function connectionClosed(): IWsConnectionClosedAction {
+  return { type: WS_CONNECTION_CLOSED };
+}
+export function connectionError(): IWsConnectionErrorAction {
+  return { type: WS_CONNECTION_ERROR };
+}
+export function connectionClose(): IWsConnectionCloseAction {
+  return { type: WS_CONNECTION_CLOSE };
 }
 
 export type TWsActions = 

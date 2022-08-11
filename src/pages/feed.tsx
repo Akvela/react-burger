@@ -2,24 +2,25 @@ import React, {FunctionComponent} from 'react';
 import { OrderContainer } from '../components/order-container/order-container';
 import { Loading } from '../components/loading/loading';
 import { setUniqueId } from '../utils/utils';
-import { WS_CONNECTION_START, WS_CONNECTION_CLOSE } from '../services/actions/ws';
-import feedStyles from './feed.module.css';
+import { connectionStart, connectionClose } from '../services/actions/ws';
 import { useDispatch, useSelector } from '../services/types/hooks';
+import { TFeedOrder } from '../services/types/data';
+import feedStyles from './feed.module.css';
 
 export const Feed: FunctionComponent = () => {
   const dispatch = useDispatch();
   const { orders, total, totalToday } = useSelector(store => store.ws);
 
   React.useEffect(() => {
-    dispatch({ type: WS_CONNECTION_START, payload: '/all' });
+    dispatch(connectionStart('/all'));
 
     return () => {
-      dispatch({ type: WS_CONNECTION_CLOSE });
+      dispatch(connectionClose());
     };
   }, [dispatch]);
 
-  const ordersDone = orders?.filter(item => item.status === 'done').slice(0, 20);
-  const ordersWork = orders?.filter(item => item.status === 'pending').slice(0, 10);
+  const ordersDone: TFeedOrder[] | null = orders && orders.filter((item) => item.status === 'done').slice(0, 20);
+  const ordersWork: TFeedOrder[] | null = orders && orders.filter((item) => item.status === 'pending').slice(0, 10);
 
   return (
     <>

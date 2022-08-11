@@ -1,17 +1,11 @@
 import React, { FunctionComponent } from 'react';
-import { useSelector, useDispatch } from '../../services/types/hooks';
+import { useSelector } from '../../services/types/hooks';
 import { Gallery } from '../gallery/gallery';
-import { Modal } from '../modal/modal';
-import { IngredientDetails } from '../ingredient-details/ingredient-details';
-import { CLOSE_MODAL_INGREDIENT } from '../../services/actions/ingredient-details';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import burgerIngredientsStyles from './burger-ingredients.module.css';
-import { TIngredient } from '../../services/types/data';
 
 export const BurgerIngredients: FunctionComponent = () => {
-  const ingredients: TIngredient[] = useSelector(store => store.burgerIngredients.ingredients);
-  const itemIsClicked = useSelector(store => store.ingredientDetails.itemIsClicked);
-  const dispatch = useDispatch();
+  const ingredients = useSelector(store => store.burgerIngredients.ingredients);
   
   const bunsArray = ingredients.filter(element => element.type === 'bun');
   const sauceArray = ingredients.filter(element => element.type === 'sauce');
@@ -55,16 +49,11 @@ export const BurgerIngredients: FunctionComponent = () => {
           </Tab>
         </li>
       </ul>
-      <div className={burgerIngredientsStyles.block} onScroll={e => { scrollInfo(e) }}>
+      <div className={burgerIngredientsStyles.block} onScroll={(e: any) => { scrollInfo(e) }}>
         <Gallery ingredientsType='Булки' data={bunsArray} ref={bunsRef} />
         <Gallery ingredientsType='Соусы' data={sauceArray} ref={soucesRef} />
         <Gallery ingredientsType='Начинки' data={mainArray} ref={mainRef} />
       </div>
-      {itemIsClicked && (
-        <Modal title='Детали ингредиента' onCloseClick={() => { dispatch({ type: CLOSE_MODAL_INGREDIENT }) }}>
-          <IngredientDetails />
-        </Modal>
-      )}
     </div>
   )
 }

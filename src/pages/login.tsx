@@ -3,13 +3,12 @@ import { Link, Redirect, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from '../services/types/hooks';
 import { loginUser } from '../services/actions/user';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Loading } from '../components/loading/loading';
 import loginStyles from './login.module.css';
 
 export const Login: FunctionComponent = () => {
   const [emailForm, setEmailForm] = React.useState('');
   const [passwordForm, setPasswordForm] = React.useState('');
-  const location = useLocation<{[key in any] : any}>();
+  const location = useLocation<{ from: string }>();
   const dispatch = useDispatch();
   const {userName, loading, loginError} = useSelector(store => store.user);
 
@@ -49,7 +48,6 @@ export const Login: FunctionComponent = () => {
           <Link className={loginStyles.link} to='/forgot-password'>Восстановить пароль</Link>
         </div>
       </main>
-      {loading && <Loading />}
     </>
   );
 }

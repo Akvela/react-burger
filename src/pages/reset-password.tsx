@@ -2,8 +2,7 @@ import React, {FunctionComponent} from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from '../services/types/hooks';
 import { changePassword } from '../services/actions/user';
-import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Loading } from '../components/loading/loading';
+import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import resetPasswordStyles from './reset-password.module.css';
 
 export const ResetPassword: FunctionComponent = () => {
@@ -57,7 +56,6 @@ export const ResetPassword: FunctionComponent = () => {
           <Link className={resetPasswordStyles.link} to='/login'>Войти</Link>
         </div>
       </main>
-      {loading && <Loading />}
     </>
   );
 }

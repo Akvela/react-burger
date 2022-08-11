@@ -3,7 +3,6 @@ import { Link, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from '../services/types/hooks';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { getPasswordRecovery } from '../services/actions/user';
-import { Loading } from '../components/loading/loading';
 import forgotPasswordStyles from './forgot-password.module.css';
 
 export const ForgotPassword: FunctionComponent = () => {
@@ -45,7 +44,6 @@ export const ForgotPassword: FunctionComponent = () => {
           <Link className={forgotPasswordStyles.link} to='/login'>Войти</Link>
         </div>
       </main>
-      {loading && <Loading />}
     </>
   );
 }

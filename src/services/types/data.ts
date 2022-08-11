@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 export type TIngredient = {
   _id: string;
@@ -13,17 +13,19 @@ export type TIngredient = {
   image_mobile: string;
   image_large: string;
   __v: number;
-  count?: number | undefined;
-  uniqueId?: string;
+  uniqueId: number;
   id?: string;
-  index: number;
-  key?: string;
+}
+
+export type TIngredientCard = {
+  item: TIngredient
 }
 
 export type TConstructorItem = {
-  id: string;
-  index?: number;
-  key: string
+  id: number;
+  index: number;
+  key: number;
+  children: ReactNode;
 }
 
 export type TIngredientPage = {
@@ -46,6 +48,10 @@ export type TOrderData = {
   _id: string;
 }
 
+export type TOrderDataContainer = {
+  order: TOrderData;
+}
+
 export type TOrderResponse = {
   name: string;
   order: TOrder;
@@ -57,12 +63,35 @@ export type TPasswordResponse = {
   message: string;
 }
 
-export type TUser = {
+export type TIngredientResponse = {
+  data: TIngredient[];
   success: boolean;
-  user: {
-    email: string,
-    name: string
-  },
+}
+
+export type TUser = {
+  email: string,
+  name: string
+}
+
+export type TUserResponse = {
+  success: boolean;
+  user: TUser;
+}
+
+export type TLoginResponse = {
+  success: boolean;
+  accessToken: string;
+  refreshToken: string;
+  user: TUser;
+}
+
+export type TLogoutResponse = {
+  success: boolean;
+  message: string;
+}
+
+export type TRefreshTokenResponse = {
+  success: boolean;
   accessToken: string;
   refreshToken: string;
 }
@@ -81,17 +110,6 @@ export type TFeedOrders = {
   total: number;
   totalToday: number;
   orders: Array<TFeedOrder>;
-}
-
-export type TToken = {
-  accessToken: string;
-  refreshToken: string;
-  requestParams: object;
-  name?: string; 
-  email?: string;
-  password?: string;
-  getUserInfo?: () => void;
-
 }
 
 export type TIngredientsResponse = {
@@ -113,12 +131,12 @@ export type TLocation = {
 
 export type TModal = {
   onCloseClick: () => void;
-  title?: string | number;
-  children: ReactNode;
+  title?: string;
+  children?: ReactNode;
 }
 
 export type TModalOverlay = {
-  onClick: () => void;
+  onClick: (evt: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 export type TProtectedRoute = {
@@ -138,4 +156,15 @@ export type TIngredientDetails = {
 export type TGallery = {
   ingredientsType: string;
   data: Array<TIngredient>;
+}
+
+export type TOrderIngredient = {
+  item: {
+    _id: string;
+  }
+}
+
+export type TError = {
+  success: boolean;
+  message: string;
 }

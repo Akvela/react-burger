@@ -1,16 +1,17 @@
 import { WS_CONNECTION_SUCCESS, WS_GET_MESSAGE, WS_CONNECTION_CLOSED, WS_CONNECTION_ERROR, WS_CONNECTION_START } from '../actions/ws';
 import { TWsActions } from '../actions/ws';
+import { TFeedOrder } from '../types/data';
 
 type TWsState = {
   wsRequest: boolean,
   wsOpen: boolean,
   wsFailed: boolean,
-  orders: Array<object> | [],
+  orders: TFeedOrder[],
   total: number,
   totalToday: number
 };
 
-const initialState = {
+const initialState: TWsState = {
   wsRequest: false,
   wsOpen: false,
   wsFailed: false,

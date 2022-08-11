@@ -1,6 +1,6 @@
-import { TIngredientsResponse, TOrderResponse, TPasswordResponse, TUser, TToken } from "../services/types/data";
+import { TIngredientsResponse, TOrderResponse, TPasswordResponse, TUser, TUserResponse, TLoginResponse, TRefreshTokenResponse, TLogoutResponse } from "../services/types/data";
 
-const urlApi = 'https://norma.nomoreparties.space/api';
+const urlApi: string = 'https://norma.nomoreparties.space/api';
 
 const checkResponse = <T>(res: Response): Promise<T> => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err))
@@ -75,7 +75,7 @@ const getUser = (accessToken: string) => {
       'Authorization': accessToken
     },
   })
-  .then(res => checkResponse<TUser>(res))
+  .then(res => checkResponse<TUserResponse>(res))
 }
 
 
@@ -92,7 +92,7 @@ const refreshUser = (name: string, email: string, password: string, accessToken:
       'password': password
     })
   })
-  .then(res => checkResponse<TUser>(res))
+  .then(res => checkResponse<TUserResponse>(res))
 }
 
 const login = (email: string, password: string) => {
@@ -106,7 +106,7 @@ const login = (email: string, password: string) => {
       'password': password
     })
   })
-  .then(res => checkResponse<TUser>(res))
+  .then(res => checkResponse<TLoginResponse>(res))
 }
 
 const refreshTokenUser = (refreshToken: string) => {
@@ -117,7 +117,7 @@ const refreshTokenUser = (refreshToken: string) => {
     },
     body: JSON.stringify({ 'token': refreshToken })
   })
-  .then(res => checkResponse<TUser>(res))
+  .then(res => checkResponse<TRefreshTokenResponse>(res))
 }
 
 const logout = (refreshToken: string) => {
@@ -129,7 +129,7 @@ const logout = (refreshToken: string) => {
     },
     body: JSON.stringify({ 'token': refreshToken })
   })
-  .then(res => checkResponse<TToken>(res))
+  .then(res => checkResponse<TLogoutResponse>(res))
 }
 
 export {getIngredients, getOrderNumber, requestPassword, resetPassword, createNewUser, login, 

@@ -1,17 +1,18 @@
-import React, {FunctionComponent} from 'react';
+import {FunctionComponent} from 'react';
 import { useSelector } from '../../services/types/hooks';
 import { useParams } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { TIngredientDetails } from '../../services/types/data';
 import ingredientDetailsStyles from './ingredient-details.module.css';
-import { TIngredientDetails, TIngredient } from '../../services/types/data';
+import { Loading } from '../loading/loading';
 
 export const IngredientDetails: FunctionComponent<TIngredientDetails> = ({ title }) => {
   const { ingredients } = useSelector(store => store.burgerIngredients);
-  const { id } = useParams();
-  const selectedIngredient: TIngredient = ingredients?.find(ingredient => ingredient._id === id)
+  const { id } = useParams<{ id: string }>();
+  const selectedIngredient = ingredients?.find(ingredient => ingredient._id === id)
 
   return(
     <>
+      {!selectedIngredient && <Loading />}
       {selectedIngredient && (
         <div className={ingredientDetailsStyles.item}>
           {title && (<h2 className={`${ingredientDetailsStyles.title} text text_type_main-large`}>{title}</h2>)}
@@ -40,7 +41,3 @@ export const IngredientDetails: FunctionComponent<TIngredientDetails> = ({ title
     </>
   )
 }
-
-IngredientDetails.propTypes = {
-  title: PropTypes.string,
-};

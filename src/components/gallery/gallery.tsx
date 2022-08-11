@@ -9,7 +9,7 @@ export const Gallery = React.forwardRef<HTMLHeadingElement, TGallery>((props, re
       <h2 ref={ref} className='text text_type_main-medium mb-6 mt-10'>{props.ingredientsType}</h2>
       <ul className={`${galleryStyles.gallery} pl-4 pr-2`}>
         {props.data && props.data.map((item)=>(
-          <Card id={item._id} key={item._id} {...item} />
+          <Card item={item} key={item._id}/>
         ))}
       </ul>
     </>

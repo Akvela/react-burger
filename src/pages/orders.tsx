@@ -1,43 +1,32 @@
-import { Link, Redirect } from 'react-router-dom';
-import React, {FunctionComponent} from 'react';
+import React, {FunctionComponent, useCallback} from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from '../services/types/hooks';
-import { logout } from '../utils/api';
-import ordersStyles from './orders.module.css';
-import { deleteCookie, getCookie } from '../utils/cookie';
-import { WS_CONNECTION_START, WS_CONNECTION_CLOSE } from '../services/actions/ws';
+import { logOut } from '../services/actions/user';
+import { getCookie } from '../utils/cookie';
+import { connectionStart, connectionClose } from '../services/actions/ws';
 import { setUniqueId } from '../utils/utils';
 import { OrderContainer } from '../components/order-container/order-container';
 import { Loading } from '../components/loading/loading';
-import { LOG_OUT_SUCCESS } from '../services/actions/user';
+import ordersStyles from './orders.module.css';
 
 export const Orders: FunctionComponent = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { orders } = useSelector(store => store.ws)
-  const { userName } = useSelector(store => store.user)
-  const refreshToken = localStorage.getItem('refreshToken');
   const ordersList = orders?.reverse();
-  const accessToken = getCookie('accessToken');
+  const refreshToken = localStorage.getItem('refreshToken');
 
-  const logoutUser = () => {
-    logout(refreshToken);
-    deleteCookie('accessToken');
-    deleteCookie('refreshToken');
-    dispatch({ type: LOG_OUT_SUCCESS });
-  }
+  const logoutUser = useCallback(() => {
+    refreshToken && dispatch(logOut(refreshToken));
+  }, [dispatch, logOut, history, refreshToken]);
 
   React.useEffect(() => {
-    dispatch({ type: WS_CONNECTION_START, payload: `?token=${getCookie('accessToken')}` });
+    dispatch(connectionStart(`?token=${getCookie('accessToken')}`));
 
     return () => {
-      dispatch({ type: WS_CONNECTION_CLOSE });
+      dispatch(connectionClose());
     };
   }, [dispatch]);
-  
-  if (userName === '') {
-    return (
-      <Redirect to='/login' />
-    )
-  }
 
   return(
     <>
@@ -52,7 +41,7 @@ export const Orders: FunctionComponent = () => {
               <Link to='/profile/orders'className={`${ordersStyles.link}  ${ordersStyles.linkActive} text text_type_main-medium`}>История заказов</Link>
             </li>
             <li className={ordersStyles.item}>
-              <Link to='/' onClick={() => logoutUser()} className={`${ordersStyles.link} text text_type_main-medium`}
+              <Link to='/' onClick={logoutUser} className={`${ordersStyles.link} text text_type_main-medium`}
               >Выход</Link>
             </li>
             <li className={ordersStyles.item}>

@@ -3,7 +3,6 @@ import { CREATE_USER_REQUEST, CREATE_USER_SUCCESS, CREATE_USER_ERROR, SEND_MAIL_
   LOGIN_ERROR, LOGIN_REQUEST, GET_USER_INFO_REQUEST, GET_USER_INFO_SUCCESS, GET_USER_INFO_ERROR, CHECK_AUTH, CHECK_AUTH_CHECKED, 
   REFRESH_TOKEN_REQUEST, REFRESH_TOKEN_SUCCESS, REFRESH_TOKEN_FAILED, LOG_OUT_SUCCESS } from '../actions/user';
 import { TUserActions } from '../actions/user';
-import { TUser } from '../types/data';
 
 type TUserState = {
   userEmail: string,
@@ -29,7 +28,7 @@ type TUserState = {
   loginStatus: boolean
 }
 
-const initialState = {
+const initialState: TUserState = {
   userEmail: '',
   userName: '',
   formName: '',
@@ -60,8 +59,8 @@ export const userReducer = (state = initialState, action: TUserActions): TUserSt
     case CREATE_USER_SUCCESS:
       return {
         ...state,
-        userName: action.payload.user.name,
-        userEmail: action.payload.user.email,
+        userName: action.payload.name,
+        userEmail: action.payload.email,
         loading: false
       }
     case CREATE_USER_ERROR:

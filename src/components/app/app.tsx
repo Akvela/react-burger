@@ -1,7 +1,6 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useCallback, useEffect } from 'react';
 import { useLocation, Switch, Route, useHistory } from 'react-router-dom';
 import { useDispatch } from '../../services/types/hooks';
-import { CLOSE_MODAL_INGREDIENT } from '../../services/actions/ingredient-details';
 import { Modal } from '../modal/modal';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { OrderInfo } from '../order-info/order-info';
@@ -11,17 +10,23 @@ import { ProtectedRoute } from '../protected-route/protected-route';
 import { Home, Login, Register, ForgotPassword, ResetPassword, Profile, Ingredient, Orders, NotFound, Feed, InfoOrder } from '../../pages';
 import { checkAuth } from '../../services/actions/user';
 
-
 export const App: FunctionComponent = () => {
-  const location = useLocation<{ [key in any]: any }>();
+  const location = useLocation<any>();
   const history = useHistory();
-  const background = history.action === 'PUSH' && location.state?.background;
+  const background = history.action === 'PUSH' && location?.state?.background;
   const dispatch = useDispatch();
-  
-  React.useEffect(() => {
+
+  useEffect(() => {
     dispatch(checkAuth());
     dispatch(getDataIngredients());
   }, [dispatch]);
+
+  const closeModal = useCallback(
+    (path) => {
+      history.push(path);
+    },
+    [history]
+  );
 
   return (
     <>
@@ -40,10 +45,10 @@ export const App: FunctionComponent = () => {
         <Route path='/feed' exact={true} children={<Feed />} />
 
         <Route path='/feed/:id' exact={true} children={<InfoOrder />} />
-          
-        <ProtectedRoute path='/profile/orders/:id' exact={true} children={<InfoOrder />} />
 
         <Route path='/ingredients/:id' exact={true} children={<Ingredient title='Детали ингредиента' />} />
+
+        <Route path='/profile/orders/:id' exact={true} children={<InfoOrder />} />
 
         <ProtectedRoute path='/profile' exact={true} children={<Profile />} />
 
@@ -53,21 +58,21 @@ export const App: FunctionComponent = () => {
       </Switch>
 
       {background && (<Route path='/ingredients/:id' exact={true} children={ 
-        <Modal title='Детали ингредиента' onCloseClick={() => { history.goBack(); dispatch({ type: CLOSE_MODAL_INGREDIENT }) }}>
+        <Modal title='Детали ингредиента' onCloseClick={() => closeModal('/')}>
           <IngredientDetails />
         </Modal>} />)}
-      
 
-      {background && <Route path='/feed/:id' exact={true}>
-          <Modal title='' onCloseClick={() => history.goBack()}>
+      {background && (<Route path='/feed/:id' exact={true}>
+          <Modal title='' onCloseClick={() => closeModal('/feed')}>
             <OrderInfo />
           </Modal>
-        </Route> }
+        </Route> )}
 
-      {background && <ProtectedRoute path='/profile/orders/:id' exact={true} children={ 
-        <Modal title='' onCloseClick={() => history.goBack()}>
+      {background && (<Route path='/profile/orders/:id' exact={true}>
+        <Modal title='' onCloseClick={() => closeModal('/profile/orders')}>
           <OrderInfo />
-        </Modal>} /> }
+        </Modal>
+      </Route> )}
     </>
   );
 }

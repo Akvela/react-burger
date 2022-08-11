@@ -5,22 +5,23 @@ import { useParams } from 'react-router-dom';
 import { setUniqueId } from '../../utils/utils';
 import { useSelector } from '../../services/types/hooks';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { TOrderInfo, TIngredient } from '../../services/types/data';
 import orderInfoStyles from './order-info.module.css';
-import { TOrderInfo } from '../../services/types/data';
 
 export const OrderInfo: FunctionComponent<TOrderInfo> = ({headerStyle}) => {
   const { orders } = useSelector(store => store.ws);
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const { ingredients } = useSelector(store => store.burgerIngredients);
-  const currentOrder = orders?.find((order) => order._id === id);
-  const findIngredient = currentOrder?.ingredients.map((orderIngredient) => ingredients.find((ingredient) => ingredient._id === orderIngredient))
+  const currentOrder = orders?.find((item) => item._id === id);
+  const currentItems = currentOrder?.ingredients;
+  const findIngredient = currentItems?.map((orderIngredient: string) => ingredients.find((ingredient: TIngredient) => ingredient._id === orderIngredient))
 
-  const calculateAmount = () => {
+  const calculateAmount = (ingredientsOrder: string[]) => {
     let sum = 0;
     let bun = 0;
     let count = 0;
-    currentOrder?.ingredients.forEach((ingredient) => {
-      const check = ingredients.find((item) => item._id === ingredient);
+    ingredientsOrder.forEach((ingredient: string) => {
+      const check = ingredients.find((item: TIngredient) => item._id === ingredient);
       if (check?.price) {
         sum += check.price;
         if (check?.type === 'bun') {
@@ -36,7 +37,7 @@ export const OrderInfo: FunctionComponent<TOrderInfo> = ({headerStyle}) => {
     return sum;
   }
 
-  const determineDate = (date) => {
+  const determineDate = (date: string) => {
     const relativeDate = formatRelative(new Date(date), new Date(), { locale: ru });
     return relativeDate.split(' в ').join(', ') + ' i-GMT+3'
   }
@@ -61,8 +62,8 @@ export const OrderInfo: FunctionComponent<TOrderInfo> = ({headerStyle}) => {
                   <h4 className={`${orderInfoStyles.name} text text_type_main-default pl-4`}>{ingredient?.name}</h4>
                   <div className={`${orderInfoStyles.price} text text_type_digits-default`}>
                     <span>
-                      {findIngredient && (findIngredient.filter(item => (item?._id === ingredient?._id) && (item.type !== 'bun')).length) === 0 ? 2 : 
-                        (findIngredient.filter(item => (item?._id === ingredient?._id)).length) }
+                      {findIngredient && (findIngredient.filter(item => (item?._id === ingredient?._id) && (item?.type !== 'bun')).length) === 0 ? 2 : 
+                        (findIngredient?.filter(item => (item?._id === ingredient?._id)).length) }
                     </span>
                     x
                     <p className={orderInfoStyles.details}>
@@ -85,8 +86,4 @@ export const OrderInfo: FunctionComponent<TOrderInfo> = ({headerStyle}) => {
     }
     </> 
   )
-}
-
-OrderInfo.propTypes = {
-  headerStyle: PropTypes.string
 }

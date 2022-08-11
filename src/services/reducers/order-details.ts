@@ -11,7 +11,7 @@ type TOrderDetailsState = {
   order: TOrder | {};
 }
 
-const initialState = {
+const initialState: TOrderDetailsState = {
   orderRequest: false,
   orderIsClicked: false,
   orderSuccessed: false,

@@ -1,38 +1,35 @@
-import React, { FunctionComponent } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import React, { FormEvent, FunctionComponent, useCallback } from 'react';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from '../services/types/hooks';
-import { logout } from '../utils/api';
+import { logOut } from '../services/actions/user';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { refreshTokenUser, deleteCookie, getCookie } from '../utils/cookie';
+import { getCookie, deleteCookie } from '../utils/cookie';
 import { updateUser } from '../services/actions/user';
 import { Loading } from '../components/loading/loading';
-import { LOG_OUT_SUCCESS } from '../services/actions/user';
 import profileStyles from './profile.module.css';
 
 export const Profile: FunctionComponent = () => {
   const [isUserInfoChanged, setIsUserInfoChanged] = React.useState(false);
   const dispatch = useDispatch();
+  const history = useHistory();
   const { userName, userEmail, loading} = useSelector(store => store.user)
   const [nameValue, setNameValue] = React.useState(userName);
   const [loginValue, setLoginValue] = React.useState(userEmail);
   const [passwordValue, setPasswordValue] = React.useState('');
 
-  const nameInputRef = React.useRef(null);
-  const loginInputRef = React.useRef(null);
-  const passwordInputRef = React.useRef(null);
+  const nameInputRef = React.useRef<HTMLInputElement>(null);
+  const loginInputRef = React.useRef<HTMLInputElement>(null);
+  const passwordInputRef = React.useRef<HTMLInputElement>(null);
 
   const accessToken = getCookie('accessToken');
   const refreshToken = localStorage.getItem('refreshToken');
-
-  const logoutUser = () => {
-    logout(refreshToken);
-    deleteCookie('accessToken');
-    deleteCookie('refreshToken');
-    dispatch({ type: LOG_OUT_SUCCESS });
-  }
+  
+  const logoutUser = useCallback(() => {
+    refreshToken && dispatch(logOut(refreshToken));
+  }, [dispatch, logOut, history, refreshToken]);
 
   const onClickName = () => {
-    setTimeout(() => nameInputRef.current && nameInputRef.current.focus(), 0)
+    setTimeout(() => nameInputRef.current && nameInputRef.current?.focus(), 0)
   }
   const onClickLogin = () => {
     setTimeout(() => loginInputRef.current && loginInputRef.current.focus(), 0)
@@ -54,17 +51,18 @@ export const Profile: FunctionComponent = () => {
     evt.target.value === passwordValue ? setIsUserInfoChanged(false) : setIsUserInfoChanged(true)
   }
 
-  const resetForm = (evt: React.FormEvent<HTMLFormElement>) => {
-    evt.preventDefault();
+  const resetForm = React.useCallback(() => {
     setNameValue(userName)
     setLoginValue(userEmail)
     setPasswordValue('')
-  }
+  }, [userName, userEmail])
 
-  const submitForm = (evt: React.FormEvent<HTMLFormElement>) => {
+  const submitForm = React.useCallback((evt: FormEvent) => {
     evt.preventDefault();
-    dispatch(updateUser(nameValue, loginValue, passwordValue, { accessToken: `Bearer ${accessToken}` }))
-  }
+    dispatch(updateUser({ name: nameValue, email: loginValue, password: passwordValue, accessToken: `Bearer ${accessToken}` }))
+  },
+    [dispatch, nameValue, loginValue, passwordValue, accessToken]
+  )
 
   React.useEffect(() => {
     setNameValue(userName);
@@ -90,7 +88,7 @@ export const Profile: FunctionComponent = () => {
               <Link to='/profile/orders' className={`${profileStyles.link} text text_type_main-medium`}>История заказов</Link>
             </li>
             <li className={profileStyles.item}>
-              <Link to='/' onClick={() => logoutUser()}
+              <Link to='/' onClick={logoutUser}
                 className={`${profileStyles.link} text text_type_main-medium`}
               >Выход</Link>
             </li>

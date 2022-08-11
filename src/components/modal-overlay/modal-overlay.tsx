@@ -1,9 +1,9 @@
-import modalOverlayStyles from './modal-overlay.module.css';
-import { FunctionComponent } from 'react';
+import React from 'react';
 import { TModalOverlay } from '../../services/types/data';
+import modalOverlayStyles from './modal-overlay.module.css';
 
-export const ModalOverlay: FunctionComponent<TModalOverlay> = ({ onClick }) => {
+export const ModalOverlay = React.forwardRef<HTMLDivElement, TModalOverlay>((props, ref) => {
   return(
-    <div className={modalOverlayStyles.container} onClick={onClick} />
+    <div ref={ref} className={modalOverlayStyles.container} onClick={props.onClick} />
   )
-}
+})

@@ -1,31 +1,32 @@
+import { FunctionComponent } from 'react';
 import { formatRelative } from 'date-fns';
 import { ru } from 'date-fns/locale'
 import { Link, useLocation, useRouteMatch } from 'react-router-dom';
 import { setUniqueId } from '../../utils/utils';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from '../../services/types/hooks';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { TIngredient, TOrderData, TOrderDataContainer } from '../../services/types/data';
 import orderContainerStyles from './order-container.module.css';
-import PropTypes from 'prop-types';
 
-export const OrderContainer = ({ order }) => {
+
+export const OrderContainer: FunctionComponent<TOrderDataContainer> = ({ order }) => {
   const allIngredients = useSelector(store => store.burgerIngredients.ingredients);
   const { number, _id, createdAt, name, status, ingredients } = order;
   const location = useLocation();
   const { url } = useRouteMatch();
   const numbersHidden = ingredients.length === 6 ? '' : `+${ingredients.length - 6}`;
-  const dispatch = useDispatch();
 
-  const findIngredient = (ingredient) => {
-    return allIngredients.find((item) => item._id === ingredient)
+  const findIngredient = (ingredient: string) => {
+    return allIngredients.find((item: TIngredient) => item._id === ingredient)
   }
   
   const lastIngredient = findIngredient(ingredients[5]);
 
-  const calculateAmount = () => {
+  const calculateAmount = (arrayId: string[]) => {
     let sum = 0;
     let bun = 0;
     let count = 0;
-    ingredients.forEach((ingredient) => {
+    arrayId.forEach((ingredient) => {
       const check = allIngredients.find((item) => item._id === ingredient);
       if (check?.price) {
         sum += check.price;
@@ -42,7 +43,7 @@ export const OrderContainer = ({ order }) => {
     return sum;
   }
 
-  const determineDate = (date) => {
+  const determineDate = (date: string) => {
     const relativeDate = formatRelative(new Date(date), new Date(), { locale: ru });
     return relativeDate.split(' в ').join(', ') + ' i-GMT+3'
   }
@@ -85,12 +86,4 @@ export const OrderContainer = ({ order }) => {
       </Link>
     </li>
   )
-}
-
-OrderContainer.propTypes = {
-  status: PropTypes.string, 
-  number: PropTypes.number, 
-  createdAt: PropTypes.string, 
-  name: PropTypes.string, 
-  id: PropTypes.string
 }

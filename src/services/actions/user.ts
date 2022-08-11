@@ -1,7 +1,7 @@
 import { requestPassword, resetPassword, createNewUser, refreshUser, getUser, login, refreshTokenUser, logout } from '../../utils/api';
-import { setCookie, getCookie } from '../../utils/cookie';
-import { TUser } from '../types/data';
-import { AppThunk, AppDispatch } from '../types';
+import { setCookie, getCookie, deleteCookie } from '../../utils/cookie';
+import { TUser, TError, TUserResponse } from '../types/data';
+import { AppThunk } from '../types';
 
 export const CREATE_USER_REQUEST: 'CREATE_USER_REQUEST' = 'CREATE_USER_REQUEST';
 export const CREATE_USER_SUCCESS: 'CREATE_USER_SUCCESS' = 'CREATE_USER_SUCCESS';
@@ -70,6 +70,7 @@ export interface ISendMailSuccessAction {
 }
 export interface ISendMailErrorAction {
   type: typeof SEND_MAIL_ERROR;
+  err: TError
 }
 export interface ISendNewPasswordRequestAction {
   type: typeof SEND_NEW_PASSWORD_REQUEST;
@@ -117,6 +118,80 @@ export interface IRefreshTokenSuccessAction {
 }
 export interface IRefreshTokenFailedAction {
   type: typeof REFRESH_TOKEN_FAILED;
+  err: TError
+}
+
+export function createUserRequest(): ICreateUserRequestAction {
+  return { type: CREATE_USER_REQUEST };
+}
+export function createUserSuccess(payload: TUser): ICreateUserSuccessAction {
+  return { type: CREATE_USER_SUCCESS, payload };
+}
+export function createUserError(): ICreateUserErrorAction {
+  return { type: CREATE_USER_ERROR };
+}
+export function patchUserFailed(): IPatchUserFailedAction {
+  return { type: PATCH_USER_FAILED };
+}
+export function getUserInfoRequest(): IGetUserInfoRequestAction {
+  return { type: GET_USER_INFO_REQUEST };
+}
+export function getUserInfoSuccess(email: string, name: string): IGetUserInfoSuccessAction {
+  return { type: GET_USER_INFO_SUCCESS, email, name };
+}
+export function getUserInfoError(): IGetUserInfoErrorAction {
+  return { type: GET_USER_INFO_ERROR };
+}
+export function sendMailRequest(): ISendMailRequestAction {
+  return { type: SEND_MAIL_REQUEST };
+}
+export function sendMailSuccess(success: boolean, message: string): ISendMailSuccessAction {
+  return { type: SEND_MAIL_SUCCESS, success, message };
+}
+export function sendMailError(err: TError): ISendMailErrorAction {
+  return { type: SEND_MAIL_ERROR, err };
+}
+export function sendNewPasswordRequest(): ISendNewPasswordRequestAction {
+  return { type: SEND_NEW_PASSWORD_REQUEST };
+}
+export function sendNewPasswordSuccess(success: boolean, message: string): ISendNewPasswordSuccessAction {
+  return { type: SEND_NEW_PASSWORD_SUCCESS, success, message };
+}
+export function sendNewPasswordError(): ISendNewPasswordErrorAction {
+  return { type: SEND_NEW_PASSWORD_ERROR };
+}
+export function loginRequest(): ILoginRequestAction {
+  return { type: LOGIN_REQUEST };
+}
+export function loginSuccess(email: string, name: string, status: boolean): ILoginSuccessAction {
+  return { type: LOGIN_SUCCESS, email, name, status };
+}
+export function loginError(): ILoginErrorAction {
+  return { type: LOGIN_ERROR };
+}
+export function logOutRequest(): ILogOutRequestAction {
+  return { type: LOG_OUT_REQUEST };
+}
+export function logOutSuccess(): ILogOutSuccessAction {
+  return { type: LOG_OUT_SUCCESS };
+}
+export function logOutFailed(): ILogOutFailedAction {
+  return { type: LOG_OUT_FAILED };
+}
+export function checkAuthLoading(): ICheckAuthAction {
+  return { type: CHECK_AUTH };
+}
+export function checkAuthChecked(): ICheckAuthCheckedAction {
+  return { type: CHECK_AUTH_CHECKED };
+}
+export function refreshTokenRequest(): IRefreshTokenRequestAction {
+  return { type: REFRESH_TOKEN_REQUEST };
+}
+export function refreshTokenSuccess(): IRefreshTokenSuccessAction {
+  return { type: REFRESH_TOKEN_SUCCESS };
+}
+export function refreshTokenFailed(err: TError): IRefreshTokenFailedAction {
+  return { type: REFRESH_TOKEN_FAILED, err };
 }
 
 export type TUserActions = 
@@ -145,73 +220,71 @@ export type TUserActions =
   | IRefreshTokenSuccessAction
   | IRefreshTokenFailedAction;
 
-export const getPasswordRecovery: AppThunk = (email: string) => {
-  return function(dispatch: AppDispatch) {
-    dispatch({ type: SEND_MAIL_REQUEST })
-    requestPassword(email)
-      .then(res => dispatch({
-          type: SEND_MAIL_SUCCESS,
-          success: res.success,
-          message: res.message
-      }))
-      .catch(err => dispatch({ type: SEND_MAIL_ERROR }))
+export const logOut = (refreshToken: string): AppThunk => {
+  return function (dispatch) {
+    dispatch(logOutRequest());
+    logout(refreshToken)
+      .then((res) => {
+        deleteCookie('accessToken');
+        localStorage.removeItem('refreshToken');
+        dispatch(logOutSuccess());
+      })
+      .catch((err) => dispatch(logOutFailed()));
   }
 }
 
-export const changePassword: AppThunk = (password: string, token: string) => {
-  return function(dispatch: AppDispatch) {
-    dispatch({ type: SEND_NEW_PASSWORD_REQUEST })
+export const getPasswordRecovery = (email: string): AppThunk => {
+  return function (dispatch) {
+  dispatch(sendMailRequest())
+  requestPassword(email)
+    .then(res => dispatch(sendMailSuccess(res.success, res.message)))
+    .catch(err => dispatch(sendMailError(err.message)))
+  }
+}
+
+export const changePassword = (password: string, token: string): AppThunk => {
+  return function (dispatch) {
+    dispatch(sendNewPasswordRequest())
     resetPassword(password, token)
-      .then(res => dispatch({
-          type: SEND_NEW_PASSWORD_SUCCESS,
-          success: res.success,
-          message: res.message
-      }))
-      .catch(err => dispatch({ type: SEND_NEW_PASSWORD_ERROR }))
+      .then(res => dispatch(sendNewPasswordSuccess(res.success, res.message)))
+      .catch(err => dispatch(sendNewPasswordError()))
   }
 }
 
-export const registerNewUser: AppThunk = (name: string, email: string, password: string) => {
-  return function(dispatch: AppDispatch) {
-    dispatch({ type: CREATE_USER_REQUEST })
+export const registerNewUser = (name: string, email: string, password: string): AppThunk => {
+  return function (dispatch) {
+    dispatch(createUserRequest())
     createNewUser(name, email, password)
-      .then(res => dispatch({
-          type: CREATE_USER_SUCCESS,
-          payload: res
-      }))
-      .catch(err => dispatch({ type: CREATE_USER_ERROR }))
+      .then(res => dispatch(createUserSuccess(res)))
+      .catch(err => dispatch(createUserError()))
   }
 }
 
-export const loginUser: AppThunk = (email: string, password: string) => {
-  return function(dispatch: AppDispatch) {
-    dispatch({ type: LOGIN_REQUEST })
+export const loginUser = (email: string, password: string): AppThunk => {
+  return function (dispatch) {
+    dispatch(loginRequest())
     login(email, password)
       .then(res => {
         setCookie('accessToken', res.accessToken.split('Bearer ')[1]);
         localStorage.setItem('refreshToken', res.refreshToken);
-        dispatch({ type: LOGIN_SUCCESS, email: res.user.email, name: res.user.name, status: res.success })
+        dispatch(loginSuccess(res.user.email, res.user.name, res.success))
       })
-      .catch(err => dispatch({ type: LOGIN_ERROR }))
+      .catch(err => dispatch(loginError()))
   }
 }
 
-type TRequestParams = {
-  accessToken: string
-}
-
-export const fetchWithRefresh: AppThunk = (request: (...args: any[]) => any, ...requestParams: TRequestParams[]) => {
-  return function (dispatch: AppDispatch) {
+export const fetchWithRefresh = (request: any, requestParams: { [key: string]: string }): AppThunk => {
+  return function (dispatch) {
     const refreshToken = localStorage.getItem('refreshToken');
     if (!refreshToken) {
       throw new Error('Токен не найдет в хранилище');
     } else {
-      dispatch({ type: REFRESH_TOKEN_REQUEST });
+      dispatch(refreshTokenRequest());
       refreshTokenUser(refreshToken)
         .then((res) => {
           setCookie('accessToken', res.accessToken.split('Bearer ')[1]);
           localStorage.setItem('refreshToken', res.refreshToken);
-          dispatch({ type: REFRESH_TOKEN_SUCCESS });
+          dispatch(refreshTokenSuccess());
           return res;
         })
         .then((res) => {
@@ -219,59 +292,52 @@ export const fetchWithRefresh: AppThunk = (request: (...args: any[]) => any, ...
           dispatch(request(requestParams));
         })
         .catch((err) => {
-          dispatch(logout(refreshToken));
-          dispatch({ type: REFRESH_TOKEN_FAILED, err: err.message });
+          dispatch(logOut(refreshToken));
+          dispatch(refreshTokenFailed(err.message));
           return Promise.reject(err);
         });
     }
-  };
-};
+  }
+}
 
-export const getUserInfo: AppThunk = ({ accessToken }: {accessToken: string}) => {
-  return function(dispatch: AppDispatch) {
-    dispatch({ type: GET_USER_INFO_REQUEST })
+export const getUserInfo = ({ accessToken }: {accessToken: string}): AppThunk => {
+  return function (dispatch) {
+    dispatch(getUserInfoRequest())
     getUser(accessToken as string)
-      .then(res => dispatch({
-          type: GET_USER_INFO_SUCCESS,
-          email: res.user.email, 
-          name: res.user.name
-      }))
+      .then(res => dispatch(getUserInfoSuccess(res.user.email, res.user.name)))
       .catch((err) => {
         if (err.message === 'jwt expired' || err.message === 'jwt malformed') {
           dispatch(fetchWithRefresh(getUserInfo, { accessToken }));
         } else {
-          dispatch({ type: GET_USER_INFO_ERROR });
+          dispatch(getUserInfoError());
           return Promise.reject(err);
         }
       })
   }
 }
 
-export const updateUser: AppThunk = ({ name, email, password, accessToken }: { name: string, email: string, password: string, accessToken: string }) => {
-  return function(dispatch: AppDispatch) {
+export const updateUser = ({ name, email, password, accessToken }: { name: string, email: string, password: string, accessToken: string }): AppThunk => {
+  return function (dispatch) {
     refreshUser(name, email, password, accessToken)
-      .then(res => dispatch({
-          type: CREATE_USER_SUCCESS,
-          payload: res
-      }))
+      .then(res => dispatch(createUserSuccess(res.user)))
       .catch((err) => {
         if (err.message === 'jwt expired' || err.message === 'You should be authorised') {
           dispatch(fetchWithRefresh(updateUser, { name, email, password, accessToken }));
         } else {
-          dispatch({ type: PATCH_USER_FAILED });
+          dispatch(patchUserFailed());
           return Promise.reject(err);
         }
       })
   }
 }
 
-export const checkAuth: AppThunk = () => {
-  return function (dispatch: AppDispatch) {
+export const checkAuth = (): AppThunk => {
+  return function (dispatch) {
     const accessToken = getCookie('accessToken');
-    dispatch({ type: CHECK_AUTH });
+    dispatch(checkAuthLoading());
     if (!!accessToken) {
       dispatch(getUserInfo({ accessToken: `Bearer ${accessToken}` }));
     }
-    dispatch({ type: CHECK_AUTH_CHECKED });
-  };
+    dispatch(checkAuthChecked())
+  }
 };
