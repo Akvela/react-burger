@@ -16,8 +16,8 @@ export const BurgerIngredients: FunctionComponent = () => {
   const soucesRef = React.useRef<HTMLDivElement>(null);
   const mainRef = React.useRef<HTMLDivElement>(null);
 
-  function scrollInfo(e: React.ChangeEvent<HTMLDivElement>) {
-    const scrollPosition = e.target.scrollTop;
+  function scrollInfo(e: React.UIEvent<HTMLDivElement, UIEvent>) {
+    const scrollPosition = e.currentTarget.scrollTop;
     const sauceContainer = soucesRef.current !== null && soucesRef.current.offsetTop;
     const mainContainer = mainRef.current !== null && mainRef.current.offsetTop;
     if (scrollPosition + 300 <=sauceContainer) {
@@ -49,7 +49,7 @@ export const BurgerIngredients: FunctionComponent = () => {
           </Tab>
         </li>
       </ul>
-      <div className={burgerIngredientsStyles.block} onScroll={(e: any) => { scrollInfo(e) }}>
+      <div className={burgerIngredientsStyles.block} onScroll={scrollInfo}>
         <Gallery ingredientsType='Булки' data={bunsArray} ref={bunsRef} />
         <Gallery ingredientsType='Соусы' data={sauceArray} ref={soucesRef} />
         <Gallery ingredientsType='Начинки' data={mainArray} ref={mainRef} />
